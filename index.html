@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PetCare Connect</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: #dfe6ec;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      color: #1f2937;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 1080px;
+      background: #f4f4f4;
+      border: 4px solid #6d5efc;
+      border-radius: 34px;
+      padding: 26px;
+      position: relative;
+    }
+
+    .top-icons {
+      position: absolute;
+      top: 22px;
+      right: 24px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .icon-btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      border: 1px solid #cfd8df;
+      background: #f7f7f7;
+      color: #2d3748;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s ease;
+    }
+
+    .icon-btn:hover {
+      background: #ecefff;
+      border-color: #6d5efc;
+      color: #4c3ff0;
+      transform: translateY(-1px);
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 26px;
+      padding-right: 80px;
+      padding-left: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: #eef2ff;
+      border: 1px solid #6d5efc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+    }
+
+    .brand-text h1 {
+      font-size: 2rem;
+      color: #0b8aa7;
+      margin-bottom: 3px;
+    }
+
+    .main-content {
+      display: grid;
+      grid-template-columns: 1.15fr 0.95fr;
+      gap: 20px;
+    }
+
+    .panel {
+      background: #f0f2f4;
+      border: 1px solid #d5dce3;
+      border-radius: 24px;
+      padding: 22px;
+      min-height: 470px;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #14213d;
+      margin-bottom: 14px;
+    }
+
+    .section-subtitle {
+      font-size: 0.95rem;
+      color: #5b6778;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .login-status {
+      display: none;
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #eef2ff;
+      border: 1px solid #cfd5ff;
+      color: #374151;
+      font-weight: 600;
+    }
+
+    .login-status strong {
+      color: #4c3ff0;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .input-group label {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    .input-group input {
+      height: 44px;
+      border: 1px solid #c6d1db;
+      border-radius: 12px;
+      padding: 0 14px;
+      background: #fff;
+      font-size: 1rem;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    .input-group input:focus {
+      border-color: #6d5efc;
+      box-shadow: 0 0 0 3px rgba(109, 94, 252, 0.12);
+    }
+
+    .login-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      color: #3b4a5a;
+    }
+
+    .forgot {
+      text-decoration: none;
+      color: #4c3ff0;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .login-btn {
+      margin-top: 6px;
+      height: 46px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(90deg, #1486a5, #655ef5);
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .login-btn:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+
+    .profiles {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .profile-card {
+      background: #f9f9f9;
+      border: 1px solid #cfd8df;
+      border-radius: 18px;
+      padding: 16px 18px;
+      transition: 0.2s;
+      cursor: pointer;
+    }
+
+    .profile-card:hover {
+      border-color: #6d5efc;
+      background: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .profile-card.active {
+      border-color: #6d5efc;
+      background: #eef2ff;
+      box-shadow: 0 0 0 2px rgba(109, 94, 252, 0.08);
+    }
+
+    .profile-card h3 {
+      font-size: 1rem;
+      color: #111827;
+      margin-bottom: 6px;
+    }
+
+    .profile-card p {
+      font-size: 0.95rem;
+      color: #5b6778;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 900px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+
+      .top-bar {
+        justify-content: flex-start;
+        padding-right: 0;
+        margin-top: 40px;
+      }
+
+      .top-icons {
+        top: 16px;
+        right: 18px;
+      }
+
+      .panel {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 14px;
+      }
+
+      .app-container {
+        padding: 18px;
+        border-radius: 24px;
+      }
+
+      .brand-text h1 {
+        font-size: 1.6rem;
+      }
+
+      .brand-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.4rem;
+      }
+
+      .top-icons {
+        gap: 8px;
+      }
+
+      .icon-btn {
+        width: 42px;
+        height: 42px;
+        font-size: 1.15rem;
+      }
+
+      .login-options {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <div class="top-icons">
+      <button class="icon-btn" title="Tela inicial" onclick="resetLogin()">⌂</button>
+      <button class="icon-btn" title="Recarregar" onclick="location.reload()">⟳</button>
+    </div>
+
+    <div class="top-bar">
+      <div class="brand">
+        <div class="brand-icon">🐾</div>
+        <div class="brand-text">
+          <h1>PetCare Connect</h1>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="panel">
+        <div class="section-title">Acesso ao sistema</div>
+        <div class="section-subtitle" id="loginDescription">
+          Selecione um perfil de acesso para continuar no sistema PetCare Connect.
+        </div>
+
+        <div class="login-status" id="loginStatus">
+          Logando como: <strong id="selectedProfile">Tutor(a)</strong>
+        </div>
+
+        <form class="login-form" id="loginForm">
+          <div class="input-group" id="usuarioGroup" style="display: none;">
+            <label for="usuario">Usuário</label>
+            <input type="text" id="usuario" placeholder="Digite seu usuário">
+          </div>
+
+          <div class="input-group" id="senhaGroup" style="display: none;">
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" placeholder="Digite sua senha">
+          </div>
+
+          <div class="login-options" id="loginOptions" style="display: none;">
+            <label class="remember">
+              <input type="checkbox">
+              Lembrar acesso
+            </label>
+            <a href="#" class="forgot">Esqueci minha senha</a>
+          </div>
+
+          <button type="submit" class="login-btn" id="loginBtn" style="display: none;">Entrar</button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <div class="section-title">Perfis de acesso</div>
+        <div class="section-subtitle">
+          Escolha o perfil mais adequado para visualizar as funções disponíveis na plataforma.
+        </div>
+
+        <div class="profiles">
+          <div class="profile-card" onclick="selectProfile('Tutor(a)', this)">
+            <h3>Tutor(a)</h3>
+            <p>Acompanhe vacinas, histórico do pet, consultas e agendamentos de forma rápida e prática.</p>
+          </div>
+
+          <div class="profile-card" onclick="selectProfile('Veterinário(a)', this)">
+            <h3>Veterinário(a)</h3>
+            <p>Visualize atendimentos, histórico clínico, agenda diária e registros de acompanhamento.</p>
+          </div>
+
+          <div class="profile-card" onclick="selectProfile('Administração', this)">
+            <h3>Administração</h3>
+            <p>Gerencie cadastros, organização da clínica, relatórios e acompanhamento operacional.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentProfile = "";
+
+    function selectProfile(profileName, element) {
+      currentProfile = profileName;
+
+      document.getElementById("loginDescription").textContent =
+        "Informe seu usuário e senha para acessar o sistema com o perfil selecionado.";
+
+      document.getElementById("selectedProfile").textContent = profileName;
+      document.getElementById("loginStatus").style.display = "block";
+
+      document.getElementById("usuarioGroup").style.display = "flex";
+      document.getElementById("senhaGroup").style.display = "flex";
+      document.getElementById("loginOptions").style.display = "flex";
+      document.getElementById("loginBtn").style.display = "block";
+
+      const cards = document.querySelectorAll(".profile-card");
+      cards.forEach(card => card.classList.remove("active"));
+      element.classList.add("active");
+    }
+
+    function resetLogin() {
+      currentProfile = "";
+
+      document.getElementById("loginDescription").textContent =
+        "Selecione um perfil de acesso para continuar no sistema PetCare Connect.";
+
+      document.getElementById("loginStatus").style.display = "none";
+      document.getElementById("usuarioGroup").style.display = "none";
+      document.getElementById("senhaGroup").style.display = "none";
+      document.getElementById("loginOptions").style.display = "none";
+      document.getElementById("loginBtn").style.display = "none";
+
+      document.getElementById("usuario").value = "";
+      document.getElementById("senha").value = "";
+
+      const cards = document.querySelectorAll(".profile-card");
+      cards.forEach(card => card.classList.remove("active"));
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const usuario = document.getElementById("usuario").value.trim();
+      const senha = document.getElementById("senha").value.trim();
+
+      if (!currentProfile) {
+        alert("Selecione um perfil antes de entrar.");
+        return;
+      }
+
+      if (!usuario || !senha) {
+        alert("Preencha usuário e senha.");
+        return;
+      }
+
+      if (currentProfile === "Tutor(a)") {
+        window.location.href = "tutor.html";
+      } else if (currentProfile === "Veterinário(a)") {
+        window.location.href = "veterinario.html";
+      } else if (currentProfile === "Administração") {
+        window.location.href = "admin.html";
+      }
+    });
+  </script>
+</body>
+</html>
