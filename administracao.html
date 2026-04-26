@@ -19,20 +19,60 @@
       radial-gradient(circle at top right,#dbeafe 0%,transparent 24%),
       var(--bg)
     }
-    .top-icons{position:fixed;top:8px;right:16px;display:flex;gap:8px;z-index:1000}
-    .icon-btn,.access-btn{display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s}
-    .icon-btn{
-      width:40px;height:40px;border:1px solid var(--border);border-radius:12px;
-      background:rgba(255,255,255,.95);color:var(--primary);font-size:1rem;
-      box-shadow:0 8px 20px rgba(29,78,216,.08)
+
+    .top-icons{
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      display: flex;
+      gap: 8px;
+      z-index: 1000;
     }
-    .icon-btn:hover,.access-btn:hover,.logout-btn:hover,.btn:hover,.stat-card:hover,.notice-cta:hover{transform:translateY(-1px)}
+
+    .icon-btn,.access-btn{display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.18s ease}
+
+    .icon-btn{
+      width: 38px;
+      height: 38px;
+      border: 1px solid #dbe4ee;
+      border-radius: 12px;
+      background: #ffffff;
+      color: #2563eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: .18s ease;
+      box-shadow: 0 4px 10px rgba(15,23,42,.06);
+    }
+
+    .icon-btn svg{
+      width: 17px;
+      height: 17px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .icon-btn:hover{
+      background: #f8fbff;
+      border-color: #bfd5ea;
+    }
+
+    .icon-btn:active{
+      transform: scale(.96);
+    }
+
     .logout-btn{
       position:fixed;left:16px;bottom:18px;z-index:1000;display:flex;align-items:center;gap:6px;
       border:1px solid #ef9a9a;background:var(--dangerBg);color:var(--danger);
       border-radius:10px;padding:8px 11px;font-size:.82rem;font-weight:700;cursor:pointer;
       box-shadow:0 8px 20px rgba(198,40,40,.08)
     }
+    .logout-btn:hover,.btn:hover,.stat-card:hover,.notice-cta:hover,.access-btn:hover{transform:translateY(-1px)}
+
     .access-btn{
       position:fixed;right:16px;bottom:18px;z-index:1000;width:46px;height:46px;border-radius:50%;
       border:1px solid #bde8e7;background:linear-gradient(135deg,#ecfeff,#eff6ff);color:#0f766e;
@@ -77,6 +117,7 @@
     .hero p{line-height:1.5;max-width:700px}
     .hero-badge,.section-chip,.tag,.status-badge{border-radius:999px;font-weight:800;white-space:nowrap}
     .hero-badge{padding:10px 14px;background:#eff6ff;border:1px solid #bfdbfe;color:var(--primary);font-size:.9rem}
+
     .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px}
     .stat-card,.item-card,.right-card,.notice-item{
       background:#fff;border:1px solid var(--border);box-shadow:0 10px 24px rgba(15,23,42,.04)
@@ -190,8 +231,9 @@
       .hero,.section,.sidebar,.rightbar{border-radius:22px}
       .hero h2{font-size:1.45rem}
       .stats{grid-template-columns:1fr}
-      .top-icons{top:6px;right:10px}
-      .icon-btn{width:38px;height:38px;font-size:.95rem}
+      .top-icons{top:10px;right:10px;gap:8px}
+      .icon-btn{width:38px;height:38px;border-radius:12px}
+      .icon-btn svg{width:17px;height:17px}
       .logout-btn{left:10px;bottom:12px;padding:7px 10px;font-size:.78rem}
       .access-btn{right:10px;bottom:12px;width:42px;height:42px;font-size:1rem}
     }
@@ -199,8 +241,19 @@
 </head>
 <body>
   <div class="top-icons">
-    <button class="icon-btn" title="Início" onclick="goHome()">⌂</button>
-    <button class="icon-btn" title="Recarregar" onclick="reloadPage()">⟳</button>
+    <button class="icon-btn" title="Início" onclick="goHome()">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 10.5 12 3l9 7.5"></path>
+        <path d="M5 9.5V20h14V9.5"></path>
+      </svg>
+    </button>
+
+    <button class="icon-btn" title="Recarregar" onclick="reloadPage()">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20 11a8 8 0 1 0-2.34 5.66"></path>
+        <path d="M20 4v7h-7"></path>
+      </svg>
+    </button>
   </div>
 
   <div class="app">
@@ -386,7 +439,7 @@
       <div class="right-card">
         <h3>Painel administrativo</h3>
         <div class="mini-summary">
-          <div class="mini-row"><span>Administrador(a)</span><strong id="usuarioLateral">Murillo Santos</strong></div>
+          <div class="mini-row"><span>Administrador(a)</span><strong id="usuarioLateral">Administrador(a)</strong></div>
           <div class="mini-row"><span>Sistema</span><strong>Ativo</strong></div>
           <button class="notice-cta" onclick="toggleAvisosDrawer(true)">
             <span>Ver avisos</span>
@@ -482,129 +535,104 @@
 
   <div id="toast" class="toast"></div>
 
+  <script src="petcare-data.js"></script>
   <script>
-    const KEY="petcare_admin_data_v1", USER_KEY="petcare_logged_user_name", SEC_KEY="petcare_admin_secao";
-    const MEDICOS=["Dra. Camila","Dr. Rafael","Dra. Beatriz"];
-    const HORARIOS_PADRAO=["09:00","10:00","11:00","14:00","15:00","16:00"];
-    const $=id=>document.getElementById(id);
-    const menuItems=[
-      ["inicio","⌂","Início"],["usuarios","👥","Gerenciar usuário"],["pets","🐾","Gerenciar pet"],
-      ["consultas","🗓","Consultas"],["avisos","📢","Avisos"],["relatorios","📄","Relatórios"]
+    const SEC_KEY = "petcare_admin_secao";
+    const $ = id => document.getElementById(id);
+    const menuItems = [
+      ["inicio","⌂","Início"],
+      ["usuarios","👥","Gerenciar usuário"],
+      ["pets","🐾","Gerenciar pet"],
+      ["consultas","🗓","Consultas"],
+      ["avisos","📢","Avisos"],
+      ["relatorios","📄","Relatórios"]
     ];
-    const defaults={
-      usuarios:[
-        {nome:"Mariana Souza",perfil:"Tutor(a)",email:"mariana@email.com"},
-        {nome:"Dra. Camila",perfil:"Veterinário(a)",email:"camila@email.com"},
-        {nome:"Murillo Santos",perfil:"Administração",email:"murillo@email.com"}
-      ],
-      pets:[
-        {nome:"Luna",tipo:"Cachorra",tutor:"Mariana Souza",idade:4,peso:"12,4",relatorio:"Quadro estável e vacinação em dia.",relatorioAtualizacao:"12/04/2026"},
-        {nome:"Thor",tipo:"Gato",tutor:"Mariana Souza",idade:2,peso:"4,8",relatorio:"Monitoramento de peso recomendado.",relatorioAtualizacao:"28/03/2026"}
-      ],
-      consultas:[
-        {pet:"Luna",vet:"Dra. Camila",data:"25/12/2026",hora:"14:00",status:"Marcada"},
-        {pet:"Thor",vet:"Dr. Rafael",data:"26/12/2026",hora:"10:00",status:"Marcada"}
-      ],
-      avisos:[
-        {titulo:"Sistema atualizado",texto:"Novas melhorias foram aplicadas ao painel.",lido:false},
-        {titulo:"Revisão cadastral",texto:"Verifique os cadastros dos usuários e pets nesta semana.",lido:false}
-      ]
-    };
 
-    let confirmCallback=null, usuarioIndex=null, petIndex=null, avisoIndex=null, relatorioIndex=null;
-
-    const brDate=v=>v?(()=>{const[a,b,c]=v.split("-");return `${c}/${b}/${a}`})():"";
-    const cloneDefaults=()=>JSON.parse(JSON.stringify(defaults));
-    const load=()=>{try{return JSON.parse(localStorage.getItem(KEY))||cloneDefaults()}catch{return cloneDefaults()}};
-    const save=d=>localStorage.setItem(KEY,JSON.stringify(d));
-    const currentSection=()=>localStorage.getItem(SEC_KEY)||"inicio";
-    const currentUser=()=>localStorage.getItem(USER_KEY)?.trim()||"Administrador(a)";
+    let confirmCallback = null, usuarioIndex = null, petIndex = null, avisoIndex = null, relatorioIndex = null;
+    const currentSection = () => localStorage.getItem(SEC_KEY) || "inicio";
+    const currentUser = () => petcareGetSession().user || "Administrador(a)";
+    const load = () => petcareLoad();
+    const save = d => petcareSave(d);
 
     function showToast(msg){
-      const t=$("toast");
-      t.textContent=msg;
+      const t = $("toast");
+      t.textContent = msg;
       t.classList.add("show");
       clearTimeout(showToast.timer);
-      showToast.timer=setTimeout(()=>t.classList.remove("show"),2200);
+      showToast.timer = setTimeout(() => t.classList.remove("show"), 2200);
     }
+
     function openConfirm(message, callback, title="Confirmação"){
-      $("confirmTitle").textContent=title;
-      $("confirmText").textContent=message;
-      confirmCallback=callback;
+      $("confirmTitle").textContent = title;
+      $("confirmText").textContent = message;
+      confirmCallback = callback;
       $("confirmModal").classList.add("active");
     }
+
     function closeConfirm(result){
       $("confirmModal").classList.remove("active");
       if(confirmCallback) confirmCallback(result);
-      confirmCallback=null;
+      confirmCallback = null;
     }
-    const toggleModal=(id,show)=>$(id).classList.toggle("active",show);
+
+    function toggleModal(id,show){ $(id).classList.toggle("active",show); }
 
     function buildMenu(){
-      $("menu").innerHTML=menuItems.map(([id,ico,txt])=>
+      $("menu").innerHTML = menuItems.map(([id,ico,txt]) =>
         `<button class="menu-btn" data-sec="${id}" onclick="openSection('${id}')"><span class="menu-icon">${ico}</span><span>${txt}</span></button>`
       ).join("");
     }
+
     function openSection(id){
-      document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
-      document.querySelectorAll(".menu-btn").forEach(b=>b.classList.remove("active"));
+      document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+      document.querySelectorAll(".menu-btn").forEach(b => b.classList.remove("active"));
       $(id).classList.add("active");
       document.querySelector(`.menu-btn[data-sec="${id}"]`)?.classList.add("active");
       localStorage.setItem(SEC_KEY,id);
-      scrollTo({top:0,behavior:"smooth"});
+      scrollTo({ top:0, behavior:"smooth" });
     }
-    const goHome=()=>openSection("inicio");
-    const reloadPage=()=>location.reload();
+
+    const goHome = () => openSection("inicio");
+    const reloadPage = () => location.reload();
 
     function updateHeader(){
-      $("usuarioLateral").textContent=currentUser();
+      $("usuarioLateral").textContent = currentUser();
     }
 
-    function preencherMedicos(){
-      $("consultaVet").innerHTML=`<option value="">Selecione</option>${MEDICOS.map(m=>`<option value="${m}">${m}</option>`).join("")}`;
+    function updateSelects(data){
+      const petOptions = data.pets.length
+        ? data.pets.map(p => `<option value="${p.id}">${p.nome}</option>`).join("")
+        : `<option value="">Nenhum pet cadastrado</option>`;
+
+      $("consultaPet").innerHTML = petOptions;
+      $("relatorioPet").innerHTML = petOptions;
+
+      const vets = petcareGetVets(data);
+      $("consultaVet").innerHTML = vets.length
+        ? `<option value="">Selecione</option>${vets.map(v => `<option value="${v.nome}">${v.nome}</option>`).join("")}`
+        : `<option value="">Nenhum doutor(a) cadastrado</option>`;
     }
 
-    function definirMinDataConsulta(){
-      const hoje=new Date();
-      hoje.setDate(hoje.getDate()+1);
-      $("consultaData").min=hoje.toISOString().split("T")[0];
-    }
-
-    function horariosDisponiveis(vet,dataISO,d){
-      if(!vet||!dataISO) return [...HORARIOS_PADRAO];
-      const data=brDate(dataISO);
-      const ocupados=d.consultas.filter(c=>c.vet===vet && c.data===data).map(c=>c.hora);
-      return HORARIOS_PADRAO.filter(h=>!ocupados.includes(h));
-    }
-
-    function atualizarHorariosConsulta(){
-      const d=load();
-      const vet=$("consultaVet").value;
-      const dataISO=$("consultaData").value;
-      const disponiveis=horariosDisponiveis(vet,dataISO,d);
-      const atual=$("consultaHora").value;
-      $("consultaHora").innerHTML=disponiveis.length
-        ? disponiveis.map(h=>`<option value="${h}">${h}</option>`).join("")
+    function updateHorasConsultaAdmin(){
+      const data = load();
+      const horas = petcareAvailableHours(data, $("consultaVet").value, $("consultaData").value);
+      const atual = $("consultaHora").value;
+      $("consultaHora").innerHTML = horas.length
+        ? horas.map(h => `<option value="${h}">${h}</option>`).join("")
         : `<option value="">Sem horários</option>`;
-      if(disponiveis.includes(atual)) $("consultaHora").value=atual;
+      if(horas.includes(atual)) $("consultaHora").value = atual;
     }
 
-    function updateSelects(d){
-      const petOptions=d.pets.map(p=>`<option value="${p.nome}">${p.nome}</option>`).join("");
-      $("consultaPet").innerHTML=petOptions;
-      $("relatorioPet").innerHTML=petOptions;
-    }
-
-    function renderStats(d){
-      $("totalUsuarios").textContent=d.usuarios.length;
-      $("totalPets").textContent=d.pets.length;
-      $("totalConsultas").textContent=d.consultas.length;
-      $("totalRelatorios").textContent=d.pets.filter(p=>p.relatorio).length;
+    function renderStats(data){
+      $("totalUsuarios").textContent = data.usuarios.length;
+      $("totalPets").textContent = data.pets.length;
+      $("totalConsultas").textContent = data.consultas.length;
+      $("totalRelatorios").textContent = data.pets.filter(p => p.relatorio).length;
     }
 
     function renderUsuarios(){
-      const d=load();
-      $("listaUsuarios").innerHTML=d.usuarios.map((u,i)=>`
+      const data = load();
+      $("listaUsuarios").innerHTML = data.usuarios.length ? data.usuarios.map((u,i) => `
         <div class="item-card">
           <strong>${u.nome}</strong>
           <span>Perfil: ${u.perfil} • E-mail: ${u.email}</span>
@@ -613,12 +641,12 @@
             <button class="small-btn danger" onclick="removeUsuario(${i})">Excluir</button>
           </div>
         </div>
-      `).join("");
+      `).join("") : `<div class="item-card"><strong>Sem usuários</strong><p>Nenhum usuário cadastrado.</p></div>`;
     }
 
     function renderPets(){
-      const d=load();
-      $("listaPets").innerHTML=d.pets.map((p,i)=>`
+      const data = load();
+      $("listaPets").innerHTML = data.pets.length ? data.pets.map((p,i) => `
         <div class="item-card">
           <strong>${p.nome}</strong>
           <span>${p.tipo} • Tutor: ${p.tutor} • Idade: ${p.idade} ano(s) • Peso: ${p.peso} kg</span>
@@ -627,27 +655,30 @@
             <button class="small-btn danger" onclick="removePet(${i})">Excluir</button>
           </div>
         </div>
-      `).join("");
+      `).join("") : `<div class="item-card"><strong>Sem pets</strong><p>Nenhum pet cadastrado.</p></div>`;
     }
 
     function renderConsultas(){
-      const d=load();
-      $("listaConsultas").innerHTML=d.consultas.map((c,i)=>`
-        <div class="item-card">
-          <strong>${c.pet}</strong>
-          <span>Doutor(a): ${c.vet} • ${c.data} às ${c.hora}</span>
-          <div class="status-badge ${c.status==="Concluída"?"status-concluida":"status-marcada"}">${c.status}</div>
-          <div class="inline-actions">
-            ${c.status==="Marcada" ? `<button class="small-btn success" onclick="concluirConsulta(${i})">Concluir</button>` : ""}
-            <button class="small-btn danger" onclick="removeConsulta(${i})">Excluir</button>
+      const data = load();
+      $("listaConsultas").innerHTML = data.consultas.length ? data.consultas.map(c => {
+        const pet = petcareGetPetById(data, c.petId);
+        return `
+          <div class="item-card">
+            <strong>${pet ? pet.nome : "Pet"}</strong>
+            <span>Doutor(a): ${c.vet} • ${c.data} às ${c.hora}</span>
+            <div class="status-badge ${c.status === "Concluída" ? "status-concluida" : "status-marcada"}">${c.status}</div>
+            <div class="inline-actions">
+              ${c.status === "Marcada" ? `<button class="small-btn success" onclick="concluirConsulta(${c.id})">Concluir</button>` : ""}
+              <button class="small-btn danger" onclick="removeConsulta(${c.id})">Excluir</button>
+            </div>
           </div>
-        </div>
-      `).join("");
+        `;
+      }).join("") : `<div class="item-card"><strong>Sem consultas</strong><p>Nenhuma consulta registrada.</p></div>`;
     }
 
     function renderAvisos(){
-      const d=load();
-      const html=d.avisos.map((a,i)=>`
+      const data = load();
+      const html = data.avisos.length ? data.avisos.map((a,i) => `
         <div class="item-card">
           <strong>${a.titulo}</strong>
           <span>${a.texto}</span>
@@ -656,17 +687,24 @@
             <button class="small-btn danger" onclick="removeAviso(${i})">Excluir</button>
           </div>
         </div>
-      `).join("") || `<div class="item-card"><strong>Sem avisos</strong><p>Nenhum aviso publicado.</p></div>`;
-      $("listaAvisosGerenciar").innerHTML=html;
-      $("listaAvisosDrawer").innerHTML=html.replace(/onclick="editAviso\(\d+\)"/g,"").replace(/onclick="removeAviso\(\d+\)"/g,"").replace(/<div class="inline-actions">[\s\S]*?<\/div>/g,"");
-      const unread=d.avisos.filter(a=>!a.lido).length;
-      $("avisosBadge").textContent=unread;
-      $("avisosBadge").classList.toggle("hidden", unread===0);
+      `).join("") : `<div class="item-card"><strong>Sem avisos</strong><p>Nenhum aviso publicado.</p></div>`;
+
+      $("listaAvisosGerenciar").innerHTML = html;
+      $("listaAvisosDrawer").innerHTML = data.avisos.length ? data.avisos.map(a => `
+        <div class="notice-item">
+          <strong>${a.titulo}</strong>
+          <span>${a.texto}</span>
+        </div>
+      `).join("") : `<div class="notice-item"><strong>Sem avisos</strong><span>Nenhum aviso publicado.</span></div>`;
+
+      const unread = data.avisos.filter(a => !a.lido).length;
+      $("avisosBadge").textContent = unread;
+      $("avisosBadge").classList.toggle("hidden", unread === 0);
     }
 
     function renderRelatorios(){
-      const d=load();
-      $("listaRelatorios").innerHTML=d.pets.map((p,i)=>`
+      const data = load();
+      $("listaRelatorios").innerHTML = data.pets.length ? data.pets.map((p,i) => `
         <div class="item-card">
           <strong>Relatório - ${p.nome}</strong>
           <p>${p.relatorio || "Sem relatório disponível."}</p>
@@ -676,217 +714,386 @@
             <button class="small-btn danger" onclick="removeRelatorio(${i})">Excluir</button>
           </div>
         </div>
-      `).join("");
+      `).join("") : `<div class="item-card"><strong>Sem relatórios</strong><p>Nenhum pet disponível.</p></div>`;
     }
 
     function render(){
-      const d=load();
+      const data = load();
       updateHeader();
-      updateSelects(d);
-      renderStats(d);
+      updateSelects(data);
+      renderStats(data);
       renderUsuarios();
       renderPets();
       renderConsultas();
       renderAvisos();
       renderRelatorios();
       openSection(currentSection());
-      atualizarHorariosConsulta();
+      updateHorasConsultaAdmin();
     }
 
     function clearUsuarioForm(){
-      $("usuarioNome").value=""; $("usuarioPerfil").value=""; $("usuarioEmail").value="";
+      $("usuarioNome").value = "";
+      $("usuarioPerfil").value = "";
+      $("usuarioEmail").value = "";
     }
+
     function addUsuario(){
-      const d=load(), nome=$("usuarioNome").value.trim(), perfil=$("usuarioPerfil").value.trim(), email=$("usuarioEmail").value.trim();
-      if(!nome||!perfil||!email){ showToast("Preencha nome, perfil e e-mail do usuário."); return; }
-      d.usuarios.push({nome,perfil,email});
-      save(d); clearUsuarioForm(); render(); showToast("Usuário cadastrado com sucesso.");
+      const data = load();
+      const nome = $("usuarioNome").value.trim();
+      const perfil = $("usuarioPerfil").value.trim();
+      const email = $("usuarioEmail").value.trim();
+
+      if(!nome || !perfil || !email) return showToast("Preencha nome, perfil e e-mail do usuário.");
+
+      data.usuarios.push({
+        id: petcareNextId(data.usuarios),
+        nome,
+        perfil,
+        email
+      });
+
+      save(data);
+      clearUsuarioForm();
+      render();
+      showToast("Usuário cadastrado com sucesso.");
     }
+
     function editUsuario(i){
-      const u=load().usuarios[i];
-      usuarioIndex=i;
-      $("editUsuarioNome").value=u.nome;
-      $("editUsuarioPerfil").value=u.perfil;
-      $("editUsuarioEmail").value=u.email;
-      toggleModal("usuarioModal",true);
+      const u = load().usuarios[i];
+      usuarioIndex = i;
+      $("editUsuarioNome").value = u.nome;
+      $("editUsuarioPerfil").value = u.perfil;
+      $("editUsuarioEmail").value = u.email;
+      toggleModal("usuarioModal", true);
     }
+
     function saveUsuarioEdit(){
-      const d=load();
-      if(usuarioIndex===null) return;
-      const nome=$("editUsuarioNome").value.trim(), perfil=$("editUsuarioPerfil").value, email=$("editUsuarioEmail").value.trim();
-      if(!nome||!perfil||!email){ showToast("Preencha todos os dados do usuário."); return; }
-      d.usuarios[usuarioIndex]={nome,perfil,email};
-      save(d); usuarioIndex=null; toggleModal("usuarioModal",false); render(); showToast("Usuário atualizado.");
+      const data = load();
+      if(usuarioIndex === null) return;
+
+      const nome = $("editUsuarioNome").value.trim();
+      const perfil = $("editUsuarioPerfil").value;
+      const email = $("editUsuarioEmail").value.trim();
+
+      if(!nome || !perfil || !email) return showToast("Preencha todos os dados do usuário.");
+
+      data.usuarios[usuarioIndex] = { ...data.usuarios[usuarioIndex], nome, perfil, email };
+      save(data);
+      usuarioIndex = null;
+      toggleModal("usuarioModal", false);
+      render();
+      showToast("Usuário atualizado.");
     }
+
     function removeUsuario(i){
-      openConfirm("Deseja excluir este usuário?", ok=>{
+      openConfirm("Deseja excluir este usuário?", ok => {
         if(!ok) return;
-        const d=load(); d.usuarios.splice(i,1); save(d); render(); showToast("Usuário excluído.");
-      },"Excluir usuário");
+        const data = load();
+        data.usuarios.splice(i,1);
+        save(data);
+        render();
+        showToast("Usuário excluído.");
+      }, "Excluir usuário");
     }
 
     function clearPetForm(){
-      $("petNome").value=""; $("petTipo").value=""; $("petTutor").value=""; $("petIdade").value=""; $("petPeso").value="";
+      $("petNome").value = "";
+      $("petTipo").value = "";
+      $("petTutor").value = "";
+      $("petIdade").value = "";
+      $("petPeso").value = "";
     }
+
     function addPet(){
-      const d=load(), nome=$("petNome").value.trim(), tipo=$("petTipo").value.trim(), tutor=$("petTutor").value.trim(),
-            idade=$("petIdade").value.trim(), peso=$("petPeso").value.trim();
-      if(!nome||!tipo||!tutor||!idade||!peso){ showToast("Preencha todos os dados do pet."); return; }
-      d.pets.push({nome,tipo,tutor,idade:Number(idade),peso:String(peso).replace(".",","),relatorio:"",relatorioAtualizacao:""});
-      save(d); clearPetForm(); render(); showToast("Pet cadastrado com sucesso.");
+      const data = load();
+      const nome = $("petNome").value.trim();
+      const tipo = $("petTipo").value.trim();
+      const tutor = $("petTutor").value.trim();
+      const idade = $("petIdade").value.trim();
+      const peso = $("petPeso").value.trim();
+
+      if(!nome || !tipo || !tutor || !idade || !peso) return showToast("Preencha todos os dados do pet.");
+
+      data.pets.push({
+        id: petcareNextId(data.pets),
+        nome,
+        tipo,
+        tutor,
+        idade: Number(idade),
+        peso: String(peso).replace(".", ","),
+        vacinasAplicadas: [],
+        vacinasDisponiveis: [],
+        historico: [],
+        medicacoes: [],
+        relatorio: "",
+        relatorioAtualizacao: ""
+      });
+
+      save(data);
+      clearPetForm();
+      render();
+      showToast("Pet cadastrado com sucesso.");
     }
+
     function editPet(i){
-      const p=load().pets[i];
-      petIndex=i;
-      $("editPetNome").value=p.nome;
-      $("editPetTutor").value=p.tutor;
-      $("editPetIdade").value=p.idade;
-      $("editPetPeso").value=String(p.peso).replace(",",".");
-      toggleModal("petModal",true);
+      const p = load().pets[i];
+      petIndex = i;
+      $("editPetNome").value = p.nome;
+      $("editPetTutor").value = p.tutor;
+      $("editPetIdade").value = p.idade;
+      $("editPetPeso").value = String(p.peso).replace(",", ".");
+      toggleModal("petModal", true);
     }
+
     function savePetEdit(){
-      const d=load();
-      if(petIndex===null) return;
-      const antigoNome=d.pets[petIndex].nome;
-      const nome=$("editPetNome").value.trim(), tutor=$("editPetTutor").value.trim(),
-            idade=$("editPetIdade").value.trim(), peso=$("editPetPeso").value.trim();
-      if(!nome||!tutor||!idade||!peso){ showToast("Preencha todos os dados do pet."); return; }
-      d.pets[petIndex].nome=nome;
-      d.pets[petIndex].tutor=tutor;
-      d.pets[petIndex].idade=Number(idade);
-      d.pets[petIndex].peso=String(peso).replace(".",",");
-      d.consultas.forEach(c=>{ if(c.pet===antigoNome) c.pet=nome; });
-      save(d); petIndex=null; toggleModal("petModal",false); render(); showToast("Pet atualizado.");
+      const data = load();
+      if(petIndex === null) return;
+
+      const antigoNome = data.pets[petIndex].nome;
+      const nome = $("editPetNome").value.trim();
+      const tutor = $("editPetTutor").value.trim();
+      const idade = $("editPetIdade").value.trim();
+      const peso = $("editPetPeso").value.trim();
+
+      if(!nome || !tutor || !idade || !peso) return showToast("Preencha todos os dados do pet.");
+
+      data.pets[petIndex].nome = nome;
+      data.pets[petIndex].tutor = tutor;
+      data.pets[petIndex].idade = Number(idade);
+      data.pets[petIndex].peso = String(peso).replace(".", ",");
+
+      save(data);
+      petIndex = null;
+      toggleModal("petModal", false);
+      render();
+      showToast(`Pet ${antigoNome} atualizado.`);
     }
+
     function removePet(i){
-      openConfirm("Deseja excluir este pet?", ok=>{
+      openConfirm("Deseja excluir este pet?", ok => {
         if(!ok) return;
-        const d=load(), nome=d.pets[i].nome;
-        d.pets.splice(i,1);
-        d.consultas=d.consultas.filter(c=>c.pet!==nome);
-        save(d); render(); showToast("Pet excluído.");
-      },"Excluir pet");
+        const data = load();
+        const petId = data.pets[i].id;
+        data.pets.splice(i,1);
+        data.consultas = data.consultas.filter(c => c.petId !== petId);
+        save(data);
+        render();
+        showToast("Pet excluído.");
+      }, "Excluir pet");
     }
 
     function addConsulta(){
-      const d=load(), pet=$("consultaPet").value, vet=$("consultaVet").value, dataISO=$("consultaData").value, hora=$("consultaHora").value;
-      if(!pet||!vet||!dataISO||!hora){ showToast("Preencha pet, doutor(a), data e hora."); return; }
+      const data = load();
+      const petId = Number($("consultaPet").value);
+      const vet = $("consultaVet").value;
+      const dataISO = $("consultaData").value;
+      const hora = $("consultaHora").value;
 
-      const hoje=new Date(); hoje.setHours(0,0,0,0);
-      const dataSelecionada=new Date(dataISO+"T00:00:00");
-      if(dataSelecionada<=hoje){ showToast("Cadastre apenas consultas em datas futuras."); return; }
+      if(!petId || !vet || !dataISO || !hora) return showToast("Preencha pet, doutor(a), data e hora.");
 
-      const livres=horariosDisponiveis(vet,dataISO,d);
-      if(!livres.includes(hora)){ showToast("Esse horário já está ocupado para esse doutor(a)."); atualizarHorariosConsulta(); return; }
+      const hoje = new Date();
+      hoje.setHours(0,0,0,0);
+      const dataSelecionada = new Date(dataISO + "T00:00:00");
+      if(dataSelecionada <= hoje) return showToast("Cadastre apenas consultas em datas futuras.");
 
-      d.consultas.push({pet,vet,data:brDate(dataISO),hora,status:"Marcada"});
-      save(d);
-      $("consultaData").value="";
-      $("consultaVet").value="";
-      atualizarHorariosConsulta();
+      const livres = petcareAvailableHours(data, vet, dataISO);
+      if(!livres.includes(hora)){
+        updateHorasConsultaAdmin();
+        return showToast("Esse horário já está ocupado para esse doutor(a).");
+      }
+
+      data.consultas.push({
+        id: petcareNextId(data.consultas),
+        petId,
+        vet,
+        data: petcareBrDate(dataISO),
+        hora,
+        status: "Marcada"
+      });
+
+      save(data);
+      $("consultaData").value = "";
+      $("consultaVet").value = "";
       render();
       showToast("Consulta marcada com sucesso.");
     }
-    function concluirConsulta(i){
-      const d=load(), c=d.consultas[i];
-      if(!c) return;
-      c.status="Concluída";
-      save(d); render(); showToast("Consulta concluída.");
-    }
-    function removeConsulta(i){
-      openConfirm("Deseja excluir esta consulta?", ok=>{
-        if(!ok) return;
-        const d=load(); d.consultas.splice(i,1); save(d); render(); showToast("Consulta excluída.");
-      },"Excluir consulta");
+
+    function concluirConsulta(id){
+      const data = load();
+      const consulta = data.consultas.find(c => c.id === id);
+      if(!consulta) return;
+      consulta.status = "Concluída";
+      save(data);
+      render();
+      showToast("Consulta concluída.");
     }
 
-    function clearAvisoForm(){ $("avisoTitulo").value=""; $("avisoTexto").value=""; }
+    function removeConsulta(id){
+      openConfirm("Deseja excluir esta consulta?", ok => {
+        if(!ok) return;
+        const data = load();
+        data.consultas = data.consultas.filter(c => c.id !== id);
+        save(data);
+        render();
+        showToast("Consulta excluída.");
+      }, "Excluir consulta");
+    }
+
+    function clearAvisoForm(){
+      $("avisoTitulo").value = "";
+      $("avisoTexto").value = "";
+    }
+
     function addAviso(){
-      const d=load(), titulo=$("avisoTitulo").value.trim(), texto=$("avisoTexto").value.trim();
-      if(!titulo||!texto){ showToast("Preencha título e mensagem do aviso."); return; }
-      d.avisos.unshift({titulo,texto,lido:false});
-      save(d); clearAvisoForm(); render(); showToast("Aviso publicado.");
-    }
-    function editAviso(i){
-      const a=load().avisos[i];
-      avisoIndex=i;
-      $("editAvisoTitulo").value=a.titulo;
-      $("editAvisoTexto").value=a.texto;
-      toggleModal("avisoModal",true);
-    }
-    function saveAvisoEdit(){
-      const d=load();
-      if(avisoIndex===null) return;
-      const titulo=$("editAvisoTitulo").value.trim(), texto=$("editAvisoTexto").value.trim();
-      if(!titulo||!texto){ showToast("Preencha título e mensagem."); return; }
-      d.avisos[avisoIndex].titulo=titulo;
-      d.avisos[avisoIndex].texto=texto;
-      d.avisos[avisoIndex].lido=false;
-      save(d); avisoIndex=null; toggleModal("avisoModal",false); render(); showToast("Aviso atualizado.");
-    }
-    function removeAviso(i){
-      openConfirm("Deseja excluir este aviso?", ok=>{
-        if(!ok) return;
-        const d=load(); d.avisos.splice(i,1); save(d); render(); showToast("Aviso excluído.");
-      },"Excluir aviso");
+      const data = load();
+      const titulo = $("avisoTitulo").value.trim();
+      const texto = $("avisoTexto").value.trim();
+
+      if(!titulo || !texto) return showToast("Preencha título e mensagem do aviso.");
+
+      data.avisos.unshift({
+        id: petcareNextId(data.avisos),
+        titulo,
+        texto,
+        lido: false
+      });
+
+      save(data);
+      clearAvisoForm();
+      render();
+      showToast("Aviso publicado.");
     }
 
-    function clearRelatorioForm(){ $("relatorioTexto").value=""; }
-    function addRelatorio(){
-      const d=load(), pet=$("relatorioPet").value, texto=$("relatorioTexto").value.trim();
-      if(!pet||!texto){ showToast("Selecione o pet e digite o relatório."); return; }
-      const p=d.pets.find(x=>x.nome===pet);
-      if(!p) return;
-      p.relatorio=texto;
-      p.relatorioAtualizacao=new Date().toLocaleDateString("pt-BR");
-      save(d); clearRelatorioForm(); render(); showToast("Relatório publicado.");
+    function editAviso(i){
+      const a = load().avisos[i];
+      avisoIndex = i;
+      $("editAvisoTitulo").value = a.titulo;
+      $("editAvisoTexto").value = a.texto;
+      toggleModal("avisoModal", true);
     }
-    function editRelatorio(i){
-      const p=load().pets[i];
-      relatorioIndex=i;
-      $("editRelatorioPet").value=p.nome;
-      $("editRelatorioTexto").value=p.relatorio || "";
-      toggleModal("relatorioModal",true);
+
+    function saveAvisoEdit(){
+      const data = load();
+      if(avisoIndex === null) return;
+
+      const titulo = $("editAvisoTitulo").value.trim();
+      const texto = $("editAvisoTexto").value.trim();
+
+      if(!titulo || !texto) return showToast("Preencha título e mensagem.");
+
+      data.avisos[avisoIndex].titulo = titulo;
+      data.avisos[avisoIndex].texto = texto;
+      data.avisos[avisoIndex].lido = false;
+
+      save(data);
+      avisoIndex = null;
+      toggleModal("avisoModal", false);
+      render();
+      showToast("Aviso atualizado.");
     }
-    function saveRelatorioEdit(){
-      const d=load();
-      if(relatorioIndex===null) return;
-      const txt=$("editRelatorioTexto").value.trim();
-      if(!txt){ showToast("Digite o texto do relatório."); return; }
-      d.pets[relatorioIndex].relatorio=txt;
-      d.pets[relatorioIndex].relatorioAtualizacao=new Date().toLocaleDateString("pt-BR");
-      save(d); relatorioIndex=null; toggleModal("relatorioModal",false); render(); showToast("Relatório atualizado.");
-    }
-    function removeRelatorio(i){
-      openConfirm("Deseja excluir este relatório?", ok=>{
+
+    function removeAviso(i){
+      openConfirm("Deseja excluir este aviso?", ok => {
         if(!ok) return;
-        const d=load();
-        d.pets[i].relatorio="";
-        d.pets[i].relatorioAtualizacao="";
-        save(d); render(); showToast("Relatório excluído.");
-      },"Excluir relatório");
+        const data = load();
+        data.avisos.splice(i,1);
+        save(data);
+        render();
+        showToast("Aviso excluído.");
+      }, "Excluir aviso");
+    }
+
+    function clearRelatorioForm(){
+      $("relatorioTexto").value = "";
+    }
+
+    function addRelatorio(){
+      const data = load();
+      const petId = Number($("relatorioPet").value);
+      const texto = $("relatorioTexto").value.trim();
+
+      if(!petId || !texto) return showToast("Selecione o pet e digite o relatório.");
+
+      const pet = data.pets.find(p => p.id === petId);
+      if(!pet) return;
+
+      pet.relatorio = texto;
+      pet.relatorioAtualizacao = new Date().toLocaleDateString("pt-BR");
+
+      save(data);
+      clearRelatorioForm();
+      render();
+      showToast("Relatório publicado.");
+    }
+
+    function editRelatorio(i){
+      const p = load().pets[i];
+      relatorioIndex = i;
+      $("editRelatorioPet").value = p.nome;
+      $("editRelatorioTexto").value = p.relatorio || "";
+      toggleModal("relatorioModal", true);
+    }
+
+    function saveRelatorioEdit(){
+      const data = load();
+      if(relatorioIndex === null) return;
+
+      const txt = $("editRelatorioTexto").value.trim();
+      if(!txt) return showToast("Digite o texto do relatório.");
+
+      data.pets[relatorioIndex].relatorio = txt;
+      data.pets[relatorioIndex].relatorioAtualizacao = new Date().toLocaleDateString("pt-BR");
+
+      save(data);
+      relatorioIndex = null;
+      toggleModal("relatorioModal", false);
+      render();
+      showToast("Relatório atualizado.");
+    }
+
+    function removeRelatorio(i){
+      openConfirm("Deseja excluir este relatório?", ok => {
+        if(!ok) return;
+        const data = load();
+        data.pets[i].relatorio = "";
+        data.pets[i].relatorioAtualizacao = "";
+        save(data);
+        render();
+        showToast("Relatório excluído.");
+      }, "Excluir relatório");
     }
 
     function toggleAvisosDrawer(show){
       $("drawerAvisos").classList.toggle("active",show);
       $("drawerOverlay").classList.toggle("active",show);
       if(show){
-        const d=load(); let changed=false;
-        d.avisos.forEach(a=>{ if(!a.lido){ a.lido=true; changed=true; }});
-        if(changed){ save(d); renderAvisos(); }
+        const data = load();
+        let changed = false;
+        data.avisos.forEach(a => {
+          if(!a.lido){
+            a.lido = true;
+            changed = true;
+          }
+        });
+        if(changed){
+          save(data);
+          renderAvisos();
+        }
       }
     }
 
-    const openA11y=()=>showToast("Área de acessibilidade. Futuramente aqui poderá abrir o vídeo em LIBRAS.");
+    const openA11y = () => showToast("Área de acessibilidade. Futuramente aqui poderá abrir o vídeo em LIBRAS.");
+
     function logout(){
-      openConfirm("Deseja realmente sair do sistema?", ok=>{ if(ok) location.href="index.html"; },"Sair do sistema");
+      openConfirm("Deseja realmente sair do sistema?", ok => { if(ok) location.href = "index.html"; }, "Sair do sistema");
     }
 
     buildMenu();
-    preencherMedicos();
-    definirMinDataConsulta();
-    $("consultaVet").addEventListener("change", atualizarHorariosConsulta);
-    $("consultaData").addEventListener("change", atualizarHorariosConsulta);
+    const hoje = new Date();
+    hoje.setDate(hoje.getDate() + 1);
+    $("consultaData").min = hoje.toISOString().split("T")[0];
+    $("consultaVet").addEventListener("change", updateHorasConsultaAdmin);
+    $("consultaData").addEventListener("change", updateHorasConsultaAdmin);
     render();
   </script>
 </body>

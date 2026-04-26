@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PetCare Connect</title>
- <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Crect x="4" y="4" width="56" height="56" rx="18" fill="%23e0f2fe" stroke="%2360a5fa" stroke-width="2"/%3E%3Cg fill="%231d4ed8"%3E%3Ccircle cx="22" cy="22" r="5"/%3E%3Ccircle cx="32" cy="17" r="5"/%3E%3Ccircle cx="42" cy="22" r="5"/%3E%3Ccircle cx="28" cy="29" r="5"/%3E%3Cpath d="M32 31c-6 0-12 5-12 11 0 5 4 8 8 8 2 0 3-1 4-2 1 1 2 2 4 2 4 0 8-3 8-8 0-6-6-11-12-11z"/%3E%3C/g%3E%3C/svg%3E'>
+  <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Crect x="4" y="4" width="56" height="56" rx="18" fill="%23e0f2fe" stroke="%2360a5fa" stroke-width="2"/%3E%3Cg fill="%231d4ed8"%3E%3Ccircle cx="22" cy="22" r="5"/%3E%3Ccircle cx="32" cy="17" r="5"/%3E%3Ccircle cx="42" cy="22" r="5"/%3E%3Ccircle cx="28" cy="29" r="5"/%3E%3Cpath d="M32 31c-6 0-12 5-12 11 0 5 4 8 8 8 2 0 3-1 4-2 1 1 2 2 4 2 4 0 8-3 8-8 0-6-6-11-12-11z"/%3E%3C/g%3E%3C/svg%3E'>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
     :root{
@@ -20,14 +20,51 @@
       display:flex;align-items:center;justify-content:center
     }
 
-    .top-icons{position:fixed;top:8px;right:16px;display:flex;gap:8px;z-index:1000}
-    .icon-btn,.access-btn{display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s}
-    .icon-btn{
-      width:40px;height:40px;border:1px solid var(--border);border-radius:12px;
-      background:rgba(255,255,255,.95);color:var(--primary);font-size:1rem;
-      box-shadow:0 8px 20px rgba(29,78,216,.08)
+    .top-icons{
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      display: flex;
+      gap: 8px;
+      z-index: 1000;
     }
-    .icon-btn:hover,.access-btn:hover,.role-card:hover,.enter-btn:hover{transform:translateY(-1px)}
+
+    .icon-btn,.access-btn{display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.18s ease}
+
+    .icon-btn{
+      width: 38px;
+      height: 38px;
+      border: 1px solid #dbe4ee;
+      border-radius: 12px;
+      background: #ffffff;
+      color: #2563eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: .18s ease;
+      box-shadow: 0 4px 10px rgba(15,23,42,.06);
+    }
+
+    .icon-btn svg{
+      width: 17px;
+      height: 17px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .icon-btn:hover{
+      background: #f8fbff;
+      border-color: #bfd5ea;
+    }
+
+    .icon-btn:active{
+      transform: scale(.96);
+    }
+
     .access-btn{
       position:fixed;right:16px;bottom:18px;z-index:1000;width:46px;height:46px;border-radius:50%;
       border:1px solid #bde8e7;background:linear-gradient(135deg,#ecfeff,#eff6ff);color:#0f766e;
@@ -38,18 +75,15 @@
       width:100%;max-width:1180px;display:grid;grid-template-columns:1.08fr .92fr;
       gap:20px;align-items:stretch
     }
-
     .hero,.login-panel{
       background:rgba(255,255,255,.9);border:1px solid var(--border);
       border-radius:30px;box-shadow:var(--shadow);backdrop-filter:blur(8px)
     }
-
     .hero{padding:28px;position:relative;overflow:hidden}
     .hero::after{
       content:"";position:absolute;right:-50px;top:-50px;width:220px;height:220px;border-radius:50%;
       background:radial-gradient(circle,rgba(14,165,164,.12),transparent 70%)
     }
-
     .brand{display:flex;align-items:center;gap:14px;margin-bottom:22px}
     .brand-icon{
       width:62px;height:62px;border-radius:18px;display:flex;align-items:center;justify-content:center;
@@ -57,10 +91,8 @@
     }
     .brand-text h1{font-size:2rem;margin-bottom:4px}
     .brand-text p{font-size:.95rem;color:var(--muted)}
-
     .hero h2{font-size:2rem;line-height:1.2;margin-bottom:10px;max-width:650px}
     .hero .subtitle{font-size:1rem;line-height:1.6;color:var(--muted);max-width:690px;margin-bottom:22px}
-
     .role-list{display:grid;gap:14px;margin-top:18px}
     .role-card{
       border:1px solid var(--border);background:linear-gradient(180deg,#fff,#f9fcfe);
@@ -69,17 +101,13 @@
     .role-card.active{border-color:#bfdbfe;background:linear-gradient(90deg,#eff6ff,#ecfeff)}
     .role-card strong{display:block;margin-bottom:6px;font-size:1rem}
     .role-card span{color:var(--muted);font-size:.93rem;line-height:1.5}
-
-    .login-panel{padding:24px;display:flex;flex-direction:column;justify-content:space-between}
+    .login-panel{padding:24px;display:flex;flex-direction:column;justify-content:flex-start}
     .panel-head h3{font-size:1.25rem;margin-bottom:8px}
-    .panel-head p{font-size:.95rem;color:var(--muted);line-height:1.5}
-
     .status-box{
       margin:18px 0 14px;padding:12px 14px;border-radius:16px;
       background:#eff6ff;border:1px solid #bfdbfe;color:var(--primary);font-weight:800;display:none
     }
     .status-box.show{display:block}
-
     .form{display:grid;gap:14px}
     .input-group{display:flex;flex-direction:column;gap:6px}
     .input-group label{font-size:.92rem;font-weight:700}
@@ -88,23 +116,37 @@
       font-size:.96rem;color:var(--text);outline:none
     }
     .input-group input:focus{border-color:#7db5ff;box-shadow:0 0 0 4px rgba(29,78,216,.1);background:#fff}
-
     .extra-row{
       display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap
     }
     .remember{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.92rem}
-    .forgot{border:none;background:none;color:var(--primary);font-weight:700;cursor:pointer;font-size:.92rem}
-
+    .link-row{
+      display:flex;justify-content:flex-end;align-items:center;gap:14px;flex-wrap:wrap
+    }
+    .forgot,.register-inline{
+      border:none;background:none;color:var(--primary);font-weight:700;cursor:pointer;font-size:.92rem
+    }
     .enter-btn{
       border:none;border-radius:16px;padding:13px 18px;font-size:.96rem;font-weight:800;cursor:pointer;transition:.2s;
       color:#fff;background:linear-gradient(90deg,var(--primary),var(--accent));box-shadow:0 12px 22px rgba(29,78,216,.18)
     }
-
-    .help-card{
-      margin-top:18px;background:#f8fbfd;border:1px solid var(--border);border-radius:20px;padding:16px
+    .register-row{
+      display:flex;
+      justify-content:center;
+      margin-top:10px;
     }
-    .help-card strong{display:block;margin-bottom:6px}
-    .help-card span{color:var(--muted);font-size:.9rem;line-height:1.5}
+    .register-inline{
+      display:none;
+      border:none;
+      background:none;
+      color:var(--primary);
+      font-weight:700;
+      cursor:pointer;
+      font-size:.92rem;
+    }
+    .register-inline.show{
+      display:inline-block;
+    }
 
     .toast{
       position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-20px);
@@ -117,21 +159,35 @@
       .app{grid-template-columns:1fr}
       .hero h2{font-size:1.6rem}
     }
+
     @media (max-width:620px){
       body{padding:14px}
-      .top-icons{top:6px;right:10px}
-      .icon-btn{width:38px;height:38px;font-size:.95rem}
+      .top-icons{top:10px;right:10px;gap:8px}
+      .icon-btn{width:38px;height:38px;border-radius:12px}
+      .icon-btn svg{width:17px;height:17px}
       .access-btn{right:10px;bottom:12px;width:42px;height:42px;font-size:1rem}
       .hero,.login-panel{border-radius:22px}
       .brand-text h1{font-size:1.6rem}
       .hero h2{font-size:1.35rem}
+      .extra-row,.link-row{justify-content:space-between}
     }
   </style>
 </head>
 <body>
   <div class="top-icons">
-    <button class="icon-btn" title="Tela inicial" onclick="resetLogin()">⌂</button>
-    <button class="icon-btn" title="Recarregar" onclick="reloadPage()">⟳</button>
+    <button class="icon-btn" title="Início" onclick="goHome()">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 10.5 12 3l9 7.5"></path>
+        <path d="M5 9.5V20h14V9.5"></path>
+      </svg>
+    </button>
+
+    <button class="icon-btn" title="Recarregar" onclick="reloadPage()">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20 11a8 8 0 1 0-2.34 5.66"></path>
+        <path d="M20 4v7h-7"></path>
+      </svg>
+    </button>
   </div>
 
   <div class="app">
@@ -149,18 +205,18 @@
         Escolha o perfil de acesso para entrar no sistema e visualizar as funções disponíveis para sua rotina.
       </p>
 
-      <div class="role-list" id="roleList">
-        <div class="role-card" data-role="Tutor(a)" onclick="selectRole('Tutor(a)', this)">
+      <div class="role-list">
+        <div class="role-card" data-role="Tutor(a)" onclick="selectRole('Tutor(a)')">
           <strong>Tutor(a)</strong>
           <span>Acompanhe pets, consultas, vacinas, histórico e relatórios do seu animal.</span>
         </div>
 
-        <div class="role-card" data-role="Veterinário(a)" onclick="selectRole('Veterinário(a)', this)">
+        <div class="role-card" data-role="Veterinário(a)" onclick="selectRole('Veterinário(a)')">
           <strong>Veterinário(a)</strong>
           <span>Gerencie atendimentos, avisos, vacinas, histórico clínico e relatórios dos pets.</span>
         </div>
 
-        <div class="role-card" data-role="Administração" onclick="selectRole('Administração', this)">
+        <div class="role-card" data-role="Administração" onclick="selectRole('Administração')">
           <strong>Administração</strong>
           <span>Controle usuários, pets, consultas, avisos e relatórios do sistema.</span>
         </div>
@@ -168,43 +224,42 @@
     </section>
 
     <section class="login-panel" id="loginPanel" style="display:none;">
-      <div>
-        <div class="panel-head">
-          <h3>Acesso ao sistema</h3>
-          <p id="loginDescription">Selecione um perfil de acesso para continuar no sistema PetCare Connect.</p>
+      <div class="panel-head">
+        <h3>Acesso ao sistema</h3>
+      </div>
+
+      <div class="status-box" id="statusBox">
+        Entrando como: <span id="selectedRole">Tutor(a)</span>
+      </div>
+
+      <form class="form" onsubmit="enterSystem(event)">
+        <div class="input-group">
+          <label for="usuario">Usuário</label>
+          <input id="usuario" type="text" placeholder="Digite seu usuário" />
         </div>
 
-        <div class="status-box" id="statusBox">
-          Entrando como: <span id="selectedRole">Tutor(a)</span>
+        <div class="input-group">
+          <label for="senha">Senha</label>
+          <input id="senha" type="password" placeholder="Digite sua senha" />
         </div>
 
-        <form class="form" onsubmit="enterSystem(event)">
-          <div class="input-group">
-            <label for="usuario">Usuário</label>
-            <input id="usuario" type="text" placeholder="Digite seu usuário" />
-          </div>
+        <div class="extra-row">
+          <label class="remember">
+            <input type="checkbox" />
+            <span>Lembrar acesso</span>
+          </label>
 
-          <div class="input-group">
-            <label for="senha">Senha</label>
-            <input id="senha" type="password" placeholder="Digite sua senha" />
-          </div>
-
-          <div class="extra-row">
-            <label class="remember">
-              <input type="checkbox" />
-              <span>Lembrar acesso</span>
-            </label>
+          <div class="link-row">
             <button type="button" class="forgot" onclick="showToast('Fluxo de recuperação será implementado futuramente.')">Esqueci minha senha</button>
           </div>
+        </div>
 
-          <button class="enter-btn" type="submit">Entrar</button>
-        </form>
-      </div>
+        <button class="enter-btn" type="submit">Entrar</button>
 
-      <div class="help-card">
-        <strong>Primeiro acesso</strong>
-        <span>Selecione o perfil correto antes de entrar. O sistema usará esse perfil para abrir a área correspondente.</span>
-      </div>
+        <div class="register-row">
+          <button type="button" class="register-inline" id="registerTutorBtn" onclick="cadastrarTutor()">Cadastrar-se</button>
+        </div>
+      </form>
     </section>
   </div>
 
@@ -212,12 +267,17 @@
 
   <div id="toast" class="toast"></div>
 
+  <script src="petcare-data.js"></script>
   <script>
-    const USER_KEY = "petcare_logged_user_name";
     const ROLE_KEY = "petcare_selected_role";
     let selectedRole = "";
-
     const $ = id => document.getElementById(id);
+
+    const PAGE_BY_ROLE = {
+      "Tutor(a)": "tutor.html",
+      "Veterinário(a)": "veterinario.html",
+      "Administração": "administracao.html"
+    };
 
     function showToast(msg){
       const t = $("toast");
@@ -227,21 +287,31 @@
       showToast.timer = setTimeout(() => t.classList.remove("show"), 2200);
     }
 
+    function cadastrarTutor(){
+      if(selectedRole !== "Tutor(a)"){
+        showToast("Selecione o perfil Tutor(a) para se cadastrar.");
+        return;
+      }
+      showToast("Cadastro de tutor: preencha usuário e senha para criar o acesso.");
+      $("usuario").focus();
+    }
+
     function applyRole(role){
       if(!role) return;
 
       selectedRole = role;
       $("selectedRole").textContent = role;
       $("statusBox").classList.add("show");
-      $("loginDescription").textContent = "Informe seu usuário e senha para acessar o sistema com o perfil selecionado.";
       $("loginPanel").style.display = "flex";
 
       document.querySelectorAll(".role-card").forEach(card => {
         card.classList.toggle("active", card.dataset.role === role);
       });
+
+      $("registerTutorBtn").classList.toggle("show", role === "Tutor(a)");
     }
 
-    function selectRole(role, element){
+    function selectRole(role){
       localStorage.setItem(ROLE_KEY, role);
       applyRole(role);
     }
@@ -252,16 +322,33 @@
       $("senha").value = "";
       $("statusBox").classList.remove("show");
       $("loginPanel").style.display = "none";
-      $("loginDescription").textContent = "Selecione um perfil de acesso para continuar no sistema PetCare Connect.";
+      $("registerTutorBtn").classList.remove("show");
       document.querySelectorAll(".role-card").forEach(card => card.classList.remove("active"));
       localStorage.removeItem(ROLE_KEY);
+      petcareClearSession();
+    }
+
+    function goHome(){
+      resetLogin();
     }
 
     function reloadPage(){
-      if(selectedRole){
-        localStorage.setItem(ROLE_KEY, selectedRole);
-      }
+      if(selectedRole) localStorage.setItem(ROLE_KEY, selectedRole);
       location.reload();
+    }
+
+    function ensureUserExists(nome, perfil){
+      const data = petcareLoad();
+      const existe = data.usuarios.find(u => u.nome === nome && u.perfil === perfil);
+      if (!existe) {
+        data.usuarios.push({
+          id: petcareNextId(data.usuarios),
+          nome,
+          perfil,
+          email: ""
+        });
+        petcareSave(data);
+      }
     }
 
     function enterSystem(event){
@@ -270,28 +357,25 @@
       const usuario = $("usuario").value.trim();
       const senha = $("senha").value.trim();
 
-      if(!selectedRole){
-        showToast("Selecione um perfil de acesso.");
-        return;
-      }
-      if(!usuario || !senha){
-        showToast("Preencha usuário e senha.");
-        return;
-      }
+      if(!selectedRole) return showToast("Selecione um perfil de acesso.");
+      if(!usuario || !senha) return showToast("Preencha usuário e senha.");
 
-      localStorage.setItem(USER_KEY, usuario);
+      ensureUserExists(usuario, selectedRole);
+      petcareSetSession(usuario, selectedRole);
       localStorage.setItem(ROLE_KEY, selectedRole);
 
-      if(selectedRole === "Tutor(a)") location.href = "tutor.html";
-      else if(selectedRole === "Veterinário(a)") location.href = "veterinario.html";
-      else if(selectedRole === "Administração") location.href = "administracao.html";
+      const destino = PAGE_BY_ROLE[selectedRole];
+      if(!destino){
+        showToast("Perfil inválido.");
+        return;
+      }
+
+      location.href = destino;
     }
 
     window.addEventListener("DOMContentLoaded", () => {
       const savedRole = localStorage.getItem(ROLE_KEY);
-      if(savedRole){
-        applyRole(savedRole);
-      }
+      if(savedRole) applyRole(savedRole);
     });
   </script>
 </body>

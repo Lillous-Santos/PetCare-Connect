@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PetCare Connect - Área do Veterinário</title>
+  <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Crect x="4" y="4" width="56" height="56" rx="18" fill="%23e0f2fe" stroke="%2360a5fa" stroke-width="2"/%3E%3Cg fill="%231d4ed8"%3E%3Ccircle cx="22" cy="22" r="5"/%3E%3Ccircle cx="32" cy="17" r="5"/%3E%3Ccircle cx="42" cy="22" r="5"/%3E%3Ccircle cx="28" cy="29" r="5"/%3E%3Cpath d="M32 31c-6 0-12 5-12 11 0 5 4 8 8 8 2 0 3-1 4-2 1 1 2 2 4 2 4 0 8-3 8-8 0-6-6-11-12-11z"/%3E%3C/g%3E%3C/svg%3E'>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
     :root{
       --bg:#edf4f8;--border:#d8e7ef;--text:#0f172a;--muted:#64748b;
       --primary:#1d4ed8;--accent:#0ea5a4;--danger:#c62828;--dangerBg:#fff1f2;
-      --ok:#15803d;--okBg:#ecfdf5;--warn:#b45309;--warnBg:#fff7ed;
-      --shadow:0 18px 40px rgba(15,23,42,.08)
+      --ok:#15803d;--okBg:#ecfdf5;--shadow:0 18px 40px rgba(15,23,42,.08)
     }
     body{
       min-height:100vh;color:var(--text);
@@ -20,14 +20,50 @@
       var(--bg)
     }
 
-    .top-icons{position:fixed;top:8px;right:16px;display:flex;gap:8px;z-index:1000}
-    .icon-btn,.access-btn{display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s}
-    .icon-btn{
-      width:40px;height:40px;border:1px solid var(--border);border-radius:12px;
-      background:rgba(255,255,255,.95);color:var(--primary);font-size:1rem;
-      box-shadow:0 8px 20px rgba(29,78,216,.08)
+    .top-icons{
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      display: flex;
+      gap: 8px;
+      z-index: 1000;
     }
-    .icon-btn:hover,.access-btn:hover,.logout-btn:hover,.btn:hover,.stat-card:hover,.notice-cta:hover{transform:translateY(-1px)}
+
+    .icon-btn,.access-btn{display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.18s ease}
+
+    .icon-btn{
+      width: 38px;
+      height: 38px;
+      border: 1px solid #dbe4ee;
+      border-radius: 12px;
+      background: #ffffff;
+      color: #2563eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: .18s ease;
+      box-shadow: 0 4px 10px rgba(15,23,42,.06);
+    }
+
+    .icon-btn svg{
+      width: 17px;
+      height: 17px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .icon-btn:hover{
+      background: #f8fbff;
+      border-color: #bfd5ea;
+    }
+
+    .icon-btn:active{
+      transform: scale(.96);
+    }
 
     .logout-btn{
       position:fixed;left:16px;bottom:18px;z-index:1000;display:flex;align-items:center;gap:6px;
@@ -35,6 +71,8 @@
       border-radius:10px;padding:8px 11px;font-size:.82rem;font-weight:700;cursor:pointer;
       box-shadow:0 8px 20px rgba(198,40,40,.08)
     }
+    .icon-btn:hover,.access-btn:hover,.logout-btn:hover,.btn:hover,.stat-card:hover,.notice-cta:hover{transform:translateY(-1px)}
+
     .access-btn{
       position:fixed;right:16px;bottom:18px;z-index:1000;width:46px;height:46px;border-radius:50%;
       border:1px solid #bde8e7;background:linear-gradient(135deg,#ecfeff,#eff6ff);color:#0f766e;
@@ -77,7 +115,7 @@
     }
     .hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;padding-right:90px}
     .hero h2{font-size:2rem;margin-bottom:6px}
-    .hero p{line-height:1.5;max-width:680px}
+    .hero p{line-height:1.5;max-width:700px}
     .hero-badge,.section-chip,.tag,.status-badge{border-radius:999px;font-weight:800;white-space:nowrap}
     .hero-badge{padding:10px 14px;background:#eff6ff;border:1px solid #bfdbfe;color:var(--primary);font-size:.9rem}
 
@@ -96,13 +134,14 @@
     .section-subtitle{font-size:.95rem;line-height:1.5;max-width:760px}
     .section-chip{padding:9px 12px;background:#f0fdfd;border:1px solid #bde8e7;color:#0f766e;font-size:.82rem}
 
-    .search-wrap{display:flex;justify-content:flex-end;margin-bottom:14px}
+    .search-row{display:flex;justify-content:flex-end;margin-bottom:16px}
     .search-box{
-      display:flex;align-items:center;gap:8px;min-width:240px;max-width:320px;width:100%;
-      background:#fbfdfe;border:1px solid #cfdde6;border-radius:16px;padding:10px 12px
+      width:100%;max-width:320px;display:flex;align-items:center;gap:10px;
+      background:#fbfdfe;border:1px solid #cfdde6;border-radius:16px;padding:0 14px;height:48px
     }
-    .search-box input{border:none;outline:none;background:transparent;width:100%;font-size:.95rem;color:var(--text)}
-    .search-box span{color:var(--primary);font-size:1rem}
+    .search-box input{
+      border:none;outline:none;background:transparent;width:100%;font-size:.95rem;color:var(--text)
+    }
 
     .form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:16px}
     .input-group{display:flex;flex-direction:column;gap:6px}
@@ -123,19 +162,18 @@
     .btn{border:none;border-radius:16px;padding:12px 18px;font-size:.95rem}
     .btn-primary{color:#fff;background:linear-gradient(90deg,var(--primary),var(--accent));box-shadow:0 12px 22px rgba(29,78,216,.18)}
     .btn-secondary,.small-btn{background:#fff;border:1px solid #cbdbe5;color:var(--primary)}
-    .btn-success{background:linear-gradient(90deg,#16a34a,#22c55e);color:#fff}
     .small-btn{padding:9px 12px;border-radius:12px;font-size:.88rem}
     .small-btn:hover{background:#eff6ff}
     .small-btn.danger{border-color:#fecaca;color:var(--danger)}
     .small-btn.success{border-color:#bbf7d0;color:var(--ok)}
+
     .list-grid,.notice-list,.mini-summary{display:grid;gap:14px}
     .item-card{border-radius:22px;padding:18px;background:linear-gradient(180deg,#fff,#f9fcfe)}
     .item-card strong,.notice-item strong{display:block;margin-bottom:6px;font-size:1rem}
     .tag{display:inline-block;margin-top:8px;padding:5px 9px;background:#eff6ff;color:var(--primary);border:1px solid #bfdbfe;font-size:.78rem}
     .status-badge{display:inline-block;margin-top:8px;padding:5px 9px;font-size:.76rem}
-    .status-marcada{background:var(--warnBg);color:var(--warn);border:1px solid #fed7aa}
-    .status-concluida{background:var(--okBg);color:var(--ok);border:1px solid #bbf7d0}
-    .subline{font-size:.9rem;color:var(--muted)}
+    .status-marcada{background:#fff7ed;color:#b45309;border:1px solid #fed7aa}
+    .status-concluida{background:#ecfdf5;color:var(--ok);border:1px solid #bbf7d0}
 
     .rightbar{padding:22px 18px;display:flex;flex-direction:column;gap:16px}
     .right-card{border-radius:24px;padding:18px;background:linear-gradient(180deg,#fff,#f7fbfd)}
@@ -198,7 +236,7 @@
       .app{grid-template-columns:1fr}
       .hero-top{padding-right:0;margin-top:34px}
       .form-grid{grid-template-columns:1fr}
-      .search-wrap{justify-content:stretch}
+      .search-row{justify-content:stretch}
       .search-box{max-width:none}
     }
     @media (max-width:620px){
@@ -206,8 +244,9 @@
       .hero,.section,.sidebar,.rightbar{border-radius:22px}
       .hero h2{font-size:1.45rem}
       .stats{grid-template-columns:1fr}
-      .top-icons{top:6px;right:10px}
-      .icon-btn{width:38px;height:38px;font-size:.95rem}
+      .top-icons{top:10px;right:10px;gap:8px}
+      .icon-btn{width:38px;height:38px;border-radius:12px}
+      .icon-btn svg{width:17px;height:17px}
       .logout-btn{left:10px;bottom:12px;padding:7px 10px;font-size:.78rem}
       .access-btn{right:10px;bottom:12px;width:42px;height:42px;font-size:1rem}
     }
@@ -215,8 +254,19 @@
 </head>
 <body>
   <div class="top-icons">
-    <button class="icon-btn" title="Início" onclick="goHome()">⌂</button>
-    <button class="icon-btn" title="Recarregar" onclick="reloadPage()">⟳</button>
+    <button class="icon-btn" title="Início" onclick="goHome()">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 10.5 12 3l9 7.5"></path>
+        <path d="M5 9.5V20h14V9.5"></path>
+      </svg>
+    </button>
+
+    <button class="icon-btn" title="Recarregar" onclick="reloadPage()">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20 11a8 8 0 1 0-2.34 5.66"></path>
+        <path d="M20 4v7h-7"></path>
+      </svg>
+    </button>
   </div>
 
   <div class="app">
@@ -238,16 +288,16 @@
         <div class="hero-top">
           <div>
             <h2>Bem-vindo de volta, doutor(a)!</h2>
-            <p>Gerencie pets, acompanhe consultas, publique avisos e mantenha vacinas, histórico e relatórios atualizados em um único painel clínico.</p>
+            <p>Gerencie os atendimentos, atualize históricos, vacinas, avisos e relatórios dos pets vinculados à sua agenda.</p>
           </div>
           <div class="hero-badge">Perfil logado: Veterinário(a)</div>
         </div>
 
         <div class="stats">
-          <div class="stat-card" onclick="openSection('pets')"><span>Pets acompanhados</span><strong id="totalPets">0</strong></div>
+          <div class="stat-card" onclick="openSection('pets')"><span>Pets vinculados</span><strong id="totalPets">0</strong></div>
           <div class="stat-card" onclick="openSection('consultas')"><span>Consultas marcadas</span><strong id="totalConsultas">0</strong></div>
-          <div class="stat-card" onclick="openSection('vacinas')"><span>Vacinas lançadas</span><strong id="totalVacinas">0</strong></div>
-          <div class="stat-card" onclick="openSection('relatorios')"><span>Relatórios ativos</span><strong id="totalRelatorios">0</strong></div>
+          <div class="stat-card" onclick="openSection('vacinas')"><span>Vacinas registradas</span><strong id="totalVacinas">0</strong></div>
+          <div class="stat-card" onclick="openSection('relatorios')"><span>Relatórios</span><strong id="totalRelatorios">0</strong></div>
         </div>
       </section>
 
@@ -255,14 +305,14 @@
         <div class="section-header">
           <div>
             <div class="section-title">Painel inicial</div>
-            <div class="section-subtitle">Use os atalhos acima ou o menu lateral para acessar rapidamente as funções clínicas.</div>
+            <div class="section-subtitle">Use o menu lateral para localizar rapidamente pets, consultas, vacinas, histórico, avisos e relatórios.</div>
           </div>
-          <div class="section-chip">Atalhos rápidos</div>
+          <div class="section-chip">Rotina clínica</div>
         </div>
         <div class="list-grid">
           <div class="item-card">
-            <strong>Fluxo do doutor(a)</strong>
-            <p>Pesquise pets, consulte a agenda, publique avisos e atualize histórico, vacinas e relatórios após os atendimentos.</p>
+            <strong>Painel clínico</strong>
+            <p>Nesta área, o doutor(a) pode acompanhar a agenda e atualizar as informações clínicas dos pets atendidos.</p>
           </div>
         </div>
       </section>
@@ -271,24 +321,26 @@
         <div class="section-header">
           <div>
             <div class="section-title">Gerenciar pet</div>
-            <div class="section-subtitle">Busque um pet pelo nome e atualize idade e peso rapidamente.</div>
+            <div class="section-subtitle">Busque o pet pelo nome e atualize idade e peso conforme necessidade clínica.</div>
           </div>
-          <div class="section-chip">Clínica geral</div>
+          <div class="section-chip">Busca rápida</div>
         </div>
-        <div class="search-wrap">
+
+        <div class="search-row">
           <div class="search-box">
-            <span>🔍</span>
-            <input id="petSearch" placeholder="Buscar pet pelo nome..." oninput="renderPets()" />
+            <span>🔎</span>
+            <input id="petSearch" type="text" placeholder="Buscar pet pelo nome" oninput="renderPets()">
           </div>
         </div>
+
         <div class="list-grid" id="listaPets"></div>
       </section>
 
       <section id="consultas" class="section">
         <div class="section-header">
           <div>
-            <div class="section-title">Consultas do doutor(a)</div>
-            <div class="section-subtitle">Visualize consultas marcadas, conclua atendimentos e envie a consulta concluída para o histórico do pet.</div>
+            <div class="section-title">Consultas agendadas</div>
+            <div class="section-subtitle">Visualize as consultas marcadas para você e conclua os atendimentos realizados.</div>
           </div>
           <div class="section-chip">Agenda clínica</div>
         </div>
@@ -299,31 +351,14 @@
         <div class="section-header">
           <div>
             <div class="section-title">Publicar e alterar avisos</div>
-            <div class="section-subtitle">Crie avisos coletivos para todos ou individuais para um pet específico.</div>
+            <div class="section-subtitle">Publique avisos coletivos ou específicos para orientar tutores e equipe.</div>
           </div>
           <div class="section-chip">Comunicação</div>
         </div>
 
         <div class="form-grid">
-          <div class="input-group">
-            <label>Título do aviso</label>
-            <input id="avisoTitulo" placeholder="Ex.: Reforço vacinal" />
-          </div>
-          <div class="input-group">
-            <label>Destino</label>
-            <select id="avisoDestino">
-              <option value="todos">Todos</option>
-              <option value="pet">Pet específico</option>
-            </select>
-          </div>
-          <div class="input-group">
-            <label>Pet</label>
-            <select id="avisoPet"></select>
-          </div>
-          <div class="input-group full">
-            <label>Mensagem</label>
-            <textarea id="avisoTexto" placeholder="Digite o aviso..."></textarea>
-          </div>
+          <div class="input-group"><label>Título do aviso</label><input id="avisoTitulo" placeholder="Ex.: Retorno necessário"></div>
+          <div class="input-group full"><label>Mensagem</label><textarea id="avisoTexto" placeholder="Digite o aviso..."></textarea></div>
         </div>
 
         <div class="action-row">
@@ -338,28 +373,20 @@
         <div class="section-header">
           <div>
             <div class="section-title">Gerenciar vacinas</div>
-            <div class="section-subtitle">Lance uma nova vacina para o pet e acompanhe as já registradas.</div>
+            <div class="section-subtitle">Atualize ou poste vacinação do pet atendido.</div>
           </div>
-          <div class="section-chip">Vacinação</div>
+          <div class="section-chip">Imunização</div>
         </div>
 
         <div class="form-grid">
-          <div class="input-group">
-            <label>Pet</label>
-            <select id="vacinaPet"></select>
-          </div>
-          <div class="input-group">
-            <label>Nome da vacina</label>
-            <input id="vacinaNome" placeholder="Ex.: Antirrábica" />
-          </div>
-          <div class="input-group">
-            <label>Data de aplicação</label>
-            <input id="vacinaData" type="date" />
-          </div>
+          <div class="input-group"><label>Pet</label><select id="vacinaPet"></select></div>
+          <div class="input-group"><label>Nome da vacina</label><input id="vacinaNome" placeholder="Ex.: Antirrábica"></div>
+          <div class="input-group"><label>Data da aplicação</label><input id="vacinaData" type="date"></div>
+          <div class="input-group"><label>Próxima/Disponível</label><input id="vacinaDisponivel" placeholder="Ex.: Reforço anual"></div>
         </div>
 
         <div class="action-row">
-          <button class="btn btn-primary" onclick="addVacina()">Registrar vacina</button>
+          <button class="btn btn-primary" onclick="addVacina()">Salvar vacina</button>
           <button class="btn btn-secondary" onclick="clearVacinaForm()">Limpar</button>
         </div>
 
@@ -370,16 +397,29 @@
         <div class="section-header">
           <div>
             <div class="section-title">Gerenciar histórico do pet</div>
-            <div class="section-subtitle">Busque um pet pelo nome e veja ou complemente o histórico clínico.</div>
+            <div class="section-subtitle">Busque o pet e atualize o histórico após a consulta.</div>
           </div>
           <div class="section-chip">Prontuário</div>
         </div>
-        <div class="search-wrap">
+
+        <div class="search-row">
           <div class="search-box">
-            <span>🔍</span>
-            <input id="histSearch" placeholder="Buscar pet no histórico..." oninput="renderHistorico()" />
+            <span>🔎</span>
+            <input id="historicoSearch" type="text" placeholder="Buscar pet pelo nome" oninput="renderHistorico()">
           </div>
         </div>
+
+        <div class="form-grid">
+          <div class="input-group"><label>Pet</label><select id="historicoPet"></select></div>
+          <div class="input-group"><label>Data</label><input id="historicoData" type="date"></div>
+          <div class="input-group full"><label>Descrição clínica</label><textarea id="historicoDescricao" placeholder="Ex.: Consulta concluída, avaliação geral e orientação ao tutor."></textarea></div>
+        </div>
+
+        <div class="action-row">
+          <button class="btn btn-primary" onclick="addHistorico()">Salvar histórico</button>
+          <button class="btn btn-secondary" onclick="clearHistoricoForm()">Limpar</button>
+        </div>
+
         <div class="list-grid" id="listaHistorico"></div>
       </section>
 
@@ -387,20 +427,30 @@
         <div class="section-header">
           <div>
             <div class="section-title">Gerenciar relatórios</div>
-            <div class="section-subtitle">Edite ou exclua relatórios clínicos dos pets acompanhados.</div>
+            <div class="section-subtitle">Edite ou exclua relatórios de cada pet.</div>
           </div>
-          <div class="section-chip">Documentos</div>
+          <div class="section-chip">Documentos clínicos</div>
         </div>
+
+        <div class="form-grid">
+          <div class="input-group"><label>Pet</label><select id="relatorioPet"></select></div>
+          <div class="input-group full"><label>Texto do relatório</label><textarea id="relatorioTexto" placeholder="Digite o relatório do atendimento..."></textarea></div>
+        </div>
+
+        <div class="action-row">
+          <button class="btn btn-primary" onclick="addRelatorio()">Salvar relatório</button>
+          <button class="btn btn-secondary" onclick="clearRelatorioForm()">Limpar</button>
+        </div>
+
         <div class="list-grid" id="listaRelatorios"></div>
       </section>
     </main>
 
     <aside class="rightbar">
       <div class="right-card">
-        <h3>Painel do doutor(a)</h3>
+        <h3>Painel clínico</h3>
         <div class="mini-summary">
-          <div class="mini-row"><span>Doutor(a)</span><strong id="usuarioLateral">Dra. Camila</strong></div>
-          <div class="mini-row"><span>Plantão</span><strong>Ativo</strong></div>
+          <div class="mini-row"><span>Doutor(a)</span><strong id="usuarioLateral">Veterinário(a)</strong></div>
           <button class="notice-cta" onclick="toggleAvisosDrawer(true)">
             <span>Ver avisos</span>
             <span id="avisosBadge" class="notice-badge hidden">0</span>
@@ -422,29 +472,16 @@
   <button class="access-btn" onclick="openA11y()" title="Acessibilidade">♿</button>
   <button class="logout-btn" onclick="logout()" title="Sair"><span>↩</span><span>Sair</span></button>
 
-  <div class="modal-overlay" id="editPetModal">
+  <div class="modal-overlay" id="petModal">
     <div class="modal-box">
-      <h3>Atualizar dados do pet</h3>
-      <p>Edite idade e peso do pet selecionado.</p>
+      <h3>Editar pet</h3>
+      <p>Atualize idade e peso do pet selecionado.</p>
       <div class="input-group" style="margin-bottom:12px"><label>Pet</label><input id="editPetNome" readonly></div>
-      <div class="input-group" style="margin-bottom:12px"><label>Nova idade</label><input id="editPetIdade" type="number"></div>
-      <div class="input-group"><label>Novo peso (kg)</label><input id="editPetPeso" type="number" step="0.1"></div>
+      <div class="input-group" style="margin-bottom:12px"><label>Idade</label><input id="editPetIdade" type="number"></div>
+      <div class="input-group"><label>Peso (kg)</label><input id="editPetPeso" type="number" step="0.1"></div>
       <div class="modal-actions">
-        <button class="btn btn-secondary" onclick="toggleModal('editPetModal',false)">Cancelar</button>
-        <button class="btn btn-primary" onclick="savePetEdit()">Salvar alterações</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="relatorioModal">
-    <div class="modal-box">
-      <h3 id="relatorioModalTitulo">Editar relatório</h3>
-      <p>Atualize o texto do relatório clínico.</p>
-      <div class="input-group" style="margin-bottom:12px"><label>Pet</label><input id="relatorioPetNome" readonly></div>
-      <div class="input-group"><label>Texto do relatório</label><textarea id="relatorioTextoEdit"></textarea></div>
-      <div class="modal-actions">
-        <button class="btn btn-secondary" onclick="toggleModal('relatorioModal',false)">Cancelar</button>
-        <button class="btn btn-primary" onclick="saveRelatorioEdit()">Salvar</button>
+        <button class="btn btn-secondary" onclick="toggleModal('petModal',false)">Cancelar</button>
+        <button class="btn btn-primary" onclick="savePetEdit()">Salvar</button>
       </div>
     </div>
   </div>
@@ -462,6 +499,19 @@
     </div>
   </div>
 
+  <div class="modal-overlay" id="relatorioModal">
+    <div class="modal-box">
+      <h3>Editar relatório</h3>
+      <p>Atualize o texto do relatório selecionado.</p>
+      <div class="input-group" style="margin-bottom:12px"><label>Pet</label><input id="editRelatorioPet" readonly></div>
+      <div class="input-group"><label>Texto do relatório</label><textarea id="editRelatorioTexto"></textarea></div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="toggleModal('relatorioModal',false)">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveRelatorioEdit()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="confirmModal">
     <div class="modal-box">
       <h3 id="confirmTitle">Confirmação</h3>
@@ -475,189 +525,191 @@
 
   <div id="toast" class="toast"></div>
 
+  <script src="petcare-data.js"></script>
   <script>
-    const KEY="petcare_vet_data_v1", USER_KEY="petcare_logged_user_name", SEC_KEY="petcare_vet_secao";
-    const $=id=>document.getElementById(id);
-    const menuItems=[
-      ["inicio","⌂","Início"],["pets","🩺","Gerenciar pet"],["consultas","🗓","Consultas"],
-      ["avisos","📢","Avisos"],["vacinas","💉","Gerenciar vacinas"],
-      ["historico","📋","Gerenciar histórico"],["relatorios","📄","Gerenciar relatórios"]
+    const SEC_KEY = "petcare_vet_secao";
+    const $ = id => document.getElementById(id);
+    const menuItems = [
+      ["inicio","⌂","Início"],
+      ["pets","🩺","Gerenciar pet"],
+      ["consultas","🗓","Consultas"],
+      ["avisos","📢","Avisos"],
+      ["vacinas","💉","Gerenciar vacinas"],
+      ["historico","📋","Gerenciar histórico"],
+      ["relatorios","📄","Gerenciar relatórios"]
     ];
-    const defaults={
-      pets:[
-        {nome:"Luna",tipo:"Cachorra",idade:4,peso:"12,4",
-         vacinas:[{nome:"V8",data:"10/01/2026"},{nome:"Antirrábica",data:"15/02/2026"}],
-         historico:[
-           {data:"12/04/2026",descricao:"rotina e avaliação clínica geral."},
-           {data:"15/02/2026",descricao:"retorno clínico após medicação."}
-         ],
-         relatorio:"Paciente estável. Manter revisão preventiva em 6 meses.",
-         relatorioAtualizacao:"12/04/2026"
-        },
-        {nome:"Thor",tipo:"Gato",idade:2,peso:"4,8",
-         vacinas:[{nome:"V4",data:"08/01/2026"},{nome:"Antirrábica",data:"18/03/2026"}],
-         historico:[
-           {data:"28/03/2026",descricao:"check-up e avaliação de peso."},
-           {data:"10/01/2026",descricao:"acompanhamento preventivo."}
-         ],
-         relatorio:"Necessário monitoramento periódico de peso e reforço vacinal.",
-         relatorioAtualizacao:"28/03/2026"
-        }
-      ],
-      consultas:[
-        {pet:"Luna",data:"25/04/2026",hora:"14:00",status:"Marcada",observacao:"Consulta clínica geral."},
-        {pet:"Thor",data:"26/04/2026",hora:"10:00",status:"Marcada",observacao:"Revisão vacinal."}
-      ],
-      avisos:[
-        {titulo:"Reforço vacinal",texto:"Verificar pets com vacinação pendente nesta semana.",destino:"todos",pet:"",lido:false},
-        {titulo:"Luna",texto:"Tutor deve trazer exames anteriores na próxima consulta.",destino:"pet",pet:"Luna",lido:false}
-      ]
-    };
 
-    let confirmCallback=null, relatorioIndex=null, avisoIndex=null;
-
-    const brDate=v=>v?(()=>{const[a,b,c]=v.split("-");return `${c}/${b}/${a}`})():"";
-    const cloneDefaults=()=>JSON.parse(JSON.stringify(defaults));
-    const load=()=>{try{return JSON.parse(localStorage.getItem(KEY))||cloneDefaults()}catch{return cloneDefaults()}};
-    const save=d=>localStorage.setItem(KEY,JSON.stringify(d));
-    const currentSection=()=>localStorage.getItem(SEC_KEY)||"inicio";
-    const currentUser=()=>localStorage.getItem(USER_KEY)?.trim()||"Dra. Camila";
-    const norm=s=>(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+    let confirmCallback = null, petIndex = null, avisoIndex = null, relatorioIndex = null;
+    const currentSection = () => localStorage.getItem(SEC_KEY) || "inicio";
+    const currentUser = () => petcareGetSession().user || "Veterinário(a)";
+    const load = () => petcareLoad();
+    const save = d => petcareSave(d);
 
     function showToast(msg){
-      const t=$("toast");
-      t.textContent=msg;
+      const t = $("toast");
+      t.textContent = msg;
       t.classList.add("show");
       clearTimeout(showToast.timer);
-      showToast.timer=setTimeout(()=>t.classList.remove("show"),2200);
+      showToast.timer = setTimeout(() => t.classList.remove("show"), 2200);
     }
+
     function openConfirm(message, callback, title="Confirmação"){
-      $("confirmTitle").textContent=title;
-      $("confirmText").textContent=message;
-      confirmCallback=callback;
+      $("confirmTitle").textContent = title;
+      $("confirmText").textContent = message;
+      confirmCallback = callback;
       $("confirmModal").classList.add("active");
     }
+
     function closeConfirm(result){
       $("confirmModal").classList.remove("active");
       if(confirmCallback) confirmCallback(result);
-      confirmCallback=null;
+      confirmCallback = null;
     }
-    const toggleModal=(id,show)=>$(id).classList.toggle("active",show);
+
+    function toggleModal(id,show){ $(id).classList.toggle("active",show); }
 
     function buildMenu(){
-      $("menu").innerHTML=menuItems.map(([id,ico,txt])=>
+      $("menu").innerHTML = menuItems.map(([id,ico,txt]) =>
         `<button class="menu-btn" data-sec="${id}" onclick="openSection('${id}')"><span class="menu-icon">${ico}</span><span>${txt}</span></button>`
       ).join("");
     }
+
     function openSection(id){
-      document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
-      document.querySelectorAll(".menu-btn").forEach(b=>b.classList.remove("active"));
+      document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+      document.querySelectorAll(".menu-btn").forEach(b => b.classList.remove("active"));
       $(id).classList.add("active");
       document.querySelector(`.menu-btn[data-sec="${id}"]`)?.classList.add("active");
       localStorage.setItem(SEC_KEY,id);
-      scrollTo({top:0,behavior:"smooth"});
+      scrollTo({ top:0, behavior:"smooth" });
     }
-    const goHome=()=>openSection("inicio");
-    const reloadPage=()=>location.reload();
+
+    const goHome = () => openSection("inicio");
+    const reloadPage = () => location.reload();
+
+    function petsDoVet(data){
+      const vet = currentUser();
+      const petsIds = new Set(data.consultas.filter(c => c.vet === vet).map(c => String(c.petId)));
+      return data.pets.filter(p => petsIds.has(String(p.id)));
+    }
 
     function updateHeader(){
-      $("usuarioLateral").textContent=currentUser();
+      $("usuarioLateral").textContent = currentUser();
     }
 
-    function updateSelects(d){
-      const opts=d.pets.map(p=>`<option value="${p.nome}">${p.nome}</option>`).join("");
-      $("avisoPet").innerHTML=`<option value="">Selecione</option>${opts}`;
-      $("vacinaPet").innerHTML=opts;
+    function updateSelects(data){
+      const pets = petsDoVet(data);
+      const options = pets.length
+        ? pets.map(p => `<option value="${p.id}">${p.nome}</option>`).join("")
+        : `<option value="">Nenhum pet vinculado</option>`;
+
+      $("vacinaPet").innerHTML = options;
+      $("historicoPet").innerHTML = options;
+      $("relatorioPet").innerHTML = options;
     }
 
-    function renderStats(d){
-      $("totalPets").textContent=d.pets.length;
-      $("totalConsultas").textContent=d.consultas.filter(c=>c.status==="Marcada").length;
-      $("totalVacinas").textContent=d.pets.reduce((a,p)=>a+p.vacinas.length,0);
-      $("totalRelatorios").textContent=d.pets.filter(p=>p.relatorio).length;
+    function renderStats(data){
+      const pets = petsDoVet(data);
+      const consultas = data.consultas.filter(c => c.vet === currentUser());
+      $("totalPets").textContent = pets.length;
+      $("totalConsultas").textContent = consultas.filter(c => c.status === "Marcada").length;
+      $("totalVacinas").textContent = pets.reduce((a,p) => a + (p.vacinasAplicadas?.length || 0), 0);
+      $("totalRelatorios").textContent = pets.filter(p => p.relatorio).length;
     }
 
     function renderPets(){
-      const d=load(), q=norm($("petSearch").value);
-      $("listaPets").innerHTML=d.pets
-        .filter(p=>norm(p.nome).includes(q))
-        .map(p=>`
-          <div class="item-card">
-            <strong>${p.nome}</strong>
-            <span>Tipo: ${p.tipo} • Idade atual: ${p.idade} ano(s) • Peso atual: ${p.peso} kg</span>
-            <div class="inline-actions">
-              <button class="small-btn" onclick="editPet('${p.nome}','${p.idade}','${String(p.peso).replace(',','.')}')">Atualizar dados</button>
-            </div>
+      const data = load();
+      const q = ($("petSearch").value || "").toLowerCase();
+      const pets = petsDoVet(data).filter(p => p.nome.toLowerCase().includes(q));
+
+      $("listaPets").innerHTML = pets.length ? pets.map((p) => `
+        <div class="item-card">
+          <strong>${p.nome}</strong>
+          <span>Tipo: ${p.tipo} • Idade atual: ${p.idade} ano(s) • Peso atual: ${p.peso} kg</span>
+          <div class="inline-actions">
+            <button class="small-btn" onclick="editPet(${p.id})">Atualizar dados</button>
           </div>
-        `).join("") || `<div class="item-card"><strong>Nenhum pet encontrado</strong><p>Pesquise outro nome.</p></div>`;
+        </div>
+      `).join("") : `<div class="item-card"><strong>Nenhum pet encontrado</strong><p>Pesquise outro nome.</p></div>`;
     }
 
     function renderConsultas(){
-      const d=load();
-      $("listaConsultas").innerHTML=d.consultas.map((c,i)=>`
-        <div class="item-card">
-          <strong>${c.pet}</strong>
-          <span>${c.data} às ${c.hora} • ${c.observacao}</span>
-          <div class="status-badge ${c.status==="Concluída"?"status-concluida":"status-marcada"}">${c.status}</div>
-          <div class="inline-actions">
-            ${c.status==="Marcada" ? `<button class="small-btn success" onclick="concluirConsulta(${i})">Concluir consulta</button>` : ""}
+      const data = load();
+      const vet = currentUser();
+      const consultas = data.consultas.filter(c => c.vet === vet);
+
+      $("listaConsultas").innerHTML = consultas.length ? consultas.map(c => {
+        const pet = petcareGetPetById(data, c.petId);
+        return `
+          <div class="item-card">
+            <strong>${pet ? pet.nome : "Pet"}</strong>
+            <span>${c.data} às ${c.hora}</span>
+            <div class="status-badge ${c.status === "Concluída" ? "status-concluida" : "status-marcada"}">${c.status}</div>
+            <div class="inline-actions">
+              ${c.status === "Marcada" ? `<button class="small-btn success" onclick="concluirConsulta(${c.id})">Concluir consulta</button>` : ""}
+            </div>
           </div>
-        </div>
-      `).join("") || `<div class="item-card"><strong>Sem consultas</strong><p>Nenhuma consulta registrada no momento.</p></div>`;
+        `;
+      }).join("") : `<div class="item-card"><strong>Sem consultas</strong><p>Nenhuma consulta registrada no momento.</p></div>`;
     }
 
     function renderAvisos(){
-      const d=load();
-      const html=d.avisos.map((a,i)=>`
+      const data = load();
+      const html = data.avisos.length ? data.avisos.map((a,i) => `
         <div class="item-card">
           <strong>${a.titulo}</strong>
           <span>${a.texto}</span>
-          <p class="subline">${a.destino==="todos" ? "Aviso coletivo" : `Aviso para: ${a.pet}`}</p>
           <div class="inline-actions">
             <button class="small-btn" onclick="editAviso(${i})">Editar</button>
             <button class="small-btn danger" onclick="removeAviso(${i})">Excluir</button>
           </div>
         </div>
-      `).join("") || `<div class="item-card"><strong>Sem avisos</strong><p>Nenhum aviso publicado.</p></div>`;
-      $("listaAvisosGerenciar").innerHTML=html;
-      $("listaAvisosDrawer").innerHTML=html.replace(/onclick="editAviso\(\d+\)"/g,"").replace(/onclick="removeAviso\(\d+\)"/g,"").replace(/<div class="inline-actions">[\s\S]*?<\/div>/g,"");
-      const unread=d.avisos.filter(a=>!a.lido).length;
-      $("avisosBadge").textContent=unread;
-      $("avisosBadge").classList.toggle("hidden", unread===0);
+      `).join("") : `<div class="item-card"><strong>Sem avisos</strong><p>Nenhum aviso publicado.</p></div>`;
+
+      $("listaAvisosGerenciar").innerHTML = html;
+      $("listaAvisosDrawer").innerHTML = data.avisos.length ? data.avisos.map(a => `
+        <div class="notice-item"><strong>${a.titulo}</strong><span>${a.texto}</span></div>
+      `).join("") : `<div class="notice-item"><strong>Sem avisos</strong><span>Nenhum aviso publicado.</span></div>`;
+
+      const unread = data.avisos.filter(a => !a.lido).length;
+      $("avisosBadge").textContent = unread;
+      $("avisosBadge").classList.toggle("hidden", unread === 0);
     }
 
     function renderVacinas(){
-      const d=load();
-      $("listaVacinas").innerHTML=d.pets.map((p,pi)=>`
+      const data = load();
+      const pets = petsDoVet(data);
+
+      $("listaVacinas").innerHTML = pets.length ? pets.map(p => `
         <div class="item-card">
           <strong>${p.nome}</strong>
-          ${p.vacinas.length
-            ? p.vacinas.map((v,vi)=>`
-                <p>• ${v.nome} — aplicada em ${v.data}
-                  <button class="small-btn danger" style="margin-left:8px;padding:4px 8px" onclick="removeVacina(${pi},${vi})">Excluir</button>
-                </p>`).join("")
+          ${p.vacinasAplicadas?.length
+            ? p.vacinasAplicadas.map(v => `<p>• ${v.nome} — aplicada em ${v.data}</p>`).join("")
             : `<p>Nenhuma vacina registrada.</p>`}
+          <p><strong>Disponíveis:</strong> ${p.vacinasDisponiveis?.length ? p.vacinasDisponiveis.join(", ") : "Nenhuma informada."}</p>
         </div>
-      `).join("");
+      `).join("") : `<div class="item-card"><strong>Sem pets</strong><p>Nenhum pet vinculado ao seu atendimento.</p></div>`;
     }
 
     function renderHistorico(){
-      const d=load(), q=norm($("histSearch").value);
-      $("listaHistorico").innerHTML=d.pets
-        .filter(p=>norm(p.nome).includes(q))
-        .map(p=>`
-          <div class="item-card">
-            <strong>${p.nome}</strong>
-            ${p.historico.length
-              ? p.historico.map(h=>`<p><strong>${h.data}:</strong> ${h.descricao}</p>`).join("")
-              : `<p>Nenhum registro clínico.</p>`}
-          </div>
-        `).join("") || `<div class="item-card"><strong>Nenhum histórico encontrado</strong><p>Pesquise outro nome.</p></div>`;
+      const data = load();
+      const q = ($("historicoSearch").value || "").toLowerCase();
+      const pets = petsDoVet(data).filter(p => p.nome.toLowerCase().includes(q));
+
+      $("listaHistorico").innerHTML = pets.length ? pets.map(p => `
+        <div class="item-card">
+          <strong>${p.nome}</strong>
+          ${p.historico?.length
+            ? p.historico.map(h => `<p><strong>${h.data}:</strong> ${h.descricao}</p>`).join("")
+            : `<p>Sem histórico registrado.</p>`}
+        </div>
+      `).join("") : `<div class="item-card"><strong>Nenhum pet encontrado</strong><p>Pesquise outro nome.</p></div>`;
     }
 
     function renderRelatorios(){
-      const d=load();
-      $("listaRelatorios").innerHTML=d.pets.map((p,i)=>`
+      const data = load();
+      const pets = petsDoVet(data);
+
+      $("listaRelatorios").innerHTML = pets.length ? pets.map((p,i) => `
         <div class="item-card">
           <strong>Relatório - ${p.nome}</strong>
           <p>${p.relatorio || "Sem relatório disponível."}</p>
@@ -667,14 +719,14 @@
             <button class="small-btn danger" onclick="removeRelatorio(${i})">Excluir</button>
           </div>
         </div>
-      `).join("");
+      `).join("") : `<div class="item-card"><strong>Sem relatórios</strong><p>Nenhum pet vinculado ao seu atendimento.</p></div>`;
     }
 
     function render(){
-      const d=load();
+      const data = load();
       updateHeader();
-      updateSelects(d);
-      renderStats(d);
+      updateSelects(data);
+      renderStats(data);
       renderPets();
       renderConsultas();
       renderAvisos();
@@ -684,137 +736,288 @@
       openSection(currentSection());
     }
 
-    function editPet(nome,idade,peso){
-      $("editPetNome").value=nome;
-      $("editPetIdade").value=idade;
-      $("editPetPeso").value=peso;
-      toggleModal("editPetModal",true);
-    }
-    function savePetEdit(){
-      const d=load(), nome=$("editPetNome").value, idade=$("editPetIdade").value.trim(), peso=$("editPetPeso").value.trim();
-      if(!idade||!peso){ showToast("Preencha a nova idade e o novo peso."); return; }
-      const pet=d.pets.find(p=>p.nome===nome);
-      if(pet){ pet.idade=Number(idade); pet.peso=String(peso).replace(".",","); }
-      save(d); toggleModal("editPetModal",false); render(); showToast(`Dados de ${nome} atualizados com sucesso.`);
+    function editPet(id){
+      const p = load().pets.find(x => x.id === id);
+      if(!p) return;
+      petIndex = id;
+      $("editPetNome").value = p.nome;
+      $("editPetIdade").value = p.idade;
+      $("editPetPeso").value = String(p.peso).replace(",", ".");
+      toggleModal("petModal", true);
     }
 
-    function concluirConsulta(i){
-      const d=load(), c=d.consultas[i];
-      if(!c || c.status==="Concluída") return;
-      c.status="Concluída";
-      const pet=d.pets.find(p=>p.nome===c.pet);
+    function savePetEdit(){
+      const data = load();
+      const pet = data.pets.find(x => x.id === petIndex);
+      if(!pet) return;
+
+      const idade = $("editPetIdade").value.trim();
+      const peso = $("editPetPeso").value.trim();
+
+      if(!idade || !peso) return showToast("Preencha idade e peso.");
+
+      pet.idade = Number(idade);
+      pet.peso = String(peso).replace(".", ",");
+
+      save(data);
+      petIndex = null;
+      toggleModal("petModal", false);
+      render();
+      showToast("Dados do pet atualizados.");
+    }
+
+    function concluirConsulta(id){
+      const data = load();
+      const consulta = data.consultas.find(c => c.id === id);
+      if(!consulta || consulta.status === "Concluída") return;
+
+      consulta.status = "Concluída";
+
+      const pet = petcareGetPetById(data, consulta.petId);
       if(pet){
-        pet.historico.unshift({data:c.data,descricao:`Consulta concluída às ${c.hora}. ${c.observacao}`});
-        pet.relatorio=`Atendimento concluído em ${c.data} às ${c.hora}. ${c.observacao}`;
-        pet.relatorioAtualizacao=c.data;
+        pet.historico = pet.historico || [];
+        pet.historico.unshift({ data: consulta.data, descricao: `Consulta concluída às ${consulta.hora}.` });
+        pet.relatorio = `Atendimento concluído em ${consulta.data} às ${consulta.hora}.`;
+        pet.relatorioAtualizacao = consulta.data;
       }
-      d.avisos.unshift({titulo:`Consulta concluída - ${c.pet}`,texto:`Atendimento finalizado em ${c.data} às ${c.hora}.`,destino:"pet",pet:c.pet,lido:false});
-      save(d); render(); showToast(`Consulta de ${c.pet} concluída.`);
+
+      data.avisos.unshift({
+        id: petcareNextId(data.avisos),
+        titulo: "Consulta concluída",
+        texto: `Atendimento concluído em ${consulta.data} às ${consulta.hora}.`,
+        lido: false
+      });
+
+      save(data);
+      render();
+      showToast("Consulta concluída.");
+    }
+
+    function clearAvisoForm(){
+      $("avisoTitulo").value = "";
+      $("avisoTexto").value = "";
     }
 
     function addAviso(){
-      const d=load(), titulo=$("avisoTitulo").value.trim(), destino=$("avisoDestino").value, pet=$("avisoPet").value, texto=$("avisoTexto").value.trim();
-      if(!titulo||!texto){ showToast("Preencha título e mensagem do aviso."); return; }
-      if(destino==="pet" && !pet){ showToast("Selecione o pet para aviso individual."); return; }
-      d.avisos.unshift({titulo,texto,destino,pet:destino==="pet"?pet:"",lido:false});
-      save(d); clearAvisoForm(); render(); showToast("Aviso publicado com sucesso.");
+      const data = load();
+      const titulo = $("avisoTitulo").value.trim();
+      const texto = $("avisoTexto").value.trim();
+
+      if(!titulo || !texto) return showToast("Preencha título e mensagem do aviso.");
+
+      data.avisos.unshift({
+        id: petcareNextId(data.avisos),
+        titulo,
+        texto,
+        lido: false
+      });
+
+      save(data);
+      clearAvisoForm();
+      render();
+      showToast("Aviso publicado.");
     }
-    function clearAvisoForm(){
-      $("avisoTitulo").value="";
-      $("avisoDestino").value="todos";
-      $("avisoPet").value="";
-      $("avisoTexto").value="";
-    }
+
     function editAviso(i){
-      const a=load().avisos[i];
-      avisoIndex=i;
-      $("editAvisoTitulo").value=a.titulo;
-      $("editAvisoTexto").value=a.texto;
-      toggleModal("avisoModal",true);
+      const a = load().avisos[i];
+      avisoIndex = i;
+      $("editAvisoTitulo").value = a.titulo;
+      $("editAvisoTexto").value = a.texto;
+      toggleModal("avisoModal", true);
     }
+
     function saveAvisoEdit(){
-      const d=load();
-      if(avisoIndex===null) return;
-      const a=d.avisos[avisoIndex];
-      const titulo=$("editAvisoTitulo").value.trim(), texto=$("editAvisoTexto").value.trim();
-      if(!titulo||!texto){ showToast("Preencha título e mensagem."); return; }
-      a.titulo=titulo; a.texto=texto; a.lido=false;
-      save(d); avisoIndex=null; toggleModal("avisoModal",false); render(); showToast("Aviso atualizado com sucesso.");
+      const data = load();
+      if(avisoIndex === null) return;
+
+      const titulo = $("editAvisoTitulo").value.trim();
+      const texto = $("editAvisoTexto").value.trim();
+      if(!titulo || !texto) return showToast("Preencha título e mensagem.");
+
+      data.avisos[avisoIndex].titulo = titulo;
+      data.avisos[avisoIndex].texto = texto;
+      data.avisos[avisoIndex].lido = false;
+
+      save(data);
+      avisoIndex = null;
+      toggleModal("avisoModal", false);
+      render();
+      showToast("Aviso atualizado.");
     }
+
     function removeAviso(i){
-      openConfirm("Deseja excluir este aviso?", ok=>{
+      openConfirm("Deseja excluir este aviso?", ok => {
         if(!ok) return;
-        const d=load(); d.avisos.splice(i,1); save(d); render(); showToast("Aviso excluído.");
-      },"Excluir aviso");
+        const data = load();
+        data.avisos.splice(i,1);
+        save(data);
+        render();
+        showToast("Aviso excluído.");
+      }, "Excluir aviso");
+    }
+
+    function clearVacinaForm(){
+      $("vacinaNome").value = "";
+      $("vacinaData").value = "";
+      $("vacinaDisponivel").value = "";
     }
 
     function addVacina(){
-      const d=load(), petNome=$("vacinaPet").value, nome=$("vacinaNome").value.trim(), data=$("vacinaData").value;
-      if(!petNome||!nome||!data){ showToast("Preencha pet, nome da vacina e data."); return; }
-      const pet=d.pets.find(p=>p.nome===petNome);
+      const data = load();
+      const petId = Number($("vacinaPet").value);
+      const nome = $("vacinaNome").value.trim();
+      const dataVacina = $("vacinaData").value;
+      const disponivel = $("vacinaDisponivel").value.trim();
+
+      if(!petId || !nome || !dataVacina) return showToast("Preencha pet, nome da vacina e data.");
+
+      const pet = data.pets.find(p => p.id === petId);
       if(!pet) return;
-      pet.vacinas.unshift({nome,data:brDate(data)});
-      pet.historico.unshift({data:brDate(data),descricao:`Vacina registrada: ${nome}.`});
-      d.avisos.unshift({titulo:`Vacina lançada - ${petNome}`,texto:`Vacina ${nome} registrada em ${brDate(data)}.`,destino:"pet",pet:petNome,lido:false});
-      save(d); clearVacinaForm(); render(); showToast(`Vacina registrada para ${petNome}.`);
+
+      pet.vacinasAplicadas = pet.vacinasAplicadas || [];
+      pet.vacinasDisponiveis = pet.vacinasDisponiveis || [];
+
+      pet.vacinasAplicadas.unshift({
+        nome,
+        data: petcareBrDate(dataVacina)
+      });
+
+      if(disponivel && !pet.vacinasDisponiveis.includes(disponivel)){
+        pet.vacinasDisponiveis.push(disponivel);
+      }
+
+      save(data);
+      clearVacinaForm();
+      render();
+      showToast("Vacina registrada.");
     }
-    function clearVacinaForm(){ $("vacinaNome").value=""; $("vacinaData").value=""; }
-    function removeVacina(pi,vi){
-      openConfirm("Deseja excluir esta vacina?", ok=>{
-        if(!ok) return;
-        const d=load(), pet=d.pets[pi];
-        pet.vacinas.splice(vi,1);
-        save(d); render(); showToast("Vacina excluída.");
-      },"Excluir vacina");
+
+    function clearHistoricoForm(){
+      $("historicoData").value = "";
+      $("historicoDescricao").value = "";
+    }
+
+    function addHistorico(){
+      const data = load();
+      const petId = Number($("historicoPet").value);
+      const dataHist = $("historicoData").value;
+      const descricao = $("historicoDescricao").value.trim();
+
+      if(!petId || !dataHist || !descricao) return showToast("Preencha pet, data e descrição clínica.");
+
+      const pet = data.pets.find(p => p.id === petId);
+      if(!pet) return;
+
+      pet.historico = pet.historico || [];
+      pet.historico.unshift({
+        data: petcareBrDate(dataHist),
+        descricao
+      });
+
+      save(data);
+      clearHistoricoForm();
+      render();
+      showToast("Histórico atualizado.");
+    }
+
+    function clearRelatorioForm(){
+      $("relatorioTexto").value = "";
+    }
+
+    function addRelatorio(){
+      const data = load();
+      const petId = Number($("relatorioPet").value);
+      const texto = $("relatorioTexto").value.trim();
+
+      if(!petId || !texto) return showToast("Selecione o pet e digite o relatório.");
+
+      const pet = data.pets.find(p => p.id === petId);
+      if(!pet) return;
+
+      pet.relatorio = texto;
+      pet.relatorioAtualizacao = new Date().toLocaleDateString("pt-BR");
+
+      save(data);
+      clearRelatorioForm();
+      render();
+      showToast("Relatório salvo.");
     }
 
     function editRelatorio(i){
-      const p=load().pets[i];
-      relatorioIndex=i;
-      $("relatorioPetNome").value=p.nome;
-      $("relatorioTextoEdit").value=p.relatorio || "";
-      toggleModal("relatorioModal",true);
+      const pets = petsDoVet(load());
+      const p = pets[i];
+      if(!p) return;
+      relatorioIndex = p.id;
+      $("editRelatorioPet").value = p.nome;
+      $("editRelatorioTexto").value = p.relatorio || "";
+      toggleModal("relatorioModal", true);
     }
+
     function saveRelatorioEdit(){
-      const d=load();
-      if(relatorioIndex===null) return;
-      const txt=$("relatorioTextoEdit").value.trim();
-      if(!txt){ showToast("Digite o texto do relatório."); return; }
-      d.pets[relatorioIndex].relatorio=txt;
-      d.pets[relatorioIndex].relatorioAtualizacao=new Date().toLocaleDateString("pt-BR");
-      save(d); relatorioIndex=null; toggleModal("relatorioModal",false); render(); showToast("Relatório atualizado.");
+      const data = load();
+      const pet = data.pets.find(p => p.id === relatorioIndex);
+      if(!pet) return;
+
+      const txt = $("editRelatorioTexto").value.trim();
+      if(!txt) return showToast("Digite o texto do relatório.");
+
+      pet.relatorio = txt;
+      pet.relatorioAtualizacao = new Date().toLocaleDateString("pt-BR");
+
+      save(data);
+      relatorioIndex = null;
+      toggleModal("relatorioModal", false);
+      render();
+      showToast("Relatório atualizado.");
     }
+
     function removeRelatorio(i){
-      openConfirm("Deseja excluir este relatório?", ok=>{
+      const pets = petsDoVet(load());
+      const alvo = pets[i];
+      if(!alvo) return;
+
+      openConfirm("Deseja excluir este relatório?", ok => {
         if(!ok) return;
-        const d=load();
-        d.pets[i].relatorio="";
-        d.pets[i].relatorioAtualizacao="";
-        save(d); render(); showToast("Relatório excluído.");
-      },"Excluir relatório");
+        const data = load();
+        const pet = data.pets.find(p => p.id === alvo.id);
+        if(pet){
+          pet.relatorio = "";
+          pet.relatorioAtualizacao = "";
+        }
+        save(data);
+        render();
+        showToast("Relatório excluído.");
+      }, "Excluir relatório");
     }
 
     function toggleAvisosDrawer(show){
       $("drawerAvisos").classList.toggle("active",show);
       $("drawerOverlay").classList.toggle("active",show);
+
       if(show){
-        const d=load(); let changed=false;
-        d.avisos.forEach(a=>{ if(!a.lido){ a.lido=true; changed=true; }});
-        if(changed){ save(d); renderAvisos(); }
+        const data = load();
+        let changed = false;
+        data.avisos.forEach(a => {
+          if(!a.lido){
+            a.lido = true;
+            changed = true;
+          }
+        });
+        if(changed){
+          save(data);
+          renderAvisos();
+        }
       }
     }
 
-    const openA11y=()=>showToast("Área de acessibilidade. Futuramente aqui poderá abrir o vídeo em LIBRAS.");
-    function logout(){
-      openConfirm("Deseja realmente sair do sistema?", ok=>{ if(ok) location.href="index.html"; },"Sair do sistema");
+    function openA11y(){
+      showToast("Área de acessibilidade. Futuramente aqui poderá abrir o vídeo em LIBRAS.");
     }
 
-    function showToast(msg){
-      const t=$("toast");
-      t.textContent=msg;
-      t.classList.add("show");
-      clearTimeout(showToast.timer);
-      showToast.timer=setTimeout(()=>t.classList.remove("show"),2200);
+    function logout(){
+      openConfirm("Deseja realmente sair do sistema?", ok => {
+        if(ok) location.href = "index.html";
+      }, "Sair do sistema");
     }
 
     buildMenu();
