@@ -1,829 +1,889 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PetCare Connect - Área do Tutor</title>
-  <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Crect x="4" y="4" width="56" height="56" rx="18" fill="%23e0f2fe" stroke="%2360a5fa" stroke-width="2"/%3E%3Cg fill="%231d4ed8"%3E%3Ccircle cx="22" cy="22" r="5"/%3E%3Ccircle cx="32" cy="17" r="5"/%3E%3Ccircle cx="42" cy="22" r="5"/%3E%3Ccircle cx="28" cy="29" r="5"/%3E%3Cpath d="M32 31c-6 0-12 5-12 11 0 5 4 8 8 8 2 0 3-1 4-2 1 1 2 2 4 2 4 0 8-3 8-8 0-6-6-11-12-11z"/%3E%3C/g%3E%3C/svg%3E'>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
-    :root{
-      --bg:#edf4f8;--panel:#fff;--soft:#f7fbfd;--border:#d8e7ef;--text:#0f172a;--muted:#64748b;
-      --primary:#1d4ed8;--accent:#0ea5a4;--danger:#c62828;--dangerBg:#fff1f2;
-      --shadow:0 18px 40px rgba(15,23,42,.08)
-    }
-    body{
-      min-height:100vh;color:var(--text);
-      background:
-      radial-gradient(circle at top left,#dff3f7 0%,transparent 28%),
-      radial-gradient(circle at top right,#dbeafe 0%,transparent 24%),
-      var(--bg)
-    }
-
-    .top-icons{
-      position: fixed;
-      top: 12px;
-      right: 12px;
-      display: flex;
-      gap: 8px;
-      z-index: 1000;
-    }
-
-    .icon-btn,.access-btn{display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.18s ease}
-
-    .icon-btn{
-      width: 38px;
-      height: 38px;
-      border: 1px solid #dbe4ee;
-      border-radius: 12px;
-      background: #ffffff;
-      color: #2563eb;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: .18s ease;
-      box-shadow: 0 4px 10px rgba(15,23,42,.06);
-    }
-
-    .icon-btn svg{
-      width: 17px;
-      height: 17px;
-      stroke: currentColor;
-      stroke-width: 2;
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .icon-btn:hover{
-      background: #f8fbff;
-      border-color: #bfd5ea;
-    }
-
-    .icon-btn:active{
-      transform: scale(.96);
-    }
-
-    .logout-btn{
-      position:fixed;left:16px;bottom:18px;z-index:1000;display:flex;align-items:center;gap:6px;
-      border:1px solid #ef9a9a;background:var(--dangerBg);color:var(--danger);
-      border-radius:10px;padding:8px 11px;font-size:.82rem;font-weight:700;cursor:pointer;
-      box-shadow:0 8px 20px rgba(198,40,40,.08)
-    }
-    .logout-btn:hover,.btn:hover,.stat-card:hover,.notice-cta:hover,.access-btn:hover{transform:translateY(-1px)}
-
-    .access-btn{
-      position:fixed;right:16px;bottom:18px;z-index:1000;width:46px;height:46px;border-radius:50%;
-      border:1px solid #bde8e7;background:linear-gradient(135deg,#ecfeff,#eff6ff);color:#0f766e;
-      font-size:1.15rem;box-shadow:0 8px 20px rgba(14,165,164,.12)
-    }
-
-    .app{display:grid;grid-template-columns:270px 1fr 290px;gap:20px;min-height:100vh;padding:22px}
-    .sidebar,.rightbar,.hero,.section,.drawer{background:rgba(255,255,255,.9);border:1px solid var(--border);box-shadow:var(--shadow)}
-    .sidebar,.rightbar{border-radius:30px;backdrop-filter:blur(8px)}
-    .sidebar{padding:24px 18px;display:flex;flex-direction:column;gap:24px}
-    .brand{display:flex;align-items:center;gap:14px;padding:6px}
-    .brand-icon{
-      width:58px;height:58px;border-radius:18px;display:flex;align-items:center;justify-content:center;
-      font-size:1.6rem;border:1px solid #cde3f1;background:linear-gradient(135deg,#dbeafe,#dcfce7)
-    }
-    .brand-text h1{font-size:1.25rem}
-    .brand-text p,.section-subtitle,.hero p,.item-card p,.item-card span,.notice-item span,.mini-row,.modal-box p{color:var(--muted)}
-    .brand-text p{font-size:.88rem}
-    .menu-label{font-size:.82rem;font-weight:800;letter-spacing:.08em;color:#6b7280;padding:0 8px;text-transform:uppercase}
-    .menu{display:flex;flex-direction:column;gap:10px}
-    .menu-btn{
-      display:flex;align-items:center;gap:12px;width:100%;padding:13px 14px;border-radius:16px;
-      border:1px solid transparent;background:transparent;font-size:.95rem;font-weight:700;cursor:pointer;text-align:left
-    }
-    .menu-btn:hover{background:#f4f9fc;border-color:var(--border)}
-    .menu-btn.active{background:linear-gradient(90deg,#eff6ff,#ecfeff);border-color:#bfdbfe;color:var(--primary)}
-    .menu-icon{
-      width:34px;height:34px;border-radius:12px;border:1px solid var(--border);background:#f8fbfd;
-      display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0
-    }
-
-    .main{display:flex;flex-direction:column;gap:18px}
-    .hero,.section{border-radius:28px;padding:24px}
-    .hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#fff,#f3fbff)}
-    .hero:after{
-      content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;
-      background:radial-gradient(circle,rgba(14,165,164,.12),transparent 70%)
-    }
-    .hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;padding-right:90px}
-    .hero h2{font-size:2rem;margin-bottom:6px}
-    .hero p{line-height:1.5;max-width:620px}
-    .hero-badge,.section-chip,.tag{border-radius:999px;font-weight:800;white-space:nowrap}
-    .hero-badge{padding:10px 14px;background:#eff6ff;border:1px solid #bfdbfe;color:var(--primary);font-size:.9rem}
-    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px}
-    .stat-card,.item-card,.right-card,.notice-item{
-      background:#fff;border:1px solid var(--border);box-shadow:0 10px 24px rgba(15,23,42,.04)
-    }
-    .stat-card{padding:18px;border-radius:22px;cursor:pointer}
-    .stat-card span{display:block;color:var(--muted);font-size:.9rem;margin-bottom:8px}
-    .stat-card strong{font-size:1.9rem;color:var(--primary)}
-
-    .section{display:none}
-    .section.active{display:block}
-    .section-header{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:18px}
-    .section-title{font-size:1.15rem;font-weight:800;margin-bottom:6px}
-    .section-subtitle{font-size:.95rem;line-height:1.5;max-width:760px}
-    .section-chip{padding:9px 12px;background:#f0fdfd;border:1px solid #bde8e7;color:#0f766e;font-size:.82rem}
-
-    .form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:16px}
-    .input-group{display:flex;flex-direction:column;gap:6px}
-    .input-group label{font-size:.92rem;font-weight:700}
-    .input-group input,.input-group select{
-      min-height:48px;border:1px solid #cfdde6;border-radius:16px;padding:12px 14px;background:#fbfdfe;
-      font-size:.96rem;color:var(--text);outline:none
-    }
-    .input-group input:focus,.input-group select:focus{border-color:#7db5ff;box-shadow:0 0 0 4px rgba(29,78,216,.1);background:#fff}
-
-    .action-row,.inline-actions,.modal-actions{display:flex;gap:10px;flex-wrap:wrap}
-    .action-row{margin:6px 0 14px}
-    .btn,.small-btn{cursor:pointer;font-weight:800;transition:.2s ease}
-    .btn{border:none;border-radius:16px;padding:12px 18px;font-size:.95rem}
-    .btn-primary{color:#fff;background:linear-gradient(90deg,var(--primary),var(--accent));box-shadow:0 12px 22px rgba(29,78,216,.18)}
-    .btn-secondary,.small-btn{background:#fff;border:1px solid #cbdbe5;color:var(--primary)}
-    .small-btn{padding:9px 12px;border-radius:12px;font-size:.88rem}
-    .small-btn:hover,.notice-button:hover{background:#eff6ff}
-    .small-btn.danger{border-color:#fecaca;color:var(--danger);background:#fff}
-    .small-btn.danger:hover{background:#fff1f2}
-    .notice-button{background:linear-gradient(90deg,#eff6ff,#ecfeff);border-color:#bfdbfe}
-    .list-grid,.notice-list,.mini-summary{display:grid;gap:14px}
-    .item-card{border-radius:22px;padding:18px;background:linear-gradient(180deg,#fff,#f9fcfe)}
-    .item-card strong,.notice-item strong{display:block;margin-bottom:6px;font-size:1rem}
-    .tag{display:inline-block;margin-top:8px;padding:5px 9px;background:#eff6ff;color:var(--primary);border:1px solid #bfdbfe;font-size:.78rem}
-
-    .rightbar{padding:22px 18px;display:flex;flex-direction:column;gap:16px}
-    .right-card{border-radius:24px;padding:18px;background:linear-gradient(180deg,#fff,#f7fbfd)}
-    .right-card h3{font-size:1rem;margin-bottom:12px}
-    .mini-row{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#f8fbfd;border:1px solid var(--border);border-radius:14px;padding:11px 12px;font-size:.9rem}
-    .mini-row strong{color:var(--text)}
-
-    .notice-cta{
-      display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
-      padding:13px 14px;border:none;border-radius:16px;cursor:pointer;
-      background:linear-gradient(90deg,#eff6ff,#ecfeff);color:var(--primary);
-      border:1px solid #bfdbfe;font-size:.95rem;font-weight:800;transition:.2s ease
-    }
-    .notice-badge{
-      min-width:22px;height:22px;padding:0 7px;border-radius:999px;
-      display:inline-flex;align-items:center;justify-content:center;
-      background:#ef4444;color:#fff;font-size:.75rem;font-weight:800
-    }
-    .notice-badge.hidden{display:none}
-
-    .notice-item{border-radius:16px;padding:12px}
-
-    .drawer-overlay{
-      position:fixed;inset:0;background:rgba(15,23,42,.28);display:none;z-index:1500
-    }
-    .drawer-overlay.active{display:block}
-    .drawer{
-      position:fixed;top:0;right:-420px;width:100%;max-width:380px;height:100vh;z-index:1600;
-      padding:22px 18px;transition:right .25s ease;overflow-y:auto;background:#fff;border-left:1px solid var(--border)
-    }
-    .drawer.active{right:0}
-    .drawer-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
-    .drawer-header h3{font-size:1.05rem}
-
-    .modal-overlay{
-      position:fixed;inset:0;background:rgba(15,23,42,.28);display:none;align-items:center;justify-content:center;z-index:2000;padding:20px
-    }
-    .modal-overlay.active{display:flex}
-    .modal-box{
-      width:100%;max-width:430px;background:#fff;border:1px solid var(--border);border-radius:26px;padding:22px;
-      box-shadow:0 30px 60px rgba(15,23,42,.16)
-    }
-    .modal-box h3{font-size:1.15rem;margin-bottom:8px}
-    .modal-box p{font-size:.94rem;line-height:1.45;margin-bottom:16px}
-    .modal-actions{justify-content:flex-end;margin-top:14px}
-
-    .toast{
-      position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-20px);
-      background:#0f172a;color:#fff;padding:12px 18px;border-radius:14px;font-size:.92rem;font-weight:700;
-      box-shadow:0 14px 30px rgba(15,23,42,.18);opacity:0;pointer-events:none;transition:.25s ease;z-index:3000
-    }
-    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-    @media (max-width:1250px){
-      .app{grid-template-columns:250px 1fr}
-      .rightbar{grid-column:1/-1}
-      .stats{grid-template-columns:repeat(2,1fr)}
-    }
-    @media (max-width:920px){
-      .app{grid-template-columns:1fr}
-      .hero-top{padding-right:0;margin-top:34px}
-      .form-grid{grid-template-columns:1fr}
-    }
-    @media (max-width:620px){
-      .app{padding:14px}
-      .hero,.section,.sidebar,.rightbar{border-radius:22px}
-      .hero h2{font-size:1.45rem}
-      .stats{grid-template-columns:1fr}
-      .top-icons{top:10px;right:10px;gap:8px}
-      .icon-btn{width:38px;height:38px;border-radius:12px}
-      .icon-btn svg{width:17px;height:17px}
-      .logout-btn{left:10px;bottom:12px;padding:7px 10px;font-size:.78rem}
-      .access-btn{right:10px;bottom:12px;width:42px;height:42px;font-size:1rem}
-    }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PetCare Connect — Área do Tutor</title>
+<link rel="icon" type="image/png" href="logo-petcare.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="petcare-data.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --teal:#0d9488;--teal-dark:#0c6e6e;--teal-mid:#14b8a6;--teal-light:#e0f7f5;
+  --navy:#1a2e44;--navy-light:#243b55;
+  --cream:#f0fafa;--warm-white:#f8fffe;
+  --text:#1a2e44;--text-muted:#4a7a78;--text-light:#7aadaa;
+  --border:#b2dfdb;--card-bg:#fff;
+  --danger:#dc2626;--danger-bg:#fef2f2;--danger-border:#fecaca;
+  --shadow:0 4px 24px rgba(13,148,136,.10);--shadow-lg:0 16px 48px rgba(13,148,136,.16);
+  --sidebar-w:240px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);display:flex;min-height:100vh;overflow-x:hidden}
+.sidebar{
+  width:var(--sidebar-w);min-height:100vh;background:var(--navy);
+  display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:200;
+  transition:transform .25s ease
+}
+.sb-brand{
+  padding:22px 18px 18px;border-bottom:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;gap:10px
+}
+.sb-brand img{width:34px;height:34px;object-fit:contain;border-radius:8px}
+.sb-brand-text span{font-family:'Sora',sans-serif;font-weight:700;font-size:.92rem;color:#fff;display:block}
+.sb-brand-text small{font-size:.68rem;color:rgba(255,255,255,.38);display:block;margin-top:1px}
+.sb-user{
+  padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;gap:10px
+}
+.sb-avatar{
+  width:34px;height:34px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--teal),var(--teal-mid));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Sora',sans-serif;font-weight:700;font-size:.88rem;color:#fff
+}
+.sb-user-name{font-size:.85rem;font-weight:600;color:#fff;display:block}
+.sb-user-role{font-size:.68rem;color:rgba(255,255,255,.38);display:block;margin-top:1px}
+.sb-nav{flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:2px;overflow-y:auto}
+.sb-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.25);padding:10px 10px 6px}
+.nav-item{
+  display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;
+  cursor:pointer;transition:.15s;text-decoration:none;font-size:.87rem;font-weight:500;
+  color:rgba(255,255,255,.5);border:none;background:transparent;width:100%;text-align:left;
+  font-family:'DM Sans',sans-serif
+}
+.nav-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.85)}
+.nav-item.active{background:rgba(13,148,136,.28);color:#fff;font-weight:600}
+.nav-item .ni{font-size:1rem;width:20px;text-align:center;flex-shrink:0}
+.nav-item .badge{
+  margin-left:auto;min-width:18px;height:18px;padding:0 5px;
+  background:#ef4444;color:#fff;border-radius:100px;
+  font-size:.68rem;font-weight:700;display:flex;align-items:center;justify-content:center
+}
+.sb-footer{padding:14px 10px;border-top:1px solid rgba(255,255,255,.07)}
+.sb-logout{
+  width:100%;display:flex;align-items:center;gap:8px;padding:10px 12px;
+  background:transparent;border:1px solid rgba(255,255,255,.08);border-radius:12px;
+  color:rgba(255,255,255,.45);font-size:.83rem;font-weight:500;cursor:pointer;transition:.15s;
+  font-family:'DM Sans',sans-serif
+}
+.sb-logout:hover{background:rgba(220,38,38,.18);border-color:rgba(220,38,38,.3);color:#fca5a5}
+.main{margin-left:var(--sidebar-w);flex:1;padding:28px 32px;min-height:100vh}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:28px;gap:16px
+}
+.topbar-left h2{font-family:'Sora',sans-serif;font-weight:700;font-size:1.45rem;color:var(--text)}
+.topbar-left p{font-size:.88rem;color:var(--text-muted);margin-top:3px}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.tb-btn{
+  display:flex;align-items:center;gap:7px;padding:9px 16px;border-radius:10px;
+  border:1px solid var(--border);background:var(--card-bg);color:var(--text-muted);
+  font-size:.84rem;font-weight:600;cursor:pointer;transition:.15s;font-family:'DM Sans',sans-serif
+}
+.tb-btn:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-light)}
+.tb-btn.primary{background:var(--teal);color:#fff;border-color:var(--teal)}
+.tb-btn.primary:hover{background:var(--teal-dark)}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.stat-card{
+  background:var(--card-bg);border:1px solid var(--border);border-radius:18px;
+  padding:20px 18px;cursor:pointer;transition:.2s;position:relative;overflow:hidden
+}
+.stat-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--teal);border-radius:18px 18px 0 0}
+.stat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:rgba(13,148,136,.3)}
+.stat-card .sc-label{font-size:.8rem;color:var(--text-muted);font-weight:500;margin-bottom:10px;display:block}
+.stat-card .sc-num{font-family:'Sora',sans-serif;font-weight:700;font-size:2rem;color:var(--teal);display:block}
+.stat-card .sc-icon{position:absolute;right:16px;top:16px;font-size:1.4rem;opacity:.25}
+.section{display:none}
+.section.active{display:block}
+.page-header{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:16px;flex-wrap:wrap;margin-bottom:24px;
+  padding-bottom:20px;border-bottom:1px solid var(--border)
+}
+.page-header-left h3{font-family:'Sora',sans-serif;font-weight:700;font-size:1.15rem;color:var(--text)}
+.page-header-left p{font-size:.88rem;color:var(--text-muted);margin-top:4px;max-width:520px;line-height:1.5}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--teal-light);color:var(--teal-dark);
+  border:1px solid rgba(13,148,136,.2);border-radius:100px;
+  padding:6px 14px;font-size:.78rem;font-weight:700;white-space:nowrap
+}
+.cards-grid{display:grid;gap:14px}
+.card{
+  background:var(--card-bg);border:1px solid var(--border);border-radius:18px;
+  padding:20px;transition:.2s
+}
+.card:hover{box-shadow:var(--shadow);border-color:rgba(13,148,136,.2)}
+.card-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.card-title{font-family:'Sora',sans-serif;font-weight:600;font-size:.98rem;color:var(--text)}
+.card-sub{font-size:.85rem;color:var(--text-muted);line-height:1.5;margin-bottom:12px}
+.card-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.tag{
+  display:inline-block;padding:4px 10px;border-radius:100px;
+  font-size:.75rem;font-weight:700;
+}
+.tag-green{background:var(--teal-light);color:var(--teal-dark)}
+.tag-yellow{background:#fef9ec;color:#92400e}
+.tag-red{background:#fef2f2;color:#dc2626}
+.tag-navy{background:#e8edf5;color:var(--navy)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group label{font-size:.83rem;font-weight:700;color:var(--text)}
+.form-group input,.form-group select{
+  height:46px;border:1.5px solid var(--border);border-radius:12px;padding:0 14px;
+  background:var(--warm-white);font-size:.92rem;color:var(--text);outline:none;
+  transition:.2s;font-family:'DM Sans',sans-serif
+}
+.form-group input:focus,.form-group select:focus{
+  border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,148,136,.1);background:#fff
+}
+.form-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  border:none;border-radius:12px;padding:10px 18px;font-size:.88rem;
+  font-weight:600;cursor:pointer;transition:.2s;font-family:'DM Sans',sans-serif
+}
+.btn-primary{background:var(--teal);color:#fff}
+.btn-primary:hover{background:var(--teal-dark);transform:translateY(-1px)}
+.btn-secondary{background:var(--card-bg);color:var(--text-muted);border:1.5px solid var(--border)}
+.btn-secondary:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-light)}
+.btn-danger{background:var(--danger-bg);color:var(--danger);border:1.5px solid var(--danger-border)}
+.btn-danger:hover{background:#fee2e2}
+.btn-sm{padding:7px 13px;font-size:.8rem;border-radius:9px}
+.empty{
+  text-align:center;padding:48px 24px;
+  background:var(--card-bg);border:1.5px dashed var(--border);
+  border-radius:18px;color:var(--text-muted)
+}
+.empty .empty-icon{font-size:2.4rem;margin-bottom:12px;opacity:.5}
+.empty p{font-size:.9rem;line-height:1.6}
+.drawer-overlay{position:fixed;inset:0;background:rgba(26,46,68,.2);display:none;z-index:300}
+.drawer-overlay.active{display:block}
+.drawer{
+  position:fixed;top:0;right:-420px;width:380px;height:100vh;z-index:400;
+  background:var(--card-bg);border-left:1px solid var(--border);
+  transition:right .25s ease;display:flex;flex-direction:column;
+  box-shadow:-8px 0 32px rgba(13,148,136,.1)
+}
+.drawer.active{right:0}
+.drawer-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 22px;border-bottom:1px solid var(--border)
+}
+.drawer-head h3{font-family:'Sora',sans-serif;font-weight:700;font-size:1rem;color:var(--text)}
+.drawer-body{flex:1;overflow-y:auto;padding:16px 22px;display:flex;flex-direction:column;gap:10px}
+.aviso-card{background:var(--cream);border:1px solid var(--border);border-radius:14px;padding:14px}
+.aviso-card strong{display:block;font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:4px}
+.aviso-card span{font-size:.82rem;color:var(--text-muted);line-height:1.5}
+.aviso-card.unread{border-color:rgba(13,148,136,.3);background:var(--teal-light)}
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(26,46,68,.25);
+  display:none;align-items:center;justify-content:center;z-index:500;padding:20px
+}
+.modal-overlay.active{display:flex}
+.modal{
+  width:100%;max-width:440px;background:var(--card-bg);
+  border:1px solid var(--border);border-radius:24px;padding:28px;
+  box-shadow:0 32px 64px rgba(13,148,136,.18)
+}
+.modal h3{font-family:'Sora',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:6px;color:var(--text)}
+.modal p{font-size:.88rem;color:var(--text-muted);margin-bottom:20px;line-height:1.5}
+.modal-form{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end}
+.toast{
+  position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-20px);
+  background:var(--navy);color:#fff;padding:11px 18px;border-radius:12px;
+  font-size:.88rem;font-weight:600;box-shadow:0 14px 30px rgba(26,46,68,.2);
+  opacity:0;pointer-events:none;transition:.25s;z-index:999
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.vac-bar-wrap{margin-top:10px}
+.vac-bar-label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--text-muted);margin-bottom:4px}
+.vac-bar-track{height:6px;background:var(--cream);border-radius:100px;overflow:hidden}
+.vac-bar-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--teal-mid));border-radius:100px;transition:width .8s ease}
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:flex;gap:14px;position:relative;padding-bottom:20px}
+.tl-item:last-child{padding-bottom:0}
+.tl-item:last-child .tl-line{display:none}
+.tl-dot{width:10px;height:10px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:5px}
+.tl-line{position:absolute;left:4px;top:15px;bottom:0;width:2px;background:var(--border)}
+.tl-content{flex:1}
+.tl-date{font-size:.75rem;color:var(--text-light);font-weight:600;margin-bottom:3px}
+.tl-desc{font-size:.87rem;color:var(--text-muted)}
+@media(max-width:1100px){.stats-row{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:860px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0;padding:20px 18px}
+  .form-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .stats-row{grid-template-columns:1fr}
+  .topbar{flex-direction:column;align-items:flex-start}
+}
+</style>
 </head>
 <body>
-  <div class="top-icons">
-    <button class="icon-btn" title="Início" onclick="goHome()">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M3 10.5 12 3l9 7.5"></path>
-        <path d="M5 9.5V20h14V9.5"></path>
-      </svg>
+<aside class="sidebar" id="sidebar">
+  <div class="sb-brand">
+    <img src="logo-petcare.png" alt="PetCare Connect"/>
+    <div class="sb-brand-text">
+      <span>PetCare Connect</span>
+      <small>Sistema veterinário</small>
+    </div>
+  </div>
+  <div class="sb-user">
+    <div class="sb-avatar" id="sbAvatar">T</div>
+    <div>
+      <span class="sb-user-name" id="sbUserName">Tutor(a)</span>
+      <span class="sb-user-role">Área do Tutor</span>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-label">Menu</div>
+    <button class="nav-item active" data-sec="inicio" onclick="openSection('inicio')"><span class="ni">🏠</span> Início</button>
+    <button class="nav-item" data-sec="cadastro" onclick="openSection('cadastro')"><span class="ni">➕</span> Cadastrar pet</button>
+    <button class="nav-item" data-sec="gerenciar" onclick="openSection('gerenciar')"><span class="ni">✏️</span> Gerenciar pets</button>
+    <button class="nav-item" data-sec="consulta" onclick="openSection('consulta')"><span class="ni">📅</span> Consultas</button>
+    <button class="nav-item" data-sec="vacinas" onclick="openSection('vacinas')"><span class="ni">💉</span> Vacinas</button>
+    <button class="nav-item" data-sec="historico" onclick="openSection('historico')"><span class="ni">📋</span> Histórico</button>
+    <button class="nav-item" data-sec="relatorios" onclick="openSection('relatorios')"><span class="ni">📄</span> Relatórios</button>
+    <div class="sb-label" style="margin-top:8px">Sistema</div>
+    <button class="nav-item" onclick="toggleAvisos(true)">
+      <span class="ni">🔔</span> Avisos
+      <span class="badge" id="navBadge" style="display:none">0</span>
     </button>
-
-    <button class="icon-btn" title="Recarregar" onclick="reloadPage()">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M20 11a8 8 0 1 0-2.34 5.66"></path>
-        <path d="M20 4v7h-7"></path>
-      </svg>
-    </button>
+  </nav>
+  <div class="sb-footer">
+    <button class="sb-logout" onclick="logout()">↩ Sair do sistema</button>
   </div>
+</aside>
 
-  <div class="app">
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="brand-icon">🐾</div>
-        <div class="brand-text">
-          <h1>PetCare Connect</h1>
-          <p>Painel do Tutor</p>
-        </div>
-      </div>
-
-      <div class="menu-label">Navegação</div>
-      <div class="menu" id="menu"></div>
-    </aside>
-
-    <main class="main">
-      <section class="hero">
-        <div class="hero-top">
-          <div>
-            <h2 id="welcomeName">Bem-vindo(a)</h2>
-            <p>Centralize o cuidado com seus pets em uma experiência mais organizada, acompanhando consultas, vacinas, histórico e relatórios em um único painel.</p>
-          </div>
-          <div class="hero-badge">Perfil logado: Tutor(a)</div>
-        </div>
-
-        <div class="stats">
-          <div class="stat-card" onclick="openSection('gerenciar')"><span>Pets cadastrados</span><strong id="totalPets">0</strong></div>
-          <div class="stat-card" onclick="openSection('consulta')"><span>Consultas agendadas</span><strong id="totalConsultas">0</strong></div>
-          <div class="stat-card" onclick="openSection('vacinas')"><span>Vacinas registradas</span><strong id="totalVacinas">0</strong></div>
-          <div class="stat-card" onclick="openSection('relatorios')"><span>Relatórios disponíveis</span><strong id="totalRelatorios">0</strong></div>
-        </div>
-      </section>
-
-      <section id="inicio" class="section active">
-        <div class="section-header">
-          <div>
-            <div class="section-title">Painel inicial</div>
-            <div class="section-subtitle">Use os atalhos acima para acessar rapidamente as principais áreas do sistema.</div>
-          </div>
-          <div class="section-chip">Atalhos rápidos</div>
-        </div>
-        <div class="list-grid">
-          <div class="item-card">
-            <strong>Bem-vindo ao PetCare Connect</strong>
-            <p>Selecione uma das opções do menu lateral ou utilize os cards do topo para navegar entre as funções principais do painel do tutor.</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="cadastro" class="section">
-        <div class="section-header">
-          <div>
-            <div class="section-title">Novo cadastro de pet</div>
-            <div class="section-subtitle">Registre um novo pet com as informações básicas para começar o acompanhamento.</div>
-          </div>
-          <div class="section-chip">Cadastro rápido</div>
-        </div>
-        <div class="form-grid">
-          <div class="input-group"><label>Nome do pet</label><input id="petNome" placeholder="Ex.: Luna"></div>
-          <div class="input-group">
-            <label>Tipo do animal</label>
-            <select id="petTipo">
-              <option value="">Selecione</option>
-              <option>Cachorro</option><option>Gato</option><option>Pássaro</option><option>Coelho</option><option>Hamster</option><option>Outro</option>
-            </select>
-          </div>
-          <div class="input-group"><label>Idade</label><input id="petIdade" type="number" placeholder="Ex.: 4"></div>
-          <div class="input-group"><label>Peso (kg)</label><input id="petPeso" type="number" step="0.1" placeholder="Ex.: 12.4"></div>
-        </div>
-        <div class="action-row">
-          <button class="btn btn-primary" onclick="addPet()">Cadastrar pet</button>
-          <button class="btn btn-secondary" onclick="clearPetForm()">Limpar campos</button>
-        </div>
-      </section>
-
-      <section id="gerenciar" class="section">
-        <div class="section-header">
-          <div>
-            <div class="section-title">Atualização de dados</div>
-            <div class="section-subtitle">Altere idade e peso dos pets cadastrados sempre que necessário.</div>
-          </div>
-          <div class="section-chip">Gerenciamento</div>
-        </div>
-        <div class="list-grid" id="listaGerenciar"></div>
-      </section>
-
-      <section id="consulta" class="section">
-        <div class="section-header">
-          <div>
-            <div class="section-title">Agendamento de consulta</div>
-            <div class="section-subtitle">Selecione o pet, o doutor(a), a data e o horário disponível para registrar um novo atendimento.</div>
-          </div>
-          <div class="section-chip">Agenda</div>
-        </div>
-
-        <div class="form-grid">
-          <div class="input-group"><label>Pet</label><select id="consultaPet"></select></div>
-          <div class="input-group"><label>Doutor(a)</label><select id="consultaVet"></select></div>
-          <div class="input-group"><label>Dia</label><input id="consultaData" type="date"></div>
-          <div class="input-group"><label>Hora</label><select id="consultaHora"></select></div>
-        </div>
-
-        <div class="action-row">
-          <button class="btn btn-primary" onclick="addConsulta()">Confirmar consulta</button>
-        </div>
-
-        <div class="list-grid" id="listaConsultas"></div>
-      </section>
-
-      <section id="vacinas" class="section">
-        <div class="section-header">
-          <div>
-            <div class="section-title">Carteira de vacinação</div>
-            <div class="section-subtitle">Visualize vacinas aplicadas e as opções disponíveis para cada pet.</div>
-          </div>
-          <div class="section-chip">Saúde preventiva</div>
-        </div>
-        <div class="list-grid" id="listaVacinas"></div>
-      </section>
-
-      <section id="historico" class="section">
-        <div class="section-header">
-          <div>
-            <div class="section-title">Linha do tempo clínica</div>
-            <div class="section-subtitle">Acompanhe consultas anteriores, medicações e registros importantes no sistema.</div>
-          </div>
-          <div class="section-chip">Histórico</div>
-        </div>
-        <div class="list-grid" id="listaHistorico"></div>
-      </section>
-
-      <section id="relatorios" class="section">
-        <div class="section-header">
-          <div>
-            <div class="section-title">Relatórios disponíveis</div>
-            <div class="section-subtitle">Consulte relatórios resumidos gerados a partir dos atendimentos anteriores.</div>
-          </div>
-          <div class="section-chip">Documentos</div>
-        </div>
-        <div class="list-grid" id="listaRelatorios"></div>
-      </section>
-    </main>
-
-    <aside class="rightbar">
-      <div class="right-card">
-        <h3>Painel do tutor</h3>
-        <div class="mini-summary">
-          <div class="mini-row"><span>Usuário</span><strong id="usuarioNomeLateral">Tutor(a)</strong></div>
-          <div class="mini-row"><span>Convênio</span><strong>Ativo</strong></div>
-          <button class="notice-cta" onclick="toggleAvisos(true)">
-            <span>Ver avisos</span>
-            <span id="avisosBadge" class="notice-badge hidden">0</span>
-          </button>
-        </div>
-      </div>
-    </aside>
-  </div>
-
-  <div class="drawer-overlay" id="drawerOverlay" onclick="toggleAvisos(false)"></div>
-  <div class="drawer" id="drawerAvisos">
-    <div class="drawer-header">
-      <h3>Avisos recentes</h3>
-      <button class="icon-btn" onclick="toggleAvisos(false)">✕</button>
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <h2 id="welcomeTitle">Bem-vindo(a) 👋</h2>
+      <p id="welcomeSub">Acompanhe seus pets e gerencie as informações principais em um só lugar.</p>
     </div>
-    <div class="notice-list" id="listaAvisos"></div>
-  </div>
-
-  <button class="access-btn" onclick="toast('Área de acessibilidade. Futuramente aqui poderá abrir o vídeo em LIBRAS.')" title="Acessibilidade">♿</button>
-  <button class="logout-btn" onclick="logout()" title="Sair"><span>↩</span><span>Sair</span></button>
-
-  <div class="modal-overlay" id="modalEdicao">
-    <div class="modal-box">
-      <h3>Atualizar dados do pet</h3>
-      <p>Edite idade e peso do pet selecionado.</p>
-      <div class="input-group" style="margin-bottom:12px">
-        <label>Pet</label>
-        <input id="modalPetNome" readonly>
-      </div>
-      <div class="input-group" style="margin-bottom:12px">
-        <label>Nova idade</label>
-        <input id="modalPetIdade" type="number" placeholder="Ex.: 5">
-      </div>
-      <div class="input-group">
-        <label>Novo peso (kg)</label>
-        <input id="modalPetPeso" type="number" step="0.1" placeholder="Ex.: 13.0">
-      </div>
-      <div class="modal-actions">
-        <button class="btn btn-secondary" onclick="toggle('modalEdicao',false)">Cancelar</button>
-        <button class="btn btn-primary" onclick="savePetEdit()">Salvar alterações</button>
-      </div>
+    <div class="topbar-right">
+      <button class="tb-btn" onclick="toggleAvisos(true)">🔔 Avisos <span id="topBadge" style="display:none;background:#ef4444;color:#fff;border-radius:100px;padding:1px 7px;font-size:.72rem;margin-left:2px">0</span></button>
+      <button class="tb-btn primary" onclick="openSection('cadastro')">➕ Novo pet</button>
     </div>
   </div>
 
-  <div class="modal-overlay" id="confirmModal">
-    <div class="modal-box">
-      <h3 id="confirmTitle">Confirmação</h3>
-      <p id="confirmText">Deseja continuar?</p>
-      <div class="modal-actions">
-        <button class="btn btn-secondary" onclick="closeConfirm(false)">Cancelar</button>
-        <button class="btn btn-primary" onclick="closeConfirm(true)">Confirmar</button>
-      </div>
+  <div class="stats-row">
+    <div class="stat-card" onclick="openSection('gerenciar')">
+      <span class="sc-icon">🐾</span>
+      <span class="sc-label">Pets cadastrados</span>
+      <span class="sc-num" id="totalPets">0</span>
+    </div>
+    <div class="stat-card" onclick="openSection('consulta')">
+      <span class="sc-icon">📅</span>
+      <span class="sc-label">Consultas agendadas</span>
+      <span class="sc-num" id="totalConsultas">0</span>
+    </div>
+    <div class="stat-card" onclick="openSection('vacinas')">
+      <span class="sc-icon">💉</span>
+      <span class="sc-label">Vacinas registradas</span>
+      <span class="sc-num" id="totalVacinas">0</span>
+    </div>
+    <div class="stat-card" onclick="openSection('relatorios')">
+      <span class="sc-icon">📄</span>
+      <span class="sc-label">Relatórios disponíveis</span>
+      <span class="sc-num" id="totalRelatorios">0</span>
     </div>
   </div>
 
-  <div id="toast" class="toast"></div>
+  <section id="inicio" class="section active">
+    <div class="page-header">
+      <div class="page-header-left">
+        <h3>Painel inicial do tutor</h3>
+        <p>Nesta área, você pode acompanhar rapidamente o status dos pets, consultas, vacinas e registros do sistema.</p>
+      </div>
+      <span class="chip">Visão geral</span>
+    </div>
+    <div class="cards-grid" id="listaInicio"></div>
+  </section>
 
-  <script src="petcare-data.js"></script>
-  <script>
-    const SEC_KEY = "petcare_tutor_secao";
-    const MEDICOS_FALLBACK = ["Dra. Camila", "Dr. Rafael", "Dra. Beatriz"];
-    const $ = id => document.getElementById(id);
+  <section id="cadastro" class="section">
+    <div class="page-header">
+      <div class="page-header-left">
+        <h3>Cadastrar novo pet</h3>
+        <p>Registre um novo pet com as informações básicas para iniciar o acompanhamento clínico.</p>
+      </div>
+      <span class="chip">Cadastro rápido</span>
+    </div>
+    <div class="card">
+      <div class="form-grid">
+        <div class="form-group"><label>Nome do pet</label><input id="petNome" placeholder="Ex.: Luna"/></div>
+        <div class="form-group"><label>Tipo do animal</label>
+          <select id="petTipo">
+            <option value="">Selecione</option>
+            <option>Cachorro</option><option>Gato</option><option>Pássaro</option>
+            <option>Coelho</option><option>Hamster</option><option>Outro</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Idade (anos)</label><input id="petIdade" type="number" min="1" step="1" inputmode="numeric" placeholder="Ex.: 4" oninput="somenteInteiroPositivo(this)" onkeydown="bloquearTeclasInvalidasInteiro(event)"/></div>
+        <div class="form-group"><label>Peso (kg)</label><input id="petPeso" type="text" inputmode="decimal" placeholder="Ex.: 12,4" oninput="formatarPeso(this)"/></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="addPet()">✓ Cadastrar pet</button>
+        <button class="btn btn-secondary" onclick="clearPetForm()">Limpar campos</button>
+      </div>
+    </div>
+  </section>
 
-    const menu = [
-      ["inicio","⌂","Início"],
-      ["cadastro","＋","Cadastrar pet"],
-      ["gerenciar","✎","Gerenciar pet"],
-      ["consulta","🗓","Gerenciar consultas"],
-      ["vacinas","💉","Vacinas"],
-      ["historico","📋","Histórico"],
-      ["relatorios","📄","Relatórios"]
-    ];
+  <section id="gerenciar" class="section">
+    <div class="page-header">
+      <div class="page-header-left">
+        <h3>Gerenciar pets</h3>
+        <p>Visualize e atualize os dados dos seus pets cadastrados a qualquer momento.</p>
+      </div>
+      <span class="chip">Gerenciamento</span>
+    </div>
+    <div class="cards-grid" id="listaGerenciar"></div>
+  </section>
 
-    let confirmCb = null;
+  <section id="consulta" class="section">
+    <div class="page-header">
+      <div class="page-header-left">
+        <h3>Agendar consulta</h3>
+        <p>Selecione o pet, o veterinário, a data e o horário para registrar um novo atendimento.</p>
+      </div>
+      <span class="chip">Agenda</span>
+    </div>
+    <div class="card" style="margin-bottom:20px">
+      <div class="form-grid">
+        <div class="form-group"><label>Pet</label><select id="consultaPet"></select></div>
+        <div class="form-group"><label>Veterinário(a)</label><select id="consultaVet"></select></div>
+        <div class="form-group"><label>Data</label><input id="consultaData" type="date"/></div>
+        <div class="form-group"><label>Horário</label><select id="consultaHora"></select></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="addConsulta()">✓ Confirmar agendamento</button>
+      </div>
+    </div>
+    <div class="page-header" style="padding-top:0;margin-top:0">
+      <div class="page-header-left">
+        <h3>Consultas agendadas</h3>
+      </div>
+    </div>
+    <div class="cards-grid" id="listaConsultas"></div>
+  </section>
 
-    const currentSection = () => localStorage.getItem(SEC_KEY) || "inicio";
-    const currentUser = () => petcareGetSession().user || "Tutor(a)";
-    const load = () => petcareLoad();
-    const save = d => petcareSave(d);
+  <section id="vacinas" class="section">
+    <div class="page-header">
+      <div class="page-header-left">
+        <h3>Carteira de vacinação</h3>
+        <p>Acompanhe as vacinas aplicadas e as disponíveis para cada pet.</p>
+      </div>
+      <span class="chip">Saúde preventiva</span>
+    </div>
+    <div class="cards-grid" id="listaVacinas"></div>
+  </section>
 
-    function toast(msg){
-      const t = $("toast");
-      t.textContent = msg;
-      t.classList.add("show");
-      clearTimeout(toast.timer);
-      toast.timer = setTimeout(() => t.classList.remove("show"), 2200);
+  <section id="historico" class="section">
+    <div class="page-header">
+      <div class="page-header-left">
+        <h3>Histórico clínico</h3>
+        <p>Linha do tempo com consultas, medicações e registros importantes de cada pet.</p>
+      </div>
+      <span class="chip">Histórico</span>
+    </div>
+    <div class="cards-grid" id="listaHistorico"></div>
+  </section>
+
+  <section id="relatorios" class="section">
+    <div class="page-header">
+      <div class="page-header-left">
+        <h3>Relatórios</h3>
+        <p>Consulte relatórios resumidos gerados a partir dos atendimentos e registros clínicos.</p>
+      </div>
+      <span class="chip">Documentos</span>
+    </div>
+    <div class="cards-grid" id="listaRelatorios"></div>
+  </section>
+</main>
+
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleAvisos(false)"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <h3>🔔 Avisos recentes</h3>
+    <button class="btn btn-secondary btn-sm" onclick="toggleAvisos(false)">✕ Fechar</button>
+  </div>
+  <div class="drawer-body" id="listaAvisos"></div>
+</div>
+
+<div class="modal-overlay" id="modalEdit">
+  <div class="modal">
+    <h3>✏️ Atualizar dados do pet</h3>
+    <p>Edite as informações de idade e peso do pet selecionado.</p>
+    <div class="modal-form">
+      <div class="form-group"><label>Pet</label><input id="modalPetNome" readonly/></div>
+      <div class="form-group"><label>Nova idade (anos)</label><input id="modalPetIdade" type="number" min="1" step="1" inputmode="numeric" placeholder="Ex.: 5" oninput="somenteInteiroPositivo(this)" onkeydown="bloquearTeclasInvalidasInteiro(event)"/></div>
+      <div class="form-group"><label>Novo peso (kg)</label><input id="modalPetPeso" type="text" inputmode="decimal" placeholder="Ex.: 13,0" oninput="formatarPeso(this)"/></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('modalEdit')">Cancelar</button>
+      <button class="btn btn-primary" onclick="savePetEdit()">Salvar alterações</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalConfirm">
+  <div class="modal">
+    <h3 id="confirmTitle">Confirmação</h3>
+    <p id="confirmText">Deseja continuar?</p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeConfirm(false)">Cancelar</button>
+      <button class="btn btn-danger" onclick="closeConfirm(true)">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const MEDICOS_FALLBACK = ["Dra. Camila","Dr. Rafael","Dra. Beatriz"];
+let confirmCb = null;
+
+function toast(msg, dur=2400){
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => t.classList.remove("show"), dur);
+}
+function openModal(id){ $(id).classList.add("active"); }
+function closeModal(id){ $(id).classList.remove("active"); }
+function openConfirm(msg, cb, title="Confirmação"){
+  $("confirmTitle").textContent = title;
+  $("confirmText").textContent = msg;
+  confirmCb = cb;
+  openModal("modalConfirm");
+}
+function closeConfirm(ok){
+  closeModal("modalConfirm");
+  if(confirmCb) confirmCb(ok);
+  confirmCb = null;
+}
+function somenteInteiroPositivo(campo){
+  campo.value = campo.value.replace(/\D/g, "");
+}
+function bloquearTeclasInvalidasInteiro(evento){
+  const teclasInvalidas = ["e","E","+","-",".",","];
+  if(teclasInvalidas.includes(evento.key)) evento.preventDefault();
+}
+function formatarPeso(campo){
+  let valor = campo.value.replace(/[^0-9.,]/g, "");
+  valor = valor.replace(/,/g, ".");
+  const partes = valor.split(".");
+  if(partes.length > 2){
+    valor = partes[0] + "." + partes.slice(1).join("");
+  }
+  campo.value = valor;
+}
+function openSection(id){
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  document.querySelectorAll(".nav-item[data-sec]").forEach(b => b.classList.remove("active"));
+  $(id)?.classList.add("active");
+  document.querySelector(`.nav-item[data-sec="${id}"]`)?.classList.add("active");
+  localStorage.setItem("petcare_tutor_sec", id);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function currentUser(){ return petcareGetSession().user || "Tutor(a)"; }
+function load(){ return petcareLoad(); }
+function save(d){ petcareSave(d); }
+
+function logout(){
+  openConfirm("Deseja realmente sair do sistema?", ok => {
+    if(ok){
+      petcareClearSession();
+      location.href = "index.html";
     }
+  }, "Sair do sistema");
+}
 
-    function toggle(id,on){ $(id).classList.toggle("active",on); }
+function clearPetForm(){
+  ["petNome","petTipo","petIdade","petPeso"].forEach(id => $(id).value = "");
+}
 
-    function openConfirm(msg,cb,title="Confirmação"){
-      $("confirmTitle").textContent = title;
-      $("confirmText").textContent = msg;
-      confirmCb = cb;
-      toggle("confirmModal", true);
-    }
+function addPet(){
+  const nome = $("petNome").value.trim();
+  const tipo = $("petTipo").value;
+  const idade = $("petIdade").value.trim();
+  const peso = $("petPeso").value.trim();
+  const idadeNumero = Number(idade);
+  const pesoNumero = Number(String(peso).replace(",", "."));
 
-    function closeConfirm(ok){
-      toggle("confirmModal", false);
-      if(confirmCb) confirmCb(ok);
-      confirmCb = null;
-    }
+  if(!nome || !tipo || !idade || !peso) return toast("⚠️ Preencha todos os campos do pet.");
+  if(!Number.isInteger(idadeNumero) || idadeNumero <= 0) return toast("⚠️ A idade deve ser um número inteiro maior que 0.");
+  if(Number.isNaN(pesoNumero) || pesoNumero < 0) return toast("⚠️ O peso não pode ser negativo.");
 
-    function setMinDate(){
-      const d = new Date();
-      d.setDate(d.getDate() + 1);
-      $("consultaData").min = d.toISOString().split("T")[0];
-    }
+  const data = load();
 
-    function fillMenu(){
-      $("menu").innerHTML = menu.map(([id,ico,txt]) =>
-        `<button class="menu-btn" data-sec="${id}" onclick="openSection('${id}')"><span class="menu-icon">${ico}</span><span>${txt}</span></button>`
-      ).join("");
-    }
+  if(data.pets.some(p => p.nome.toLowerCase() === nome.toLowerCase())){
+    return toast("⚠️ Já existe um pet com esse nome.");
+  }
 
-    function fillMedicos(){
-      const data = load();
-      const vets = petcareGetVets(data);
-      const lista = vets.length ? vets.map(v => v.nome) : MEDICOS_FALLBACK;
-      $("consultaVet").innerHTML = `<option value="">Selecione</option>${lista.map(v => `<option value="${v}">${v}</option>`).join("")}`;
-    }
+  data.pets.push({
+    id: petcareNextId(data.pets),
+    nome,
+    tipo,
+    tutor: currentUser(),
+    idade: idadeNumero,
+    peso: String(peso).replace(",", "."),
+    vacinasAplicadas: [],
+    vacinasDisponiveis: [],
+    historico: [],
+    medicacoes: [],
+    relatorio: "",
+    relatorioAtualizacao: ""
+  });
 
-    function openSection(id){
-      document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
-      document.querySelectorAll(".menu-btn").forEach(b => b.classList.remove("active"));
-      $(id).classList.add("active");
-      document.querySelector(`.menu-btn[data-sec="${id}"]`)?.classList.add("active");
-      localStorage.setItem(SEC_KEY, id);
-      scrollTo({ top:0, behavior:"smooth" });
-    }
+  data.avisos.unshift({
+    ...petcareCreateAviso({
+      titulo: "Pet cadastrado",
+      texto: `${nome} foi cadastrado com sucesso.`,
+      tipo: "tutor",
+      tutor: currentUser()
+    }),
+    id: petcareNextId(data.avisos)
+  });
 
-    const goHome = () => openSection("inicio");
-    const reloadPage = () => location.reload();
+  save(data);
+  clearPetForm();
+  render();
+  toast(`✅ Pet "${nome}" cadastrado com sucesso!`);
+  openSection("gerenciar");
+}
 
-    function updateHoras(){
-      const data = load();
-      const horas = petcareAvailableHours(data, $("consultaVet").value, $("consultaData").value);
-      const atual = $("consultaHora").value;
-      $("consultaHora").innerHTML = horas.length
-        ? horas.map(h => `<option value="${h}">${h}</option>`).join("")
-        : `<option value="">Sem horários</option>`;
-      if(horas.includes(atual)) $("consultaHora").value = atual;
-    }
+function editPet(id, nome, idade, peso){
+  $("modalPetNome").value = nome;
+  $("modalPetNome").dataset.id = id;
+  $("modalPetIdade").value = idade;
+  $("modalPetPeso").value = peso;
+  openModal("modalEdit");
+}
 
-    function setUser(){
-      const u = currentUser();
-      $("welcomeName").textContent = `Bem-vindo(a), ${u}`;
-      $("usuarioNomeLateral").textContent = u;
-    }
+function savePetEdit(){
+  const id = Number($("modalPetNome").dataset.id);
+  const idade = $("modalPetIdade").value.trim();
+  const peso = $("modalPetPeso").value.trim();
+  const idadeNumero = Number(idade);
+  const pesoNumero = Number(String(peso).replace(",", "."));
 
-    function clearPetForm(){
-      ["petNome","petTipo","petIdade","petPeso"].forEach(id => $(id).value = "");
-    }
+  if(!idade || !peso) return toast("⚠️ Preencha a nova idade e o novo peso.");
+  if(!Number.isInteger(idadeNumero) || idadeNumero <= 0) return toast("⚠️ A idade deve ser um número inteiro maior que 0.");
+  if(Number.isNaN(pesoNumero) || pesoNumero < 0) return toast("⚠️ O peso não pode ser negativo.");
 
-    function addPet(){
-      const nome = $("petNome").value.trim();
-      const tipo = $("petTipo").value.trim();
-      const idade = $("petIdade").value.trim();
-      const peso = $("petPeso").value.trim();
+  const data = load();
+  const pet = data.pets.find(p => p.id === id);
 
-      if(!nome || !tipo || !idade || !peso) return toast("Preencha nome, tipo do animal, idade e peso do pet.");
+  if(pet){
+    pet.idade = idadeNumero;
+    pet.peso = String(peso).replace(",", ".");
+  }
 
-      const data = load();
-      if(data.pets.some(p => p.nome.toLowerCase() === nome.toLowerCase())) {
-        return toast("Já existe um pet com esse nome cadastrado.");
-      }
+  save(data);
+  closeModal("modalEdit");
+  render();
+  toast(`✅ Dados de ${pet?.nome} atualizados.`);
+}
 
-      data.pets.push({
-        id: petcareNextId(data.pets),
-        nome,
-        tipo,
-        tutor: currentUser(),
-        idade: Number(idade),
-        peso: String(peso).replace(".", ","),
-        vacinasAplicadas: [],
-        vacinasDisponiveis: [],
-        historico: [],
-        medicacoes: [],
-        relatorio: "",
-        relatorioAtualizacao: ""
-      });
+function setMinDate(){
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  $("consultaData").min = d.toISOString().split("T")[0];
+}
 
+function updateHoras(){
+  const horas = petcareAvailableHours(load(), $("consultaVet").value, $("consultaData").value);
+  $("consultaHora").innerHTML = horas.length
+    ? horas.map(h => `<option value="${h}">${h}</option>`).join("")
+    : `<option value="">Sem horários disponíveis</option>`;
+}
+
+function fillMedicos(){
+  const vets = petcareGetVets(load());
+  const nomes = vets.length ? vets.map(v => v.nome) : MEDICOS_FALLBACK;
+  $("consultaVet").innerHTML = `<option value="">Selecione o veterinário</option>` + nomes.map(n => `<option value="${n}">${n}</option>`).join("");
+}
+
+function addConsulta(){
+  const petId = Number($("consultaPet").value);
+  const vet = $("consultaVet").value;
+  const dataISO = $("consultaData").value;
+  const hora = $("consultaHora").value;
+
+  if(!petId || !vet || !dataISO || !hora){
+    return toast("⚠️ Preencha todos os campos para agendar.");
+  }
+
+  if(!petcareIsValidIsoDate(dataISO)){
+    return toast("⚠️ A data informada não existe no calendário.");
+  }
+
+  if(!petcareIsFutureDate(dataISO)){
+    return toast("⚠️ Escolha uma data futura válida.");
+  }
+
+  const data = load();
+
+  if(!petcareAvailableHours(data, vet, dataISO).includes(hora)){
+    updateHoras();
+    return toast("⚠️ Horário não disponível.");
+  }
+
+  const pet = petcareGetPetById(data, petId);
+  if(!pet) return toast("⚠️ Pet não encontrado.");
+
+  const dataBr = petcareBrDate(dataISO);
+
+  data.consultas.push({
+    id: petcareNextId(data.consultas),
+    petId,
+    vet,
+    data: dataBr,
+    hora,
+    status: "Marcada"
+  });
+
+  pet.historico.push({
+    data: dataBr,
+    descricao: `Consulta agendada com ${vet} para ${hora}.`
+  });
+
+  pet.relatorio = `Consulta agendada com ${vet} para ${dataBr} às ${hora}.`;
+  pet.relatorioAtualizacao = dataBr;
+
+  data.avisos.unshift({
+    ...petcareCreateAviso({
+      titulo: "Agendamento confirmado",
+      texto: `Consulta de ${pet.nome} com ${vet} em ${dataBr} às ${hora}.`,
+      tipo: "consulta",
+      petId: pet.id,
+      tutor: pet.tutor,
+      vet: vet
+    }),
+    id: petcareNextId(data.avisos)
+  });
+
+  save(data);
+  $("consultaData").value = "";
+  $("consultaVet").value = "";
+  render();
+  toast(`✅ Consulta de ${pet.nome} marcada para ${dataBr} às ${hora}!`);
+}
+
+function cancelConsulta(id){
+  const data = load();
+  const c = data.consultas.find(x => x.id === id);
+  if(!c) return;
+
+  const pet = petcareGetPetById(data, c.petId);
+  openConfirm(
+    `Desmarcar consulta de ${pet?.nome || "pet"} com ${c.vet} em ${c.data} às ${c.hora}?`,
+    ok => {
+      if(!ok) return;
+      data.consultas = data.consultas.filter(x => x.id !== id);
       data.avisos.unshift({
-        id: petcareNextId(data.avisos),
-        titulo: "Pet cadastrado",
-        texto: `${nome} foi cadastrado com sucesso no sistema.`,
-        lido: false
+        ...petcareCreateAviso({
+          titulo: "Consulta desmarcada",
+          texto: `Consulta de ${pet?.nome || "pet"} com ${c.vet} em ${c.data} às ${c.hora} foi cancelada.`,
+          tipo: "consulta",
+          petId: c.petId,
+          tutor: pet?.tutor || "",
+          vet: c.vet
+        }),
+        id: petcareNextId(data.avisos)
       });
-
       save(data);
-      clearPetForm();
       render();
-      toast(`Pet "${nome}" cadastrado com sucesso.`);
-    }
+      toast("✅ Consulta desmarcada.");
+    },
+    "Desmarcar consulta"
+  );
+}
 
-    function editPet(id,nome,idade,peso){
-      $("modalPetNome").value = nome;
-      $("modalPetNome").dataset.id = id;
-      $("modalPetIdade").value = idade;
-      $("modalPetPeso").value = peso;
-      toggle("modalEdicao", true);
-    }
+function toggleAvisos(show){
+  $("drawer").classList.toggle("active", show);
+  $("drawerOverlay").classList.toggle("active", show);
 
-    function savePetEdit(){
-      const id = Number($("modalPetNome").dataset.id);
-      const idade = $("modalPetIdade").value.trim();
-      const peso = $("modalPetPeso").value.trim();
-
-      if(!idade || !peso) return toast("Preencha a nova idade e o novo peso.");
-
-      const data = load();
-      const pet = data.pets.find(p => p.id === id);
-      if(pet){
-        pet.idade = Number(idade);
-        pet.peso = String(peso).replace(".", ",");
-      }
-
+  if(show){
+    const data = load();
+    const changed = petcareMarkAvisosAsRead(data, currentUser(), "Tutor(a)");
+    if(changed){
       save(data);
-      toggle("modalEdicao", false);
       render();
-      toast(`Dados de ${pet?.nome || "pet"} atualizados com sucesso.`);
     }
+  }
+}
 
-    function addConsulta(){
-      const petId = Number($("consultaPet").value);
-      const vet = $("consultaVet").value;
-      const dataISO = $("consultaData").value;
-      const hora = $("consultaHora").value;
+function render(){
+  const data = load();
+  const user = currentUser();
 
-      if(!petId || !vet || !dataISO || !hora) return toast("Selecione pet, doutor(a), dia e hora.");
+  $("sbUserName").textContent = user;
+  $("sbAvatar").textContent = user.charAt(0).toUpperCase();
+  $("welcomeTitle").textContent = `Bem-vindo(a), ${user} 👋`;
 
-      const hoje = new Date();
-      hoje.setHours(0,0,0,0);
-      const sel = new Date(dataISO + "T00:00:00");
-      if(sel <= hoje) return toast("Escolha apenas datas futuras para o agendamento.");
+  const meusPets = data.pets.filter(p => p.tutor === user);
+  const minhasConsultas = data.consultas.filter(c => {
+    const pet = petcareGetPetById(data, c.petId);
+    return pet && pet.tutor === user;
+  });
 
-      const data = load();
-      if(!petcareAvailableHours(data, vet, dataISO).includes(hora)) {
-        updateHoras();
-        return toast("Esse horário não está mais disponível para esse doutor(a).");
-      }
+  const totalVac = meusPets.reduce((a, p) => a + (p.vacinasAplicadas?.length || 0), 0);
+  const totalRel = meusPets.filter(p => p.relatorio).length;
 
-      const pet = petcareGetPetById(data, petId);
-      if(!pet) return toast("Pet não encontrado.");
+  $("totalPets").textContent = meusPets.length;
+  $("totalConsultas").textContent = minhasConsultas.length;
+  $("totalVacinas").textContent = totalVac;
+  $("totalRelatorios").textContent = totalRel;
 
-      const dataBr = petcareBrDate(dataISO);
+  $("consultaPet").innerHTML = meusPets.length
+    ? meusPets.map(p => `<option value="${p.id}">${p.nome}</option>`).join("")
+    : `<option value="">Nenhum pet cadastrado</option>`;
 
-      data.consultas.push({
-        id: petcareNextId(data.consultas),
-        petId,
-        vet,
-        data: dataBr,
-        hora,
-        status: "Marcada"
-      });
+  fillMedicos();
+  updateHoras();
 
-      pet.ultimaConsulta = dataBr;
-      pet.historico.push({ data: dataBr, descricao: `consulta agendada com ${vet} para ${hora}.` });
-      pet.relatorio = `Há consulta agendada com ${vet} para ${dataBr} às ${hora}. Recomenda-se acompanhamento após atendimento clínico.`;
-      pet.relatorioAtualizacao = dataBr;
+  $("listaInicio").innerHTML = meusPets.length
+    ? meusPets.map(p => {
+        const consulta = minhasConsultas.find(c => c.petId === p.id);
+        return `
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">${p.nome}</div>
+            <span class="tag ${consulta ? 'tag-green' : 'tag-navy'}">${consulta ? 'Consulta agendada' : 'Sem consulta'}</span>
+          </div>
+          <p class="card-sub">${p.tipo} • ${p.idade} ano(s) • ${String(p.peso).replace(".", ",")} kg${consulta ? ` • Próxima consulta: ${consulta.data} às ${consulta.hora}` : ''}</p>
+          <div class="card-actions">
+            <button class="btn btn-secondary btn-sm" onclick="openSection('vacinas')">💉 Vacinas</button>
+            <button class="btn btn-secondary btn-sm" onclick="openSection('historico')">📋 Histórico</button>
+            <button class="btn btn-primary btn-sm" onclick="openSection('consulta')">📅 Agendar</button>
+          </div>
+        </div>`;
+      }).join("")
+    : `<div class="empty"><div class="empty-icon">🐾</div><p>Nenhum pet cadastrado ainda.<br>Clique em <strong>Cadastrar pet</strong> para começar.</p></div>`;
 
-      data.avisos.unshift({
-        id: petcareNextId(data.avisos),
-        titulo: "Agendamento confirmado",
-        texto: `Consulta de ${pet.nome} com ${vet} marcada para ${dataBr} às ${hora}.`,
-        lido: false
-      });
+  $("listaGerenciar").innerHTML = meusPets.length
+    ? meusPets.map(p => `
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">${p.nome}</div>
+          <span class="tag tag-navy">${p.tipo}</span>
+        </div>
+        <p class="card-sub">Idade: ${p.idade} ano(s) • Peso: ${String(p.peso).replace(".", ",")} kg • Tutor: ${p.tutor}</p>
+        <div class="card-actions">
+          <button class="btn btn-secondary btn-sm" onclick="editPet('${p.id}','${p.nome}','${p.idade}','${String(p.peso)}')">✏️ Atualizar dados</button>
+        </div>
+      </div>`).join("")
+    : `<div class="empty"><div class="empty-icon">🐾</div><p>Nenhum pet cadastrado.</p></div>`;
 
-      save(data);
-      $("consultaData").value = "";
-      $("consultaVet").value = "";
-      render();
-      toast(`Consulta de ${pet.nome} com ${vet} marcada para ${dataBr} às ${hora}.`);
-    }
-
-    function cancelConsulta(consultaId){
-      const data = load();
-      const consulta = data.consultas.find(c => c.id === consultaId);
-      if(!consulta) return;
-
-      const pet = petcareGetPetById(data, consulta.petId);
-
-      openConfirm(
-        `Deseja desmarcar a consulta de ${pet?.nome || "pet"} com ${consulta.vet} em ${consulta.data} às ${consulta.hora}?`,
-        ok => {
-          if(!ok) return;
-
-          data.consultas = data.consultas.filter(c => c.id !== consultaId);
-
-          data.avisos.unshift({
-            id: petcareNextId(data.avisos),
-            titulo: "Consulta desmarcada",
-            texto: `A consulta de ${pet?.nome || "pet"} com ${consulta.vet}, marcada para ${consulta.data} às ${consulta.hora}, foi desmarcada.`,
-            lido: false
-          });
-
-          save(data);
-          render();
-          toast("Consulta desmarcada com sucesso.");
-        },
-        "Desmarcar consulta"
-      );
-    }
-
-    function toggleAvisos(show){
-      toggle("drawerAvisos", show);
-      toggle("drawerOverlay", show);
-
-      if(show){
-        const data = load();
-        let changed = false;
-        data.avisos.forEach(a => {
-          if(!a.lido){
-            a.lido = true;
-            changed = true;
-          }
-        });
-        if(changed){
-          save(data);
-          render();
-        }
-      }
-    }
-
-    function logout(){
-      openConfirm("Deseja realmente sair do sistema?", ok => {
-        if(ok) location.href = "index.html";
-      }, "Sair do sistema");
-    }
-
-    function render(){
-      const data = load();
-      const user = currentUser();
-
-      setUser();
-
-      const meusPets = data.pets.filter(p => p.tutor === user);
-      const minhasConsultas = data.consultas.filter(c => {
+  $("listaConsultas").innerHTML = minhasConsultas.length
+    ? minhasConsultas.map(c => {
         const pet = petcareGetPetById(data, c.petId);
-        return pet && pet.tutor === user && c.status !== "Cancelada";
-      });
-
-      $("totalPets").textContent = meusPets.length;
-      $("totalConsultas").textContent = minhasConsultas.length;
-      $("totalVacinas").textContent = meusPets.reduce((a,p) => a + (p.vacinasAplicadas?.length || 0), 0);
-      $("totalRelatorios").textContent = meusPets.filter(p => p.relatorio).length;
-
-      $("consultaPet").innerHTML = meusPets.length
-        ? meusPets.map(p => `<option value="${p.id}">${p.nome}</option>`).join("")
-        : `<option value="">Nenhum pet cadastrado</option>`;
-
-      $("listaGerenciar").innerHTML = meusPets.length
-        ? meusPets.map(p => `
-          <div class="item-card">
-            <strong>${p.nome}</strong>
-            <span>Tipo: ${p.tipo} • Idade atual: ${p.idade} ano(s) • Peso atual: ${p.peso} kg</span>
-            <div class="inline-actions">
-              <button class="small-btn" onclick="editPet('${p.id}','${p.nome}','${p.idade}','${String(p.peso).replace(',','.')}')">Atualizar dados</button>
-            </div>
+        return `
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">${pet?.nome || "Pet"} — Consulta agendada</div>
+            <span class="tag tag-green">✓ ${c.status}</span>
           </div>
-        `).join("")
-        : `<div class="item-card"><strong>Nenhum pet cadastrado</strong><p>Cadastre um pet para começar.</p></div>`;
-
-      $("listaConsultas").innerHTML = minhasConsultas.length
-        ? minhasConsultas.map(c => {
-            const pet = petcareGetPetById(data, c.petId);
-            return `
-            <div class="item-card">
-              <strong>Consulta agendada</strong>
-              <span>${pet ? pet.nome : "Pet"} • ${c.vet} • ${c.data} às ${c.hora}</span>
-              <div class="inline-actions">
-                <button class="small-btn danger" onclick="cancelConsulta(${c.id})">Desmarcar consulta</button>
-              </div>
-            </div>`;
-          }).join("")
-        : `<div class="item-card"><strong>Nenhuma consulta agendada</strong><p>Quando você marcar uma consulta, ela aparecerá aqui.</p></div>`;
-
-      $("listaVacinas").innerHTML = meusPets.length
-        ? meusPets.map(p => `
-          <div class="item-card">
-            <strong>${p.nome}</strong>
-            <p><strong>Vacinas aplicadas:</strong></p>
-            ${(p.vacinasAplicadas?.length ? p.vacinasAplicadas.map(v => `<p>• ${v.nome} — aplicada em ${v.data}</p>`).join("") : `<p>Nenhuma vacina registrada até o momento.</p>`)}
-            <p><strong>Vacinas disponíveis:</strong> ${(p.vacinasDisponiveis?.length ? p.vacinasDisponiveis.join(", ") : "A definir conforme avaliação veterinária.")}</p>
+          <p class="card-sub">Veterinário: <strong>${c.vet}</strong> • Data: <strong>${c.data}</strong> • Horário: <strong>${c.hora}</strong></p>
+          <div class="card-actions">
+            <button class="btn btn-danger btn-sm" onclick="cancelConsulta(${c.id})">✕ Desmarcar</button>
           </div>
-        `).join("")
-        : `<div class="item-card"><strong>Sem vacinas</strong><p>Nenhum pet disponível para exibir vacinas.</p></div>`;
+        </div>`;
+      }).join("")
+    : `<div class="empty"><div class="empty-icon">📅</div><p>Nenhuma consulta agendada.<br>Use o formulário acima para agendar.</p></div>`;
 
-      $("listaHistorico").innerHTML = meusPets.length
-        ? meusPets.map(p => `
-          <div class="item-card">
-            <strong>${p.nome}</strong>
-            ${(p.historico?.length ? p.historico.map(h => `<p><strong>Consulta em ${h.data}:</strong> ${h.descricao}</p>`).join("") : `<p><strong>Consultas:</strong> ainda não realizadas.</p>`)}
-            <p><strong>Medicações:</strong> ${(p.medicacoes?.length ? p.medicacoes.join(", ") : "nenhuma medicação registrada.")}</p>
-            <p><strong>Vacinas:</strong> ${(p.vacinasAplicadas?.length ? p.vacinasAplicadas.map(v => v.nome).join(", ") : "nenhuma vacina registrada.")}.</p>
+  $("listaVacinas").innerHTML = meusPets.length
+    ? meusPets.map(p => {
+        const total = (p.vacinasAplicadas?.length || 0) + (p.vacinasDisponiveis?.length || 0);
+        const aplicadas = p.vacinasAplicadas?.length || 0;
+        const pct = total > 0 ? Math.round((aplicadas / total) * 100) : 0;
+        return `
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">${p.nome}</div>
+            <span class="tag ${pct === 100 ? 'tag-green' : pct > 0 ? 'tag-yellow' : 'tag-red'}">${pct}% em dia</span>
           </div>
-        `).join("")
-        : `<div class="item-card"><strong>Sem histórico</strong><p>Nenhum pet disponível para exibir histórico.</p></div>`;
-
-      $("listaRelatorios").innerHTML = meusPets.length
-        ? meusPets.map(p => `
-          <div class="item-card">
-            <strong>Relatório - ${p.nome}</strong>
-            <p>${p.relatorio || "Sem relatório disponível."}</p>
-            <span class="tag">Última atualização: ${p.relatorioAtualizacao || "sem data"}</span>
+          <div class="vac-bar-wrap">
+            <div class="vac-bar-label"><span>Vacinas aplicadas</span><span>${aplicadas} / ${total || '—'}</span></div>
+            <div class="vac-bar-track"><div class="vac-bar-fill" style="width:${pct}%"></div></div>
           </div>
-        `).join("")
-        : `<div class="item-card"><strong>Sem relatórios</strong><p>Nenhum relatório disponível.</p></div>`;
+          <p class="card-sub" style="margin-top:10px">
+            <strong>Aplicadas:</strong> ${p.vacinasAplicadas?.length ? p.vacinasAplicadas.map(v => `${v.nome} (${v.data})`).join(", ") : "Nenhuma ainda."}<br/>
+            <strong>Disponíveis:</strong> ${p.vacinasDisponiveis?.length ? p.vacinasDisponiveis.join(", ") : "A definir conforme avaliação veterinária."}
+          </p>
+        </div>`;
+      }).join("")
+    : `<div class="empty"><div class="empty-icon">💉</div><p>Nenhum pet disponível para exibir vacinas.</p></div>`;
 
-      $("listaAvisos").innerHTML = data.avisos.length
-        ? data.avisos.map(a => `<div class="notice-item"><strong>${a.titulo}</strong><span>${a.texto}</span></div>`).join("")
-        : `<div class="notice-item"><strong>Sem avisos</strong><span>Nenhum aviso publicado no momento.</span></div>`;
+  $("listaHistorico").innerHTML = meusPets.length
+    ? meusPets.map(p => `
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">${p.nome}</div>
+          <span class="tag tag-navy">${p.historico?.length || 0} registro(s)</span>
+        </div>
+        <div class="timeline" style="margin:10px 0">
+          ${p.historico?.length
+            ? p.historico.map(h => `
+              <div class="tl-item">
+                <div style="position:relative"><div class="tl-dot"></div><div class="tl-line"></div></div>
+                <div class="tl-content">
+                  <div class="tl-date">${h.data}</div>
+                  <div class="tl-desc">${h.descricao}</div>
+                </div>
+              </div>`).join("")
+            : `<p class="card-sub">Nenhuma consulta realizada ainda.</p>`}
+        </div>
+        <p class="card-sub"><strong>Medicações:</strong> ${p.medicacoes?.length ? p.medicacoes.join(", ") : "Nenhuma registrada."}</p>
+        <p class="card-sub"><strong>Vacinas:</strong> ${p.vacinasAplicadas?.length ? p.vacinasAplicadas.map(v => v.nome).join(", ") : "Nenhuma registrada."}</p>
+      </div>`).join("")
+    : `<div class="empty"><div class="empty-icon">📋</div><p>Nenhum histórico disponível.</p></div>`;
 
-      const unread = data.avisos.filter(a => !a.lido).length;
-      $("avisosBadge").textContent = unread;
-      $("avisosBadge").classList.toggle("hidden", !unread);
+  $("listaRelatorios").innerHTML = meusPets.length
+    ? meusPets.map(p => `
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Relatório — ${p.nome}</div>
+          <span class="tag ${p.relatorio ? 'tag-green' : 'tag-navy'}">${p.relatorio ? 'Disponível' : 'Sem relatório'}</span>
+        </div>
+        <p class="card-sub">${p.relatorio || "Nenhum relatório gerado. Realize uma consulta para gerar o primeiro relatório."}</p>
+        ${p.relatorioAtualizacao ? `<span class="tag tag-navy" style="margin-top:8px;display:inline-block">🗓 Atualizado em: ${p.relatorioAtualizacao}</span>` : ''}
+      </div>`).join("")
+    : `<div class="empty"><div class="empty-icon">📄</div><p>Nenhum relatório disponível.</p></div>`;
 
-      openSection(currentSection());
-      fillMedicos();
-      updateHoras();
-    }
+  const avisosVisiveis = petcareGetVisibleAvisos(data, user, "Tutor(a)");
 
-    fillMenu();
-    fillMedicos();
-    setMinDate();
-    $("consultaVet").addEventListener("change", updateHoras);
-    $("consultaData").addEventListener("change", updateHoras);
-    render();
-  </script>
+  $("listaAvisos").innerHTML = avisosVisiveis.length
+    ? avisosVisiveis.map(a => `
+      <div class="aviso-card ${!petcareIsAvisoLidoPor(a, user, "Tutor(a)") ? 'unread' : ''}">
+        <strong>${a.titulo}</strong>
+        <span>${a.texto}</span>
+      </div>`).join("")
+    : `<div class="aviso-card"><strong>Sem avisos</strong><span>Nenhum aviso no momento.</span></div>`;
+
+  const unread = petcareCountUnreadAvisos(data, user, "Tutor(a)");
+  [$("navBadge"), $("topBadge")].forEach(el => {
+    if(!el) return;
+    el.textContent = unread;
+    el.style.display = unread ? "" : "none";
+  });
+}
+
+setMinDate();
+$("consultaVet").addEventListener("change", updateHoras);
+$("consultaData").addEventListener("change", updateHoras);
+
+render();
+openSection("inicio");
+</script>
 </body>
 </html>
