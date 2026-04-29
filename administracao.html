@@ -741,7 +741,7 @@
     <div class="page-header">
       <div class="page-header-left">
         <h3>Publicar avisos</h3>
-        <p>Crie avisos gerais para aparecerem nos painéis do sistema.</p>
+        <p>Escolha para quem o aviso será enviado: todos, um tutor(a) específico ou um veterinário(a) específico.</p>
       </div>
       <span class="chip">Avisos</span>
     </div>
@@ -755,6 +755,22 @@
         <div class="form-group">
           <label>Tipo</label>
           <input id="novoAvisoTipo" type="text" placeholder="Ex.: Comunicado">
+        </div>
+        <div class="form-group">
+          <label>Enviar para</label>
+          <select id="destinoAviso" onchange="toggleDestinoAviso()">
+            <option value="geral">Todos</option>
+            <option value="tutor">Tutor(a)</option>
+            <option value="vet">Veterinário(a)</option>
+          </select>
+        </div>
+        <div class="form-group" id="grupoDestinoTutor" style="display:none">
+          <label>Selecionar tutor(a)</label>
+          <select id="destinoTutor"></select>
+        </div>
+        <div class="form-group" id="grupoDestinoVet" style="display:none">
+          <label>Selecionar veterinário(a)</label>
+          <select id="destinoVet"></select>
         </div>
       </div>
 
@@ -857,6 +873,49 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="modalAviso">
+  <div class="modal">
+    <h3>Editar aviso</h3>
+    <p>Atualize o conteúdo e o destino do aviso selecionado.</p>
+
+    <div class="modal-form">
+      <div class="form-group">
+        <label>Título</label>
+        <input id="editAvisoTitulo" type="text">
+      </div>
+      <div class="form-group">
+        <label>Tipo</label>
+        <input id="editAvisoTipoTexto" type="text">
+      </div>
+      <div class="form-group">
+        <label>Enviar para</label>
+        <select id="editDestinoAviso" onchange="toggleDestinoAvisoEdicao()">
+          <option value="geral">Todos</option>
+          <option value="tutor">Tutor(a)</option>
+          <option value="vet">Veterinário(a)</option>
+        </select>
+      </div>
+      <div class="form-group" id="grupoEditDestinoTutor" style="display:none">
+        <label>Selecionar tutor(a)</label>
+        <select id="editDestinoTutor"></select>
+      </div>
+      <div class="form-group" id="grupoEditDestinoVet" style="display:none">
+        <label>Selecionar veterinário(a)</label>
+        <select id="editDestinoVet"></select>
+      </div>
+      <div class="form-group">
+        <label>Mensagem</label>
+        <textarea id="editAvisoTexto"></textarea>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('modalAviso')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarAvisoEditado()">Salvar alterações</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modalConfirm">
   <div class="modal">
     <h3 id="confirmTitle">Confirmação</h3>
@@ -875,6 +934,7 @@ const $ = id => document.getElementById(id);
 let confirmCb = null;
 let editingUserId = null;
 let editingPetId = null;
+let editingAvisoId = null;
 
 function toast(msg, dur=2400){
   const t = $("toast");
@@ -957,6 +1017,19 @@ function fillTutorSelects(){
 
   $("novoPetTutor").innerHTML = html;
   $("editPetTutor").innerHTML = html;
+  $("destinoTutor").innerHTML = html;
+  $("editDestinoTutor").innerHTML = html;
+}
+
+function fillVetSelectsAviso(){
+  const data = load();
+  const vets = data.usuarios.filter(u => u.perfil === "Veterinário(a)");
+  const html = vets.length
+    ? `<option value="">Selecione</option>` + vets.map(v => `<option value="${v.nome}">${v.nome}</option>`).join("")
+    : `<option value="">Nenhum veterinário cadastrado</option>`;
+
+  $("destinoVet").innerHTML = html;
+  $("editDestinoVet").innerHTML = html;
 }
 
 function fillConsultaSelects(){
@@ -996,6 +1069,18 @@ function toggleNovoUsuarioCampos(){
   $("novoEnderecoGroup").style.display = isTutor ? "flex" : "none";
   $("novoConvenioGroup").style.display = isTutor ? "flex" : "none";
   $("novoRegistroGroup").style.display = isVet ? "flex" : "none";
+}
+
+function toggleDestinoAviso(){
+  const destino = $("destinoAviso").value;
+  $("grupoDestinoTutor").style.display = destino === "tutor" ? "flex" : "none";
+  $("grupoDestinoVet").style.display = destino === "vet" ? "flex" : "none";
+}
+
+function toggleDestinoAvisoEdicao(){
+  const destino = $("editDestinoAviso").value;
+  $("grupoEditDestinoTutor").style.display = destino === "tutor" ? "flex" : "none";
+  $("grupoEditDestinoVet").style.display = destino === "vet" ? "flex" : "none";
 }
 
 function cadastrarUsuario(){
@@ -1348,27 +1433,162 @@ function desmarcarConsulta(id){
 
 function publicarAviso(){
   const titulo = $("novoAvisoTitulo").value.trim();
-  const tipo = $("novoAvisoTipo").value.trim();
+  const tipoTexto = $("novoAvisoTipo").value.trim();
   const texto = $("novoAvisoTexto").value.trim();
+  const destino = $("destinoAviso").value;
+  const tutorDestino = $("destinoTutor").value;
+  const vetDestino = $("destinoVet").value;
 
   if(!titulo || !texto) return toast("⚠️ Preencha ao menos título e mensagem.");
 
   const data = load();
-  data.avisos.unshift({
-    ...petcareCreateAviso({
-      titulo: tipo ? `${tipo}: ${titulo}` : titulo,
-      texto,
-      tipo: "geral"
-    }),
-    id: petcareNextId(data.avisos)
-  });
+  let aviso = null;
+
+  if(destino === "geral"){
+    aviso = {
+      ...petcareCreateAviso({
+        titulo: tipoTexto ? `${tipoTexto}: ${titulo}` : titulo,
+        texto,
+        tipo: "geral"
+      }),
+      id: petcareNextId(data.avisos)
+    };
+  }
+
+  if(destino === "tutor"){
+    if(!tutorDestino) return toast("⚠️ Selecione o tutor(a) que receberá o aviso.");
+    aviso = {
+      ...petcareCreateAviso({
+        titulo: tipoTexto ? `${tipoTexto}: ${titulo}` : titulo,
+        texto,
+        tipo: "tutor",
+        tutor: tutorDestino
+      }),
+      id: petcareNextId(data.avisos)
+    };
+  }
+
+  if(destino === "vet"){
+    if(!vetDestino) return toast("⚠️ Selecione o veterinário(a) que receberá o aviso.");
+    aviso = {
+      ...petcareCreateAviso({
+        titulo: tipoTexto ? `${tipoTexto}: ${titulo}` : titulo,
+        texto,
+        tipo: "vet",
+        vet: vetDestino
+      }),
+      id: petcareNextId(data.avisos)
+    };
+  }
+
+  data.avisos.unshift(aviso);
 
   save(data);
   $("novoAvisoTitulo").value = "";
   $("novoAvisoTipo").value = "";
   $("novoAvisoTexto").value = "";
+  $("destinoAviso").value = "geral";
+  $("destinoTutor").value = "";
+  $("destinoVet").value = "";
+  toggleDestinoAviso();
   render();
   toast("✅ Aviso publicado com sucesso.");
+}
+
+function abrirEdicaoAviso(id){
+  const data = load();
+  const aviso = data.avisos.find(a => Number(a.id) === Number(id));
+  if(!aviso) return;
+
+  editingAvisoId = aviso.id;
+
+  let tituloSemPrefixo = aviso.titulo || "";
+  let tipoTexto = "";
+
+  if(tituloSemPrefixo.includes(": ")){
+    const partes = tituloSemPrefixo.split(": ");
+    tipoTexto = partes.shift();
+    tituloSemPrefixo = partes.join(": ");
+  }
+
+  $("editAvisoTitulo").value = tituloSemPrefixo;
+  $("editAvisoTipoTexto").value = tipoTexto;
+  $("editAvisoTexto").value = aviso.texto || "";
+  $("editDestinoAviso").value = aviso.tipo === "tutor" || aviso.tipo === "vet" || aviso.tipo === "geral" ? aviso.tipo : "geral";
+
+  fillTutorSelects();
+  fillVetSelectsAviso();
+
+  $("editDestinoTutor").value = aviso.tutor || "";
+  $("editDestinoVet").value = aviso.vet || "";
+
+  toggleDestinoAvisoEdicao();
+  openModal("modalAviso");
+}
+
+function salvarAvisoEditado(){
+  if(!editingAvisoId) return;
+
+  const data = load();
+  const aviso = data.avisos.find(a => Number(a.id) === Number(editingAvisoId));
+  if(!aviso) return;
+
+  const titulo = $("editAvisoTitulo").value.trim();
+  const tipoTexto = $("editAvisoTipoTexto").value.trim();
+  const texto = $("editAvisoTexto").value.trim();
+  const destino = $("editDestinoAviso").value;
+  const tutorDestino = $("editDestinoTutor").value;
+  const vetDestino = $("editDestinoVet").value;
+
+  if(!titulo || !texto) return toast("⚠️ Preencha ao menos título e mensagem.");
+
+  aviso.titulo = tipoTexto ? `${tipoTexto}: ${titulo}` : titulo;
+  aviso.texto = texto;
+  aviso.petId = 0;
+  aviso.tutor = "";
+  aviso.vet = "";
+
+  if(destino === "geral"){
+    aviso.tipo = "geral";
+  }
+
+  if(destino === "tutor"){
+    if(!tutorDestino) return toast("⚠️ Selecione o tutor(a) que receberá o aviso.");
+    aviso.tipo = "tutor";
+    aviso.tutor = tutorDestino;
+  }
+
+  if(destino === "vet"){
+    if(!vetDestino) return toast("⚠️ Selecione o veterinário(a) que receberá o aviso.");
+    aviso.tipo = "vet";
+    aviso.vet = vetDestino;
+  }
+
+  aviso.lido = false;
+  aviso.lidoPor = [];
+
+  save(data);
+  closeModal("modalAviso");
+  render();
+  toast("✅ Aviso atualizado com sucesso.");
+}
+
+function apagarAviso(id){
+  const data = load();
+  const aviso = data.avisos.find(a => Number(a.id) === Number(id));
+  if(!aviso) return;
+
+  openConfirm(
+    `Deseja apagar o aviso "${aviso.titulo}"?`,
+    ok => {
+      if(!ok) return;
+      data.avisos = data.avisos.filter(a => Number(a.id) !== Number(id));
+      save(data);
+      render();
+      toast("✅ Aviso apagado com sucesso.");
+    },
+    "Apagar aviso"
+  );
 }
 
 function render(){
@@ -1388,6 +1608,7 @@ function render(){
   $("totalAvisos").textContent = data.avisos.length;
 
   fillTutorSelects();
+  fillVetSelectsAviso();
   fillConsultaSelects();
 
   $("painelResumo").innerHTML = `
@@ -1483,20 +1704,34 @@ function render(){
     : `<div class="empty"><div class="empty-icon">📄</div><p>Nenhum relatório disponível.</p></div>`;
 
   $("listaAvisos").innerHTML = data.avisos.length
-    ? data.avisos.map(a => `
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">${a.titulo}</div>
-          <span class="tag tag-green">Aviso</span>
-        </div>
-        <p class="card-sub">${a.texto}</p>
-      </div>
-    `).join("")
+    ? data.avisos.map(a => {
+        let destino = "Todos";
+        if(a.tipo === "tutor") destino = `Tutor(a): ${a.tutor || "não definido"}`;
+        if(a.tipo === "vet") destino = `Veterinário(a): ${a.vet || "não definido"}`;
+        if(a.tipo === "pet") destino = `Pet / Tutor relacionado`;
+        if(a.tipo === "consulta") destino = `Consulta relacionada`;
+
+        return `
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">${a.titulo}</div>
+              <span class="tag tag-green">Aviso</span>
+            </div>
+            <p class="card-sub">${a.texto}<br><strong>Destino:</strong> ${destino}</p>
+            <div class="card-actions">
+              <button class="btn btn-secondary btn-sm" onclick="abrirEdicaoAviso(${a.id})">✏ Editar aviso</button>
+              <button class="btn btn-danger btn-sm" onclick="apagarAviso(${a.id})">🗑 Apagar aviso</button>
+            </div>
+          </div>
+        `;
+      }).join("")
     : `<div class="empty"><div class="empty-icon">📢</div><p>Nenhum aviso publicado.</p></div>`;
 }
 
 setMinDate();
 toggleNovoUsuarioCampos();
+toggleDestinoAviso();
+toggleDestinoAvisoEdicao();
 $("novaConsultaVet").addEventListener("change", updateHoras);
 $("novaConsultaData").addEventListener("change", updateHoras);
 render();

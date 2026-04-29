@@ -11,6 +11,18 @@ function petcareBaseData(){
   };
 }
 
+function petcareCreateAviso(aviso){
+  return {
+    titulo: aviso?.titulo || "",
+    texto: aviso?.texto || "",
+    tipo: aviso?.tipo || "geral",
+    tutor: aviso?.tutor || "",
+    vet: aviso?.vet || "",
+    petId: Number(aviso?.petId) || 0,
+    lidoPor: Array.isArray(aviso?.lidoPor) ? aviso.lidoPor : []
+  };
+}
+
 function petcareNormalizeUser(user){
   const normalized = {
     id: Number(user?.id) || 0,
@@ -66,11 +78,12 @@ function petcareNormalizeAviso(aviso){
     titulo: aviso?.titulo || "",
     texto: aviso?.texto || "",
     tipo: aviso?.tipo || "geral",
-    petId: Number(aviso?.petId) || 0,
     tutor: aviso?.tutor || "",
     vet: aviso?.vet || "",
-    lido: Boolean(aviso?.lido),
-    lidoPor: Array.isArray(aviso?.lidoPor) ? aviso.lidoPor : []
+    petId: Number(aviso?.petId) || 0,
+    lidoPor: Array.isArray(aviso?.lidoPor)
+      ? aviso.lidoPor.filter(item => typeof item === "string" && item.trim() !== "")
+      : []
   };
 }
 
@@ -154,6 +167,38 @@ function petcareIsoDate(brDate){
   return `${year}-${month}-${day}`;
 }
 
+function petcareIsValidIsoDate(isoDate){
+  if(!isoDate || typeof isoDate !== "string") return false;
+
+  const match = isoDate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(!match) return false;
+
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+
+  const date = new Date(year, month - 1, day);
+
+  return (
+    date.getFullYear() === year &&
+    date.getMonth() === month - 1 &&
+    date.getDate() === day
+  );
+}
+
+function petcareIsFutureDate(isoDate){
+  if(!petcareIsValidIsoDate(isoDate)) return false;
+
+  const [year, month, day] = isoDate.split("-").map(Number);
+  const selected = new Date(year, month - 1, day);
+  selected.setHours(0,0,0,0);
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  return selected > today;
+}
+
 function petcareGetPetById(data, petId){
   if(!data || !Array.isArray(data.pets)) return null;
   return data.pets.find(p => Number(p.id) === Number(petId)) || null;
@@ -186,119 +231,6 @@ function petcareAvailableHours(data, vetName, isoDate){
     .map(c => c.hora);
 
   return PETCARE_DEFAULT_HOURS.filter(h => !taken.includes(h));
-}
-
-function petcareIsValidIsoDate(isoDate){
-  if(!isoDate || typeof isoDate !== "string") return false;
-
-  const match = isoDate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  if(!match) return false;
-
-  const ano = Number(match[1]);
-  const mes = Number(match[2]);
-  const dia = Number(match[3]);
-
-  if(mes < 1 || mes > 12) return false;
-  if(dia < 1) return false;
-
-  const diasNoMes = new Date(ano, mes, 0).getDate();
-  return dia <= diasNoMes;
-}
-
-function petcareIsFutureDate(isoDate){
-  if(!petcareIsValidIsoDate(isoDate)) return false;
-
-  const hoje = new Date();
-  hoje.setHours(0,0,0,0);
-
-  const data = new Date(isoDate + "T00:00:00");
-  return data > hoje;
-}
-
-function petcareCreateAviso({
-  titulo,
-  texto,
-  tipo = "geral",
-  petId = 0,
-  tutor = "",
-  vet = ""
-}){
-  return {
-    id: 0,
-    titulo: titulo || "",
-    texto: texto || "",
-    tipo,
-    petId: Number(petId) || 0,
-    tutor: tutor || "",
-    vet: vet || "",
-    lido: false,
-    lidoPor: []
-  };
-}
-
-function petcareViewerKey(user, role){
-  return `${role}::${user}`;
-}
-
-function petcareAvisoVisibleTo(aviso, user, role, data){
-  if(!aviso) return false;
-
-  if(role === "Administração") return true;
-
-  if(aviso.tipo === "geral") return true;
-
-  if(role === "Tutor(a)"){
-    if(aviso.tipo === "tutor" && aviso.tutor === user) return true;
-
-    if(aviso.tipo === "pet"){
-      const pet = petcareGetPetById(data, aviso.petId);
-      return pet && pet.tutor === user;
-    }
-
-    if(aviso.tipo === "consulta"){
-      const pet = petcareGetPetById(data, aviso.petId);
-      return pet && pet.tutor === user;
-    }
-  }
-
-  if(role === "Veterinário(a)"){
-    if(aviso.tipo === "vet" && aviso.vet === user) return true;
-    if(aviso.tipo === "consulta" && aviso.vet === user) return true;
-  }
-
-  return false;
-}
-
-function petcareGetVisibleAvisos(data, user, role){
-  return (data?.avisos || []).filter(aviso => petcareAvisoVisibleTo(aviso, user, role, data));
-}
-
-function petcareIsAvisoLidoPor(aviso, user, role){
-  const key = petcareViewerKey(user, role);
-  return Array.isArray(aviso?.lidoPor) && aviso.lidoPor.includes(key);
-}
-
-function petcareMarkAvisosAsRead(data, user, role){
-  const key = petcareViewerKey(user, role);
-  let changed = false;
-
-  (data?.avisos || []).forEach(aviso => {
-    if(petcareAvisoVisibleTo(aviso, user, role, data)){
-      if(!Array.isArray(aviso.lidoPor)) aviso.lidoPor = [];
-      if(!aviso.lidoPor.includes(key)){
-        aviso.lidoPor.push(key);
-        changed = true;
-      }
-    }
-  });
-
-  return changed;
-}
-
-function petcareCountUnreadAvisos(data, user, role){
-  return petcareGetVisibleAvisos(data, user, role)
-    .filter(aviso => !petcareIsAvisoLidoPor(aviso, user, role))
-    .length;
 }
 
 function petcareResetAll(){

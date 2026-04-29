@@ -29,6 +29,8 @@ body{
   min-height:100vh;
   overflow-x:hidden
 }
+
+/* ── SIDEBAR ── */
 .sidebar{
   width:var(--sidebar-w);min-height:100vh;background:var(--navy);
   display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:200;
@@ -84,7 +86,11 @@ body{
   font-family:'DM Sans',sans-serif
 }
 .sb-logout:hover{background:rgba(220,38,38,.18);border-color:rgba(220,38,38,.3);color:#fca5a5}
+
+/* ── MAIN ── */
 .main{margin-left:var(--sidebar-w);flex:1;padding:28px 32px;min-height:100vh}
+
+/* ── TOPBAR ── */
 .topbar{
   display:flex;align-items:center;justify-content:space-between;
   margin-bottom:28px;gap:16px
@@ -100,6 +106,8 @@ body{
 .tb-btn:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-light)}
 .tb-btn.primary{background:var(--teal);color:#fff;border-color:var(--teal)}
 .tb-btn.primary:hover{background:var(--teal-dark)}
+
+/* ── STATS ── */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
 .stat-card{
   background:var(--card-bg);border:1px solid var(--border);border-radius:18px;
@@ -112,8 +120,12 @@ body{
 .stat-card .sc-label{font-size:.8rem;color:var(--text-muted);font-weight:500;margin-bottom:10px;display:block}
 .stat-card .sc-num{font-family:'Sora',sans-serif;font-weight:700;font-size:2rem;color:var(--teal);display:block}
 .stat-card .sc-icon{position:absolute;right:16px;top:16px;font-size:1.4rem;opacity:.25}
+
+/* ── SECTIONS ── */
 .section{display:none}
 .section.active{display:block}
+
+/* ── PAGE HEADER ── */
 .page-header{
   display:flex;align-items:flex-start;justify-content:space-between;
   gap:16px;flex-wrap:wrap;margin-bottom:24px;
@@ -129,6 +141,8 @@ body{
   border:1px solid rgba(13,148,136,.2);border-radius:100px;
   padding:6px 14px;font-size:.78rem;font-weight:700;white-space:nowrap
 }
+
+/* ── CARDS ── */
 .cards-grid{display:grid;gap:14px}
 .card{
   background:var(--card-bg);border:1px solid var(--border);border-radius:18px;
@@ -149,6 +163,8 @@ body{
 .tag-yellow{background:var(--warning-bg);color:var(--warning)}
 .tag-red{background:var(--danger-bg);color:var(--danger)}
 .tag-navy{background:#e8edf5;color:var(--navy)}
+
+/* ── FORM ── */
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
 .form-group{display:flex;flex-direction:column;gap:6px}
 .form-group label{font-size:.83rem;font-weight:700;color:var(--text)}
@@ -162,6 +178,8 @@ body{
   border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,148,136,.1);background:#fff
 }
 .form-actions{display:flex;gap:10px;flex-wrap:wrap}
+
+/* ── BUTTONS ── */
 .btn{
   display:inline-flex;align-items:center;gap:7px;
   border:none;border-radius:12px;padding:10px 18px;font-size:.88rem;
@@ -174,6 +192,8 @@ body{
 .btn-danger{background:var(--danger-bg);color:var(--danger);border:1.5px solid var(--danger-border)}
 .btn-danger:hover{background:#fee2e2}
 .btn-sm{padding:7px 13px;font-size:.8rem;border-radius:9px}
+
+/* ── EMPTY ── */
 .empty{
   text-align:center;padding:48px 24px;
   background:var(--card-bg);border:1.5px dashed var(--border);
@@ -181,6 +201,8 @@ body{
 }
 .empty .empty-icon{font-size:2.4rem;margin-bottom:12px;opacity:.5}
 .empty p{font-size:.9rem;line-height:1.6}
+
+/* ── DRAWER ── */
 .drawer-overlay{position:fixed;inset:0;background:rgba(26,46,68,.2);display:none;z-index:300}
 .drawer-overlay.active{display:block}
 .drawer{
@@ -200,6 +222,8 @@ body{
 .aviso-card strong{display:block;font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:4px}
 .aviso-card span{font-size:.82rem;color:var(--text-muted);line-height:1.5}
 .aviso-card.unread{border-color:rgba(13,148,136,.3);background:var(--teal-light)}
+
+/* ── MODAL ── */
 .modal-overlay{
   position:fixed;inset:0;background:rgba(26,46,68,.25);
   display:none;align-items:center;justify-content:center;z-index:500;padding:20px
@@ -214,6 +238,8 @@ body{
 .modal p{font-size:.88rem;color:var(--text-muted);margin-bottom:20px;line-height:1.5}
 .modal-form{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
 .modal-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+
+/* ── TOAST ── */
 .toast{
   position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-20px);
   background:var(--navy);color:#fff;padding:11px 18px;border-radius:12px;
@@ -221,6 +247,8 @@ body{
   opacity:0;pointer-events:none;transition:.25s;z-index:999
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── TIMELINE ── */
 .timeline{display:flex;flex-direction:column;gap:0}
 .tl-item{display:flex;gap:14px;position:relative;padding-bottom:20px}
 .tl-item:last-child{padding-bottom:0}
@@ -230,6 +258,8 @@ body{
 .tl-content{flex:1}
 .tl-date{font-size:.75rem;color:var(--text-light);font-weight:600;margin-bottom:3px}
 .tl-desc{font-size:.87rem;color:var(--text-muted)}
+
+/* ── RESPONSIVE ── */
 @media(max-width:1100px){.stats-row{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:860px){
   .sidebar{transform:translateX(-100%)}
@@ -244,6 +274,7 @@ body{
 </style>
 </head>
 <body>
+
 <aside class="sidebar" id="sidebar">
   <div class="sb-brand">
     <img src="logo-petcare.png" alt="PetCare Connect"/>
@@ -269,6 +300,8 @@ body{
     <button class="nav-item" data-sec="vacinas" onclick="openSection('vacinas')"><span class="ni">💉</span> Vacinas</button>
     <button class="nav-item" data-sec="historico" onclick="openSection('historico')"><span class="ni">📋</span> Histórico</button>
     <button class="nav-item" data-sec="relatorios" onclick="openSection('relatorios')"><span class="ni">📄</span> Relatórios</button>
+    <button class="nav-item" data-sec="avisosTutor" onclick="openSection('avisosTutor')"><span class="ni">📢</span> Avisos aos tutores</button>
+
     <div class="sb-label" style="margin-top:8px">Sistema</div>
     <button class="nav-item" onclick="toggleAvisos(true)">
       <span class="ni">🔔</span> Avisos
@@ -285,7 +318,7 @@ body{
   <div class="topbar">
     <div class="topbar-left">
       <h2 id="welcomeTitle">Bem-vindo(a) 👋</h2>
-      <p id="welcomeSub">Gerencie consultas, prontuários, vacinas e relatórios dos pacientes em um só lugar.</p>
+      <p id="welcomeSub">Gerencie consultas, prontuários, vacinas, relatórios e avisos aos tutores em um só lugar.</p>
     </div>
     <div class="topbar-right">
       <button class="tb-btn" onclick="toggleAvisos(true)">🔔 Avisos <span id="topBadge" style="display:none;background:#ef4444;color:#fff;border-radius:100px;padding:1px 7px;font-size:.72rem;margin-left:2px">0</span></button>
@@ -342,7 +375,7 @@ body{
     <div class="page-header">
       <div class="page-header-left">
         <h3>Registrar atendimento</h3>
-        <p>Selecione o pet e registre a evolução clínica do atendimento atual no histórico do paciente.</p>
+        <p>Registre a evolução clínica da consulta no histórico do pet. Use esta área para anotações do atendimento, sintomas, avaliação e conduta.</p>
       </div>
       <span class="chip">Prontuário rápido</span>
     </div>
@@ -359,8 +392,8 @@ body{
         </div>
       </div>
       <div class="form-group" style="margin-bottom:16px">
-        <label>Descrição clínica</label>
-        <textarea id="atendimentoTexto" placeholder="Ex.: animal apresentou boa recuperação, sem febre, mantendo alimentação normal."></textarea>
+        <label>Evolução clínica / atendimento</label>
+        <textarea id="atendimentoTexto" placeholder="Ex.: paciente apresentou melhora clínica, sem febre, hidratado, mantendo apetite e com boa resposta à conduta adotada."></textarea>
       </div>
       <div class="form-actions">
         <button class="btn btn-primary" onclick="registrarAtendimento()">✓ Salvar atendimento</button>
@@ -420,7 +453,7 @@ body{
     <div class="page-header">
       <div class="page-header-left">
         <h3>Emitir relatório clínico</h3>
-        <p>Crie ou atualize relatórios resumidos para os pets atendidos, mantendo a documentação clínica organizada.</p>
+        <p>Crie ou atualize um relatório formal e resumido do pet. Use esta área para o documento consolidado que poderá ser consultado pelo tutor.</p>
       </div>
       <span class="chip">Documentos</span>
     </div>
@@ -438,7 +471,7 @@ body{
       </div>
       <div class="form-group" style="margin-bottom:16px">
         <label>Texto do relatório</label>
-        <textarea id="relatorioTexto" placeholder="Ex.: pet está estável, mantendo evolução satisfatória e seguindo acompanhamento clínico."></textarea>
+        <textarea id="relatorioTexto" placeholder="Ex.: paciente em acompanhamento clínico, com evolução estável, sem sinais de agravamento, mantendo resposta satisfatória ao tratamento."></textarea>
       </div>
       <div class="form-actions">
         <button class="btn btn-primary" onclick="salvarRelatorio()">📄 Salvar relatório</button>
@@ -446,6 +479,38 @@ body{
     </div>
 
     <div class="cards-grid" id="listaRelatoriosVet"></div>
+  </section>
+
+  <section id="avisosTutor" class="section">
+    <div class="page-header">
+      <div class="page-header-left">
+        <h3>Enviar avisos aos tutores</h3>
+        <p>Envie comunicados para o tutor responsável por um pet da sua agenda. O aviso ficará visível apenas para o tutor correspondente.</p>
+      </div>
+      <span class="chip">Comunicação</span>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Pet</label>
+          <select id="avisoPetTutor"></select>
+        </div>
+        <div class="form-group">
+          <label>Título do aviso</label>
+          <input id="avisoTutorTitulo" placeholder="Ex.: Orientação pós-consulta"/>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:16px">
+        <label>Mensagem</label>
+        <textarea id="avisoTutorTexto" placeholder="Digite a mensagem que o tutor deverá receber."></textarea>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="enviarAvisoTutor()">📢 Enviar aviso</button>
+      </div>
+    </div>
+
+    <div class="cards-grid" id="listaAvisosTutorEnviados"></div>
   </section>
 </main>
 
@@ -509,12 +574,44 @@ function currentUser(){ return petcareGetSession().user || "Veterinário(a)"; }
 function load(){ return petcareLoad(); }
 function save(d){ petcareSave(d); }
 
+function getAvisosVeterinario(data, vetNome){
+  return (data.avisos || []).filter(aviso => {
+    if(aviso.tipo === "geral") return true;
+    if(aviso.tipo === "vet") return aviso.vet === vetNome;
+    if(aviso.tipo === "consulta") return aviso.vet === vetNome;
+    return false;
+  });
+}
+
+function getAvisosTutorEnviadosPorVet(data, vetNome){
+  return (data.avisos || []).filter(aviso => aviso.tipo === "tutor" && aviso.vet === vetNome);
+}
+
+function marcarAvisosVeterinarioComoLidos(data, vetNome){
+  const avisos = getAvisosVeterinario(data, vetNome);
+  let alterou = false;
+
+  avisos.forEach(aviso => {
+    if(!Array.isArray(aviso.lidoPor)) aviso.lidoPor = [];
+    if(!aviso.lidoPor.includes(vetNome)){
+      aviso.lidoPor.push(vetNome);
+      alterou = true;
+    }
+  });
+
+  return alterou;
+}
+
+function contarAvisosNaoLidosVeterinario(data, vetNome){
+  return getAvisosVeterinario(data, vetNome).filter(aviso => {
+    if(!Array.isArray(aviso.lidoPor)) return true;
+    return !aviso.lidoPor.includes(vetNome);
+  }).length;
+}
+
 function logout(){
   openConfirm("Deseja realmente sair do sistema?", ok => {
-    if(ok){
-      petcareClearSession();
-      location.href = "index.html";
-    }
+    if(ok){ petcareClearSession(); location.href="index.html"; }
   }, "Sair do sistema");
 }
 
@@ -542,6 +639,7 @@ function fillPetSelectors(){
   $("atendimentoPet").innerHTML = html;
   $("vacinaPet").innerHTML = html;
   $("relatorioPet").innerHTML = html;
+  $("avisoPetTutor").innerHTML = html;
 }
 
 function setTodayDefaults(){
@@ -562,7 +660,7 @@ function registrarAtendimento(){
   const texto = $("atendimentoTexto").value.trim();
 
   if(!petId || !dataISO || !texto) return toast("⚠️ Preencha pet, data e descrição do atendimento.");
-  if(!petcareIsValidIsoDate(dataISO)) return toast("⚠️ A data do atendimento não existe no calendário.");
+  if(!petcareIsValidIsoDate(dataISO)) return toast("⚠️ A data informada não existe no calendário.");
 
   const data = load();
   const pet = petcareGetPetById(data, petId);
@@ -578,7 +676,7 @@ function registrarAtendimento(){
     ...petcareCreateAviso({
       titulo: "Histórico atualizado",
       texto: `Novo atendimento registrado para ${pet.nome}.`,
-      tipo: "pet",
+      tipo: "consulta",
       petId: pet.id,
       tutor: pet.tutor,
       vet: currentUser()
@@ -600,7 +698,7 @@ function registrarVacina(){
   const obs = $("vacinaObs").value.trim();
 
   if(!petId || !nome || !dataISO) return toast("⚠️ Preencha pet, vacina e data.");
-  if(!petcareIsValidIsoDate(dataISO)) return toast("⚠️ A data da vacina não existe no calendário.");
+  if(!petcareIsValidIsoDate(dataISO)) return toast("⚠️ A data informada não existe no calendário.");
 
   const data = load();
   const pet = petcareGetPetById(data, petId);
@@ -617,7 +715,7 @@ function registrarVacina(){
     ...petcareCreateAviso({
       titulo: "Vacina registrada",
       texto: `${nome} foi registrada para ${pet.nome}.`,
-      tipo: "pet",
+      tipo: "consulta",
       petId: pet.id,
       tutor: pet.tutor,
       vet: currentUser()
@@ -638,7 +736,7 @@ function salvarRelatorio(){
   const texto = $("relatorioTexto").value.trim();
 
   if(!petId || !dataISO || !texto) return toast("⚠️ Preencha pet, data e texto do relatório.");
-  if(!petcareIsValidIsoDate(dataISO)) return toast("⚠️ A data do relatório não existe no calendário.");
+  if(!petcareIsValidIsoDate(dataISO)) return toast("⚠️ A data informada não existe no calendário.");
 
   const data = load();
   const pet = petcareGetPetById(data, petId);
@@ -651,7 +749,7 @@ function salvarRelatorio(){
     ...petcareCreateAviso({
       titulo: "Relatório emitido",
       texto: `Relatório clínico atualizado para ${pet.nome}.`,
-      tipo: "pet",
+      tipo: "consulta",
       petId: pet.id,
       tutor: pet.tutor,
       vet: currentUser()
@@ -663,6 +761,36 @@ function salvarRelatorio(){
   $("relatorioTexto").value = "";
   render();
   toast("✅ Relatório salvo com sucesso.");
+}
+
+function enviarAvisoTutor(){
+  const petId = Number($("avisoPetTutor").value);
+  const titulo = $("avisoTutorTitulo").value.trim();
+  const texto = $("avisoTutorTexto").value.trim();
+
+  if(!petId || !titulo || !texto) return toast("⚠️ Preencha o pet, o título e a mensagem do aviso.");
+
+  const data = load();
+  const pet = petcareGetPetById(data, petId);
+  if(!pet) return toast("⚠️ Pet não encontrado.");
+
+  data.avisos.unshift({
+    ...petcareCreateAviso({
+      titulo,
+      texto,
+      tipo: "tutor",
+      petId: pet.id,
+      tutor: pet.tutor,
+      vet: currentUser()
+    }),
+    id: petcareNextId(data.avisos)
+  });
+
+  $("avisoTutorTitulo").value = "";
+  $("avisoTutorTexto").value = "";
+  save(data);
+  render();
+  toast("✅ Aviso enviado ao tutor com sucesso.");
 }
 
 function concluirConsulta(id){
@@ -704,21 +832,18 @@ function iniciarAtendimento(id){
   save(data);
   render();
   openSection("atendimento");
-  $("atendimentoPet").value = consulta.petId;
+  $("atendimentoPet").value = String(consulta.petId);
   toast("🩺 Consulta marcada como em atendimento.");
 }
 
 function toggleAvisos(show){
   $("drawer").classList.toggle("active", show);
   $("drawerOverlay").classList.toggle("active", show);
-
   if(show){
     const data = load();
-    const changed = petcareMarkAvisosAsRead(data, currentUser(), "Veterinário(a)");
-    if(changed){
-      save(data);
-      render();
-    }
+    const vetNome = currentUser();
+    const changed = marcarAvisosVeterinarioComoLidos(data, vetNome);
+    if(changed){ save(data); render(); }
   }
 }
 
@@ -732,7 +857,9 @@ function render(){
 
   const minhasConsultas = getMyConsultas(data);
   const meusPets = getMyPets(data);
-  const totalVacinas = meusPets.reduce((a,p) => a + (p.vacinasAplicadas?.length || 0), 0);
+  const meusAvisos = getAvisosVeterinario(data, user);
+  const meusAvisosTutor = getAvisosTutorEnviadosPorVet(data, user);
+  const totalVacinas = meusPets.reduce((a,p)=>a+(p.vacinasAplicadas?.length||0),0);
   const totalRelatorios = meusPets.filter(p => p.relatorio).length;
   const totalEmAtendimento = minhasConsultas.filter(c => c.status === "Em atendimento").length;
 
@@ -821,8 +948,10 @@ function render(){
             ? `<div class="timeline">
                 ${p.historico.map(h => `
                   <div class="tl-item">
-                    <div class="tl-dot"></div>
-                    <div class="tl-line"></div>
+                    <div style="position:relative">
+                      <div class="tl-dot"></div>
+                      <div class="tl-line"></div>
+                    </div>
                     <div class="tl-content">
                       <div class="tl-date">${h.data}</div>
                       <div class="tl-desc">${h.descricao}</div>
@@ -849,18 +978,35 @@ function render(){
     `).join("")
     : `<div class="empty"><div class="empty-icon">📄</div><p>Nenhum relatório disponível.</p></div>`;
 
-  const avisosVisiveis = petcareGetVisibleAvisos(data, user, "Veterinário(a)");
+  $("listaAvisosTutorEnviados").innerHTML = meusAvisosTutor.length
+    ? meusAvisosTutor.map(a => {
+        const pet = petcareGetPetById(data, a.petId);
+        return `
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">${a.titulo}</div>
+              <span class="tag tag-green">Tutor</span>
+            </div>
+            <p class="card-sub">
+              Tutor: <strong>${a.tutor || "-"}</strong><br>
+              Pet: <strong>${pet?.nome || "-"}</strong><br>
+              Mensagem: ${a.texto}
+            </p>
+          </div>
+        `;
+      }).join("")
+    : `<div class="empty"><div class="empty-icon">📢</div><p>Nenhum aviso enviado aos tutores até o momento.</p></div>`;
 
-  $("listaAvisos").innerHTML = avisosVisiveis.length
-    ? avisosVisiveis.map(a => `
-      <div class="aviso-card ${petcareIsAvisoLidoPor(a, user, "Veterinário(a)") ? "" : "unread"}">
+  $("listaAvisos").innerHTML = meusAvisos.length
+    ? meusAvisos.map(a => `
+      <div class="aviso-card ${(Array.isArray(a.lidoPor) && a.lidoPor.includes(user)) ? "" : "unread"}">
         <strong>${a.titulo}</strong>
         <span>${a.texto}</span>
       </div>
     `).join("")
     : `<div class="empty"><div class="empty-icon">🔔</div><p>Nenhum aviso publicado.</p></div>`;
 
-  const unread = petcareCountUnreadAvisos(data, user, "Veterinário(a)");
+  const unread = contarAvisosNaoLidosVeterinario(data, user);
   $("navBadge").textContent = unread;
   $("topBadge").textContent = unread;
   $("navBadge").style.display = unread ? "flex" : "none";

@@ -83,12 +83,46 @@ nav{
 
 /* HERO VISUAL */
 .hero-visual{position:relative;display:flex;align-items:center;justify-content:center}
+.hero-card{
+  background:var(--card-bg);border:1px solid var(--border);border-radius:28px;
+  padding:28px;box-shadow:var(--shadow-lg);width:100%;max-width:420px;
+  animation:floatUp .6s ease both
+}
+@keyframes floatUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.hc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.hc-title{font-family:'Sora',sans-serif;font-weight:600;font-size:1rem}
+.hc-subtitle{font-size:.82rem;color:var(--text-muted);margin-top:2px}
+.hc-avatar{
+  width:46px;height:46px;border-radius:14px;
+  background:linear-gradient(135deg,var(--teal-light),#b2f0ea);
+  display:flex;align-items:center;justify-content:center;
+}
+.hc-avatar img{width:32px;height:32px;object-fit:contain}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.stat-box{background:var(--cream);border-radius:14px;padding:12px 10px;text-align:center}
+.stat-num{font-family:'Sora',sans-serif;font-weight:700;font-size:1.4rem;color:var(--teal)}
+.stat-lbl{font-size:.72rem;color:var(--text-muted);margin-top:2px;line-height:1.3}
+.pet-list{display:flex;flex-direction:column;gap:10px}
+.pet-item{
+  display:flex;align-items:center;gap:12px;background:var(--cream);
+  border-radius:14px;padding:12px 14px;transition:.2s;cursor:pointer
+}
+.pet-item:hover{background:#ccf0ee}
+.pet-icon{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.pet-icon.dog{background:#fef3c7}
+.pet-icon.cat{background:#d1faf7}
+.pet-info{flex:1}
+.pet-name{font-weight:600;font-size:.92rem}
+.pet-meta{font-size:.78rem;color:var(--text-muted);margin-top:1px}
+.pet-badge{background:var(--teal-light);color:var(--teal-dark);font-size:.73rem;font-weight:600;padding:4px 10px;border-radius:100px}
+.pet-badge.warning{background:#fef9ec;color:#92400e}
+
+/* STATS SHOWCASE */
 .stats-showcase{
   background:var(--card-bg);border:1px solid var(--border);border-radius:28px;
   padding:28px;box-shadow:var(--shadow-lg);width:100%;max-width:440px;
   animation:floatUp .6s ease both
 }
-@keyframes floatUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
 .showcase-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
 .showcase-label{font-family:'Sora',sans-serif;font-weight:700;font-size:1rem;color:var(--text)}
 .showcase-live{display:flex;align-items:center;gap:6px;font-size:.78rem;font-weight:600;color:var(--teal);background:var(--teal-light);padding:4px 10px;border-radius:100px}
@@ -112,6 +146,16 @@ nav{
 .sc-footer-row{display:flex;flex-direction:column;gap:8px;padding-top:16px;border-top:1px solid var(--border)}
 .sc-vet-item{display:flex;align-items:center;gap:8px;font-size:.83rem;color:var(--text-muted);font-weight:500}
 .sc-vet-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+
+/* FLOATING CARDS */
+.float-tag{
+  position:absolute;background:var(--card-bg);border:1px solid var(--border);
+  border-radius:16px;padding:12px 16px;box-shadow:var(--shadow);
+  font-size:.82rem;font-weight:600;display:flex;align-items:center;gap:8px;white-space:nowrap
+}
+.float-tag.top-left{top:-20px;left:-30px;animation:floatUp .8s .2s ease both}
+.float-tag.bottom-right{bottom:-20px;right:-30px;animation:floatUp .8s .4s ease both}
+.tag-dot{width:10px;height:10px;border-radius:50%}
 
 /* SECTION */
 section{max-width:1200px;margin:0 auto;padding:80px 40px}
@@ -164,19 +208,16 @@ section{max-width:1200px;margin:0 auto;padding:80px 40px}
 .role-tab.active{background:var(--card-bg);color:var(--teal);box-shadow:0 2px 8px rgba(0,0,0,.08)}
 .input-wrap{margin-bottom:16px}
 .input-wrap label{display:block;font-size:.85rem;font-weight:600;margin-bottom:6px;color:var(--text)}
-.input-wrap input{width:100%;padding:12px 16px;border:1.5px solid var(--border);border-radius:12px;font-size:.94rem;background:var(--warm-white);color:var(--text);outline:none;transition:.2s;font-family:'DM Sans',sans-serif}
+.input-wrap input{width:100%;padding:12px 44px 12px 16px;border:1.5px solid var(--border);border-radius:12px;font-size:.94rem;background:var(--warm-white);color:var(--text);outline:none;transition:.2s;font-family:'DM Sans',sans-serif}
 .input-wrap input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,148,136,.12)}
-
 .password-wrap{position:relative}
-.password-wrap input{padding-right:46px}
-.eye-btn{
+.toggle-password{
   position:absolute;right:12px;top:50%;transform:translateY(-50%);
-  border:none;background:transparent;cursor:pointer;
-  color:var(--text-muted);font-size:1rem;line-height:1;
-  display:none
+  width:24px;height:24px;border:none;background:transparent;cursor:pointer;
+  display:none;align-items:center;justify-content:center;padding:0;color:var(--text-muted)
 }
-.eye-btn.visible{display:block}
-
+.toggle-password.show{display:flex}
+.toggle-password svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .form-footer{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
 .form-footer span{font-size:.83rem;color:var(--text-muted)}
 .form-footer a{font-size:.83rem;color:var(--teal);font-weight:600;text-decoration:none}
@@ -223,7 +264,6 @@ footer strong{color:#fff}
   <button class="nav-cta" onclick="document.getElementById('acesso').scrollIntoView({behavior:'smooth'})">Entrar no sistema →</button>
 </nav>
 
-<!-- HERO -->
 <div style="background:var(--warm-white)">
 <div class="hero">
   <div class="hero-content">
@@ -286,7 +326,6 @@ footer strong{color:#fff}
 </div>
 </div>
 
-<!-- FEATURES -->
 <section id="features">
   <div class="section-label">Recursos da plataforma</div>
   <div class="section-title">Tudo que sua clínica precisa</div>
@@ -301,7 +340,6 @@ footer strong{color:#fff}
   </div>
 </section>
 
-<!-- ROLES -->
 <div style="background:var(--warm-white)">
 <section id="perfis" style="padding:80px 40px">
   <div style="max-width:1200px;margin:0 auto">
@@ -350,7 +388,6 @@ footer strong{color:#fff}
 </section>
 </div>
 
-<!-- LOGIN -->
 <div class="login-section" id="acesso">
   <div class="login-inner">
     <div class="login-text">
@@ -376,26 +413,27 @@ footer strong{color:#fff}
     <div class="login-form-card">
       <div class="form-title">Entrar no sistema</div>
       <div class="form-sub">Selecione seu perfil e faça login</div>
-
       <div class="role-tabs">
         <button class="role-tab active" onclick="setTab(this,'Tutor(a)')">👤 Tutor</button>
         <button class="role-tab" onclick="setTab(this,'Veterinário(a)')">🩺 Vet</button>
         <button class="role-tab" onclick="setTab(this,'Administração')">⚙️ Admin</button>
       </div>
-
       <div class="input-wrap">
         <label>Usuário</label>
         <input type="text" id="usuario" placeholder="Digite seu usuário"/>
       </div>
-
       <div class="input-wrap">
         <label>Senha</label>
         <div class="password-wrap">
           <input type="password" id="senha" placeholder="••••••••"/>
-          <button type="button" id="botaoVisualizarSenha" class="eye-btn" onclick="alternarSenha()">👁</button>
+          <button type="button" id="toggleSenha" class="toggle-password" aria-label="Mostrar senha" onclick="togglePassword()">
+            <svg id="iconEye" viewBox="0 0 24 24">
+              <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
         </div>
       </div>
-
       <div class="form-footer">
         <span>
           <input type="checkbox" id="remember" style="margin-right:6px"/>
@@ -403,9 +441,7 @@ footer strong{color:#fff}
         </span>
         <a href="#">Esqueci minha senha</a>
       </div>
-
       <button class="submit-btn" onclick="handleLogin()">Entrar →</button>
-
       <div id="register-row" style="text-align:center;margin-top:14px;display:none">
         <span style="font-size:.85rem;color:var(--text-muted)">Não tem conta? </span>
         <a href="#" style="font-size:.85rem;color:var(--teal);font-weight:600">Cadastrar-se</a>
@@ -422,7 +458,6 @@ footer strong{color:#fff}
 <script src="petcare-data.js"></script>
 <script>
 let selectedRole = 'Tutor(a)';
-
 const PAGE_BY_ROLE = {
   'Tutor(a)': 'tutor.html',
   'Veterinário(a)': 'veterinario.html',
@@ -434,27 +469,6 @@ function setTab(el, role){
   el.classList.add('active');
   selectedRole = role;
   document.getElementById('register-row').style.display = role === 'Tutor(a)' ? 'block' : 'none';
-}
-
-function alternarSenha(){
-  const campoSenha = document.getElementById('senha');
-  if(campoSenha.type === 'password'){
-    campoSenha.type = 'text';
-  }else{
-    campoSenha.type = 'password';
-  }
-}
-
-function controlarBotaoSenha(){
-  const campoSenha = document.getElementById('senha');
-  const botao = document.getElementById('botaoVisualizarSenha');
-
-  if(campoSenha.value.length > 0){
-    botao.classList.add('visible');
-  }else{
-    botao.classList.remove('visible');
-    campoSenha.type = 'password';
-  }
 }
 
 function handleLogin(){
@@ -471,12 +485,42 @@ function handleLogin(){
     localStorage.setItem('petcare_selected_role', selectedRole);
   }
 
-  localStorage.removeItem('petcare_tutor_sec');
-  localStorage.removeItem('petcare_vet_sec');
-  localStorage.removeItem('petcare_admin_sec');
-
   window.location.href = PAGE_BY_ROLE[selectedRole];
 }
+
+function togglePassword(){
+  const input = document.getElementById('senha');
+  const icon = document.getElementById('iconEye');
+  const isPassword = input.type === 'password';
+
+  input.type = isPassword ? 'text' : 'password';
+
+  icon.innerHTML = isPassword
+    ? `<path d="M3 3l18 18"></path>
+       <path d="M10.58 10.58a2 2 0 0 0 2.83 2.83"></path>
+       <path d="M9.88 5.09A9.77 9.77 0 0 1 12 4.8c6.5 0 10 7.2 10 7.2a13.02 13.02 0 0 1-4.04 4.73"></path>
+       <path d="M6.61 6.61C3.73 8.57 2 12 2 12s3.5 7.2 10 7.2a9.8 9.8 0 0 0 4.24-.95"></path>`
+    : `<path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"></path>
+       <circle cx="12" cy="12" r="3"></circle>`;
+}
+
+function updatePasswordToggle(){
+  const senha = document.getElementById('senha');
+  const botao = document.getElementById('toggleSenha');
+
+  if(senha.value.length > 0){
+    botao.classList.add('show');
+  }else{
+    botao.classList.remove('show');
+    senha.type = 'password';
+    document.getElementById('iconEye').innerHTML = `
+      <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"></path>
+      <circle cx="12" cy="12" r="3"></circle>
+    `;
+  }
+}
+
+document.getElementById('senha').addEventListener('input', updatePasswordToggle);
 
 // Counter animation
 function animateCounters(){
@@ -513,8 +557,6 @@ const observer = new IntersectionObserver(entries => {
 
 const showcase = document.querySelector('.stats-showcase');
 if(showcase) observer.observe(showcase);
-
-document.getElementById('senha').addEventListener('input', controlarBotaoSenha);
 </script>
 </body>
 </html>
