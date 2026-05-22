@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PetCare Connect — Tutor</title>
+
+<link rel="icon" type="image/png" href="logo-petcare.png"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box
+}
+
+:root{
+--teal:#0d9488;
+--teal-dark:#0c6e6e;
+--navy:#1a2e44;
+--cream:#f0fafa;
+--border:#b2dfdb;
+--text:#1a2e44;
+--text-muted:#4a7a78;
+--card:#ffffff;
+--sidebar:240px;
+}
+
+body{
+font-family:'DM Sans',sans-serif;
+background:var(--cream);
+color:var(--text);
+display:flex;
+min-height:100vh;
+}
+
+.sidebar{
+width:var(--sidebar);
+background:var(--navy);
+position:fixed;
+left:0;
+top:0;
+bottom:0;
+display:flex;
+flex-direction:column;
+}
+
+.brand{
+padding:22px 20px;
+border-bottom:1px solid rgba(255,255,255,.08);
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.brand img{
+width:38px;
+}
+
+.brand strong{
+color:#fff;
+display:block;
+font-family:'Sora',sans-serif;
+}
+
+.brand small{
+color:rgba(255,255,255,.45);
+}
+
+.user{
+padding:18px 20px;
+border-bottom:1px solid rgba(255,255,255,.08);
+display:flex;
+gap:10px;
+align-items:center;
+}
+
+.avatar{
+width:42px;
+height:42px;
+border-radius:12px;
+background:linear-gradient(135deg,var(--teal),#14b8a6);
+display:flex;
+align-items:center;
+justify-content:center;
+color:#fff;
+font-weight:700;
+}
+
+.user strong{
+color:#fff;
+display:block;
+}
+
+.user small{
+color:rgba(255,255,255,.45);
+}
+
+.nav{
+padding:16px 10px;
+flex:1;
+}
+
+.nav button{
+width:100%;
+border:none;
+background:transparent;
+color:rgba(255,255,255,.7);
+padding:12px;
+border-radius:12px;
+text-align:left;
+cursor:pointer;
+margin-bottom:6px;
+font-size:.92rem;
+transition:.2s;
+}
+
+.nav button:hover,
+.nav button.active{
+background:rgba(13,148,136,.25);
+color:#fff;
+}
+
+.logout{
+padding:16px 10px;
+}
+
+.logout button{
+width:100%;
+padding:12px;
+border-radius:12px;
+border:1px solid rgba(255,255,255,.1);
+background:transparent;
+color:#fff;
+cursor:pointer;
+}
+
+.main{
+margin-left:var(--sidebar);
+flex:1;
+padding:30px;
+}
+
+.top{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:28px;
+}
+
+.top h1{
+font-family:'Sora',sans-serif;
+font-size:2rem;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:18px;
+margin-bottom:28px;
+}
+
+.stat{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:20px;
+padding:22px;
+}
+
+.stat h4{
+color:var(--text-muted);
+font-size:.9rem;
+margin-bottom:10px;
+}
+
+.stat strong{
+font-size:2rem;
+font-family:'Sora',sans-serif;
+color:var(--teal-dark);
+}
+
+.card{
+background:#fff;
+border:1px solid var(--border);
+border-radius:24px;
+padding:24px;
+margin-bottom:22px;
+}
+
+.card h3{
+font-family:'Sora',sans-serif;
+margin-bottom:10px;
+}
+
+.form-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:16px;
+margin-top:18px;
+}
+
+.input{
+display:flex;
+flex-direction:column;
+gap:6px;
+}
+
+.input label{
+font-size:.85rem;
+font-weight:700;
+}
+
+.input input,
+.input select{
+padding:13px 14px;
+border:1.5px solid var(--border);
+border-radius:14px;
+outline:none;
+background:#f8fffe;
+}
+
+.btn{
+background:var(--teal);
+color:#fff;
+border:none;
+padding:14px 18px;
+border-radius:14px;
+font-weight:700;
+cursor:pointer;
+margin-top:18px;
+}
+
+.pet-card{
+border:1px solid var(--border);
+border-radius:18px;
+padding:18px;
+margin-top:14px;
+}
+
+.pet-card strong{
+font-size:1rem;
+}
+
+.pet-card p{
+color:var(--text-muted);
+margin-top:6px;
+}
+
+.section{
+display:none;
+}
+
+.section.active{
+display:block;
+}
+
+@media(max-width:900px){
+
+.stats,
+.form-grid{
+grid-template-columns:1fr;
+}
+
+.sidebar{
+display:none;
+}
+
+.main{
+margin-left:0;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+<div class="brand">
+<img src="logo-petcare.png">
+
+<div>
+<strong>PetCare Connect</strong>
+<small>Sistema veterinário</small>
+</div>
+</div>
+
+<div class="user">
+
+<div class="avatar">
+T
+</div>
+
+<div>
+<strong id="nomeTutor">
+Tutor(a)
+</strong>
+
+<small>
+Área do Tutor
+</small>
+</div>
+
+</div>
+
+<div class="nav">
+
+<button class="nav-btn active"
+onclick="abrirSecao('inicio', this)">
+🏠 Início
+</button>
+
+<button class="nav-btn"
+onclick="abrirSecao('pets', this)">
+🐾 Pets
+</button>
+
+<button class="nav-btn"
+onclick="abrirSecao('consultas', this)">
+📅 Consultas
+</button>
+
+<button class="nav-btn"
+onclick="abrirSecao('vacinas', this)">
+💉 Vacinas
+</button>
+
+<button class="nav-btn"
+onclick="abrirSecao('relatorios', this)">
+📄 Relatórios
+</button>
+
+</div>
+
+<div class="logout">
+<button onclick="logout()">
+↩ Sair do sistema
+</button>
+</div>
+
+</aside>
+
+<main class="main">
+
+<div class="top">
+<div>
+<h1>Bem-vindo(a) 👋</h1>
+<p>Gerencie seus pets e consultas.</p>
+</div>
+</div>
+
+<div class="stats">
+
+<div class="stat">
+<h4>Pets cadastrados</h4>
+<strong id="totalPets">0</strong>
+</div>
+
+<div class="stat">
+<h4>Consultas</h4>
+<strong id="totalConsultas">0</strong>
+</div>
+
+<div class="stat">
+<h4>Vacinas</h4>
+<strong id="totalVacinas">0</strong>
+</div>
+
+<div class="stat">
+<h4>Relatórios</h4>
+<strong id="totalRelatorios">0</strong>
+</div>
+
+</div>
+
+<!-- INICIO -->
+
+<section id="inicio" class="section active">
+
+<div class="card">
+<h3>Painel inicial</h3>
+
+<p style="margin-top:10px;color:var(--text-muted)">
+Bem-vindo ao PetCare Connect.
+Utilize o menu lateral para acessar as funcionalidades.
+</p>
+
+</div>
+
+</section>
+
+<!-- PETS -->
+
+<section id="pets" class="section">
+
+<div class="card">
+
+<h3>Cadastrar pet</h3>
+
+<div class="form-grid">
+
+<div class="input">
+<label>Nome</label>
+<input type="text" id="petNome">
+</div>
+
+<div class="input">
+<label>Tipo</label>
+
+<select id="petTipo">
+<option>Cachorro</option>
+<option>Gato</option>
+<option>Pássaro</option>
+<option>Outro</option>
+</select>
+
+</div>
+
+<div class="input">
+<label>Idade</label>
+<input type="number" id="petIdade">
+</div>
+
+<div class="input">
+<label>Peso</label>
+<input type="number" step="0.1" id="petPeso">
+</div>
+
+</div>
+
+<button class="btn"
+onclick="addPet()">
+Cadastrar pet
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>Meus pets</h3>
+
+<div id="listaPets">
+</div>
+
+</div>
+
+</section>
+
+<!-- CONSULTAS -->
+
+<section id="consultas" class="section">
+
+<div class="card">
+
+<h3>Consultas</h3>
+
+<p style="color:var(--text-muted)">
+Nenhuma consulta encontrada.
+</p>
+
+</div>
+
+</section>
+
+<!-- VACINAS -->
+
+<section id="vacinas" class="section">
+
+<div class="card">
+
+<h3>Vacinas</h3>
+
+<p style="color:var(--text-muted)">
+Nenhuma vacina registrada.
+</p>
+
+</div>
+
+</section>
+
+<!-- RELATORIOS -->
+
+<section id="relatorios" class="section">
+
+<div class="card">
+
+<h3>Relatórios</h3>
+
+<p style="color:var(--text-muted)">
+Nenhum relatório encontrado.
+</p>
+
+</div>
+
+</section>
+
+</main>
+
+<script src="js/petcare-api.js"></script>
+
+<script>
+
+if(!petcareRequireAuth('Tutor')){
+}
+
+const sess = petcareGetSession();
+
+sess.usuarioId =
+Number(sess.usuarioId);
+
+if(sess?.nome){
+
+document.getElementById(
+'nomeTutor'
+).textContent = sess.nome;
+
+}
+
+function logout(){
+
+localStorage.clear();
+
+window.location.href =
+'index.html';
+
+}
+
+function abrirSecao(secao, btn){
+
+document
+.querySelectorAll('.section')
+.forEach(sec => {
+sec.classList.remove('active');
+});
+
+document
+.getElementById(secao)
+.classList.add('active');
+
+document
+.querySelectorAll('.nav-btn')
+.forEach(b => {
+b.classList.remove('active');
+});
+
+btn.classList.add('active');
+
+}
+
+async function carregarPets(){
+
+try{
+
+const response = await fetch(
+'http://localhost:5000/api/Pets',
+{
+headers:{
+'Authorization':'Bearer ' + sess.token
+}
+}
+);
+
+const result =
+await response.json();
+
+const pets =
+result.data ||
+result.dados ||
+[];
+
+const lista =
+document.getElementById(
+'listaPets'
+);
+
+document.getElementById(
+'totalPets'
+).textContent =
+pets.length;
+
+if(!pets.length){
+
+lista.innerHTML = `
+<p style="color:var(--text-muted)">
+Nenhum pet cadastrado.
+</p>
+`;
+
+return;
+
+}
+
+lista.innerHTML =
+pets.map(p => `
+
+<div class="pet-card">
+
+<strong>
+${p.nome}
+</strong>
+
+<p>
+${p.tipo}
+•
+${p.idade} ano(s)
+•
+${p.peso} kg
+</p>
+
+</div>
+
+`).join('');
+
+}catch(err){
+
+console.error(err);
+
+alert(
+'Erro ao carregar pets'
+);
+
+}
+
+}
+
+async function addPet(){
+
+const nome =
+document.getElementById(
+'petNome'
+).value.trim();
+
+const tipo =
+document.getElementById(
+'petTipo'
+).value;
+
+const idade =
+Number(
+document.getElementById(
+'petIdade'
+).value
+);
+
+const peso =
+Number(
+document.getElementById(
+'petPeso'
+).value
+);
+
+if(!nome || !idade || !peso){
+
+alert(
+'Preencha todos os campos'
+);
+
+return;
+
+}
+
+try{
+
+const response = await fetch(
+'http://localhost:5000/api/Pets',
+{
+method:'POST',
+
+headers:{
+'Content-Type':'application/json',
+'Authorization':'Bearer ' + sess.token
+},
+
+body:JSON.stringify({
+nome,
+tipo,
+idade,
+peso,
+tutorId:sess.usuarioId
+})
+}
+);
+
+const result =
+await response.json();
+
+if(!result.sucesso){
+
+alert(
+result.mensagem ||
+'Erro ao cadastrar pet'
+);
+
+return;
+
+}
+
+alert(
+'Pet cadastrado com sucesso!'
+);
+
+document.getElementById(
+'petNome'
+).value = '';
+
+document.getElementById(
+'petIdade'
+).value = '';
+
+document.getElementById(
+'petPeso'
+).value = '';
+
+await carregarPets();
+
+}catch(err){
+
+console.error(err);
+
+alert(
+'Erro ao cadastrar pet'
+);
+
+}
+
+}
+
+carregarPets();
+
+</script>
+
+</body>
+</html>
