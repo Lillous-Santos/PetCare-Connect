@@ -129,9 +129,19 @@ async function petcareBuscarPet(id) {
     return await apiCall('GET', `/Pets/${id}`);
 }
 
-async function petcareCriarPet(nome, tipo, idade, peso) {
-    const tutorId = petcareGetUserId();
-    return await apiCall('POST', '/Pets', { nome, tipo, idade, peso, tutorId });
+async function petcareCriarPet(nome, tipo, idade, peso, tutorId) {
+
+    return await apiCall(
+        'POST',
+        '/Pets',
+        {
+            nome,
+            tipo,
+            idade,
+            peso,
+            tutorId
+        }
+    );
 }
 
 async function petcareAtualizarPet(id, idade, peso) {
@@ -433,4 +443,82 @@ function petcareFormatarData(data){
 
     return new Date(data)
         .toLocaleString('pt-BR');
+}
+
+function formatarTelefone(input){
+
+    let valor = input.value.replace(/\D/g,'');
+
+    valor = valor.replace(/^(\d{2})(\d)/g,'($1) $2');
+    valor = valor.replace(/(\d{5})(\d)/,'$1-$2');
+
+    input.value = valor;
+}
+
+async function petcareAtualizarUsuario(id, dados){
+
+    return await apiCall(
+        'PUT',
+        `/Usuarios/${id}`,
+        dados
+    );
+}
+
+async function petcareExcluirUsuario(id){
+
+    return await apiCall(
+        'DELETE',
+        `/Usuarios/${id}`
+    );
+}
+
+async function petcareBuscarUsuario(id){
+
+    return await apiCall(
+        'GET',
+        `/Usuarios/${id}`
+    );
+}
+
+async function petcareBuscarUsuario(id){
+
+    return await apiCall(
+        'GET',
+        `/Usuarios/${id}`
+    );
+}
+
+async function petcareCriarConsulta(
+    petId,
+    veterinarioId,
+    data,
+    hora
+) {
+
+    return await apiCall(
+        'POST',
+        '/Consultas',
+        {
+            petId,
+            veterinarioId,
+            data,
+            hora
+        }
+    );
+}
+
+async function petcareEstatisticasComAvisos() {
+
+    const stats = await petcareEstatisticas();
+
+    const avisos = await petcareListarAvisos();
+
+    if (!stats.dados) {
+        stats.dados = {};
+    }
+
+    stats.dados.Avisos =
+        (avisos?.dados || []).length;
+
+    return stats;
 }

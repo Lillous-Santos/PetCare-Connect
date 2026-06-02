@@ -72,4 +72,24 @@ public class UsuariosController : ControllerBase
             ? Ok(new ApiResponse(true, "Usuário atualizado."))
             : NotFound(new ApiResponse(false, "Usuário não encontrado."));
     }
+
+[HttpPut("{id}")]
+[Authorize(Roles = "Admin")]
+public async Task<IActionResult> Atualizar(
+    int id,
+    [FromBody] AtualizarUsuarioRequest req)
+{
+    var ok = await _db.AtualizarUsuarioAsync(
+        id,
+        req.Nome,
+        req.Email,
+        req.Perfil,
+        req.Ativo
+    );
+
+    return ok
+        ? Ok(new ApiResponse(true, "Usuário atualizado."))
+        : NotFound(new ApiResponse(false, "Usuário não encontrado."));
+}
+
 }

@@ -98,3 +98,10 @@ public record SalvarRelatorioRequest(
 // ── Genérico ─────────────────────────────────────────────────
 public record ApiResponse<T>(bool Sucesso, string Mensagem, T? Dados);
 public record ApiResponse(bool Sucesso, string Mensagem);
+
+public record AtualizarUsuarioRequest(
+    string Nome,
+    string Email,
+    string Perfil,
+    bool Ativo
+);

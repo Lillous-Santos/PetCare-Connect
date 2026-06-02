@@ -488,4 +488,34 @@ public async Task<bool> ExcluirRelatorioAsync(int petId)
 
         return rows.ToDictionary(x => x.K, x => x.V);
     }
+
+
+    public async Task<bool> AtualizarUsuarioAsync(
+        int id,
+        string nome,
+        string email,
+        string perfil,
+        bool ativo)
+    {
+        using var conn = Connection;
+
+        var linhas = await conn.ExecuteAsync(@"
+            UPDATE Usuarios
+            SET
+                Nome = @nome,
+                Email = @email,
+                Perfil = @perfil,
+                Ativo = @ativo
+            WHERE Id = @id",
+            new
+            {
+                id,
+                nome,
+                email,
+                perfil,
+                ativo
+            });
+
+        return linhas > 0;
+    }
 }

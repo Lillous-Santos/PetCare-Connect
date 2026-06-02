@@ -69,7 +69,7 @@ public class ConsultasController : ControllerBase
                     System.Globalization.DateTimeStyles.None, out var data))
                 return BadRequest(new ApiResponse(false, "Data inválida. Use dd/MM/yyyy."));
 
-            if (data.Date <= DateTime.Today)
+            if (data.Date < DateTime.Today)
                 return BadRequest(new ApiResponse(false, "Escolha uma data futura."));
 
             // Aceita HH:mm com hora de 0-23

@@ -485,7 +485,56 @@
       .stats-row{grid-template-columns:1fr}
       .topbar{flex-direction:column;align-items:flex-start}
     }
-  </style>
+  
+.usuario-card{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    padding:18px;
+    background:#fff;
+    border:1px solid #dbe7e7;
+    border-radius:16px;
+    margin-bottom:12px;
+    transition:.2s;
+}
+.usuario-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.08);}
+.usuario-info h4{margin:0 0 8px;color:#1a2e44;font-size:1.1rem;}
+.usuario-info p{margin:3px 0;color:#4a7a78;}
+.usuario-acoes{display:flex;gap:10px;flex-wrap:wrap;}
+.status-ativo,.status-inativo{display:inline-block;margin-top:8px;padding:6px 12px;border-radius:999px;font-size:.85rem;font-weight:600;}
+.status-ativo{background:#dcfce7;color:#166534;}
+.status-inativo{background:#fee2e2;color:#991b1b;}
+.btn-editar,.btn-desativar,.btn-ativar{border:none;padding:8px 14px;border-radius:10px;cursor:pointer;font-weight:600;color:#fff;}
+.btn-editar{background:#f59e0b;}
+.btn-desativar{background:#dc2626;}
+.btn-ativar{background:#16a34a;}
+
+
+.feedback-card{display:flex;align-items:center;gap:16px;padding:18px;margin-bottom:20px;border-left:5px solid #16a34a;background:#f0fdf4;border-radius:14px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.feedback-icon{width:48px;height:48px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:bold}
+.feedback-content h4{margin:0;color:#166534}
+.feedback-content p{margin:4px 0 0;color:#166534}
+.feedback-close{margin-left:auto;border:none;background:none;font-size:24px;cursor:pointer;color:#166534;cursor:pointer}
+.feedback-error{background:#fef2f2;border-left-color:#dc2626}
+.feedback-error .feedback-icon{background:#dc2626}
+
+.pet-card{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:18px;background:#fff;border:1px solid #dbe7e7;border-radius:16px;margin-bottom:12px}
+.pet-info h4{margin:0 0 8px}
+.pet-acoes{display:flex;gap:10px;flex-wrap:wrap}
+.consulta-card{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:18px;background:#fff;border:1px solid #dbe7e7;border-radius:16px;margin-bottom:12px}
+.consulta-info h4{margin:0 0 8px}
+.consulta-acoes{display:flex;gap:10px;flex-wrap:wrap}
+.btn-concluir{background:#16a34a;color:#fff;border:none;padding:8px 14px;border-radius:10px;cursor:pointer;font-weight:600}
+
+.aviso-card{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding:18px;background:#fff;border:1px solid #dbe7e7;border-radius:16px;margin-bottom:12px}
+.aviso-info h4{margin:0 0 8px}
+.aviso-acoes{display:flex;gap:10px;flex-wrap:wrap}
+.badge-aviso{display:inline-block;padding:5px 10px;border-radius:999px;background:#e0f7f5;color:#0c6e6e;font-size:.8rem;font-weight:600}
+.aviso-lido{opacity:.75;border-left:5px solid #16a34a}
+
+
+</style>
 </head>
 <body>
 
@@ -522,16 +571,7 @@
 </aside>
 
 <main class="main">
-  <div class="topbar">
-    <div class="topbar-left">
-      <h2 id="welcomeTitle">Bem-vindo(a) 👋</h2>
-      <p>Gerencie usuários, pets, consultas, relatórios e avisos da clínica em um só lugar.</p>
-    </div>
-    <div class="topbar-right">
-      <button class="tb-btn primary" onclick="openSection('usuarios')">👤 Gerenciar usuários</button>
-      <button class="tb-btn" onclick="openSection('consultas')">📅 Ver consultas</button>
-    </div>
-  </div>
+
 
   <div class="stats-row">
     <div class="stat-card" onclick="openSection('usuarios')">
@@ -590,8 +630,8 @@
         <div class="form-group">
           <label>Perfil</label>
           <select id="novoPerfil" onchange="toggleNovoUsuarioCampos()">
-            <option value="Tutor(a)">Tutor(a)</option>
-            <option value="Veterinário(a)">Veterinário(a)</option>
+            <option value="Tutor">Tutor</option>
+            <option value="Veterinario">Veterinário</option>
           </select>
         </div>
         <div class="form-group">
@@ -600,11 +640,13 @@
         </div>
         <div class="form-group">
           <label>Email</label>
-          <input id="novoEmail" type="email" placeholder="Email">
+          <input id="novoEmail" type="email" pattern=".+@(gmail\.com|hotmail\.com)"title="Use Gmail ou Hotmail">
         </div>
         <div class="form-group">
           <label>Telefone</label>
-          <input id="novoTelefone" type="text" placeholder="Telefone">
+          <input id="novoTelefone" 
+          oninput="formatarTelefone(this)"
+          maxlength="15">
         </div>
         <div class="form-group" id="novoEnderecoGroup">
           <label>Endereço</label>
@@ -653,6 +695,7 @@
         <div class="form-group">
           <label>Tutor</label>
           <select id="novoPetTutor"></select>
+
         </div>
         <div class="form-group">
           <label>Tipo</label>
@@ -806,6 +849,22 @@
         <label>Telefone</label>
         <input id="editUserTelefone" type="text">
       </div>
+      <div class="form-group">
+        <label>Perfil</label>
+        <select id="editUserPerfil">
+          <option value="Tutor">Tutor</option>
+          <option value="Veterinario">Veterinário</option>
+          <option value="Admin">Administrador</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Status</label>
+        <select id="editUserAtivo">
+          <option value="true">Ativo</option>
+          <option value="false">Inativo</option>
+        </select>
+      </div>
       <div class="form-group" id="editUserEnderecoGroup">
         <label>Endereço</label>
         <input id="editUserEndereco" type="text">
@@ -930,7 +989,6 @@
 <div id="toast" class="toast"></div>
 
 
-<script src="js/petcare-api.js"></script>
 <script>
 
 // ── Auth Guard ─────────────────────────────────────────
@@ -986,13 +1044,14 @@ function openSection(secao){
 
 // ── DASHBOARD ──────────────────────────────────────────
 async function carregarEstatisticas() {
-    const result = await petcareEstatisticas();
+    const result = await petcareEstatisticasComAvisos();
     const stats  = result?.dados || {};
 
     const map = {
         'totalUsuarios':    stats.Usuarios    ?? 0,
         'totalPets':        stats.Pets         ?? 0,
         'totalConsultas':   stats.Consultas    ?? 0,
+        'totalAvisos': stats.Avisos ?? 0,
         'totalVacinas':     stats.VacinasAplicadas ?? 0,
         'totalTutores':     stats.Tutores      ?? 0,
         'totalVeterinarios':stats.Veterinarios ?? 0,
@@ -1007,9 +1066,9 @@ async function carregarEstatisticas() {
 
 // ── USUÁRIOS ───────────────────────────────────────────
 async function carregarUsuarios() {
-    const result  = await petcareListarUsuarios();
+    const result = await petcareListarUsuarios();
     const usuarios = result?.dados || [];
-    const lista   = document.getElementById('listaUsuarios');
+    const lista = document.getElementById('listaUsuarios');
     if (!lista) return;
 
     if (!usuarios.length) {
@@ -1018,45 +1077,75 @@ async function carregarUsuarios() {
     }
 
     lista.innerHTML = usuarios.map(u => `
-        <div class="pet-card" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-            <div>
-                <strong>${u.nome}</strong>
-                <p>Login: ${u.login} | Perfil: ${u.perfil} | ${u.ativo ? '✅ Ativo' : '🚫 Inativo'}</p>
+        <div class="usuario-card">
+            <div class="usuario-info">
+                <h4>${u.nome}</h4>
+                <p><strong>Login:</strong> ${u.login}</p>
+                <p><strong>Perfil:</strong> ${u.perfil}</p>
+                <span class="${u.ativo ? 'status-ativo' : 'status-inativo'}">
+                    ${u.ativo ? '✅ Ativo' : '🚫 Inativo'}
+                </span>
             </div>
-            <button onclick="toggleAtivo(${u.id}, ${!u.ativo})" class="btn-small ${u.ativo ? 'btn-danger' : ''}">
-                ${u.ativo ? '🚫 Desativar' : '✅ Ativar'}
-            </button>
+            <div class="usuario-acoes">
+                <button class="btn-editar"
+                    onclick="abrirModalEditarUsuario(${u.id}, '${u.nome}', '${u.email}', '${u.perfil}', ${u.ativo})">
+                    ✏️ Editar
+                </button>
+                ${u.ativo
+                    ? `<button class="btn-desativar" onclick="toggleAtivo(${u.id}, false)">🚫 Desativar</button>`
+                    : `<button class="btn-ativar" onclick="toggleAtivo(${u.id}, true)">✅ Ativar</button>`}
+            </div>
         </div>
     `).join('');
 }
 
-async function toggleAtivo(id, novoEstado) {
-    const result = await petcareToggleAtivo(id, novoEstado);
-    if (!result?.sucesso) { alert(result?.mensagem || 'Erro.'); return; }
+async function criarUsuario() {
+
+
+    const nome      = document.getElementById('novoNome')?.value.trim();
+    const email     = document.getElementById('novoEmail')?.value.trim();
+    const perfil    = document.getElementById('novoPerfil')?.value;
+
+    if (!nome || !email || !perfil) {
+        mostrarFeedback('Campos obrigatórios','Preencha nome, e-mail e perfil.',false);
+        return;
+    }
+
+    const login = email.split('@')[0];
+    const senha = 'PetCare123';
+
+    const result = await petcareCriarUsuario({
+        nome: nome,
+        login: login,
+        senha: senha,
+        perfil: perfil.replace('(a)','').replace('ário(a)','ario').replace('Tutor(a)','Tutor').replace('Veterinário(a)','Veterinario'),
+        email: email
+    });
+
+    if (!result?.sucesso) {
+        mostrarFeedback('Erro', result?.mensagem || 'Erro ao criar usuário.', false);
+        return;
+    }
+
+    mostrarFeedback('Sucesso','Usuário criado com sucesso!',true);
+
+    ['novoNome','novoEmail','novoTelefone','novoEndereco']
+      .forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+
     await carregarUsuarios();
     await carregarEstatisticas();
 }
 
-async function criarUsuario() {
-    const nome   = document.getElementById('novoNome')?.value.trim();
-    const login  = document.getElementById('novoLogin')?.value.trim();
-    const senha  = document.getElementById('novaSenha')?.value;
-    const perfil = document.getElementById('novoPerfil')?.value;
-    const email  = document.getElementById('novoEmail')?.value.trim();
 
-    if (!nome || !login || !senha || !perfil) {
-        alert('Preencha nome, login, senha e perfil.');
+async function toggleAtivo(id, novoEstado) {
+    const result = await petcareToggleAtivo(id, novoEstado);
+    if (!result?.sucesso) {
+        mostrarFeedback('Erro', result?.mensagem || 'Erro.', false);
         return;
     }
-
-    const result = await petcareCriarUsuario({ nome, login, senha, perfil, email: email || null });
-    if (!result?.sucesso) { alert(result?.mensagem || 'Erro ao criar usuário.'); return; }
-
-    alert('Usuário criado com sucesso!');
-    ['novoNome','novoLogin','novaSenha','novoEmail'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.value = '';
-    });
     await carregarUsuarios();
     await carregarEstatisticas();
 }
@@ -1064,44 +1153,65 @@ async function criarUsuario() {
 // ── PETS ───────────────────────────────────────────────
 async function carregarTodosPets() {
     const result = await petcareListarPets();
-    const pets   = result?.dados || [];
+    const pets = result?.dados || [];
     const lista = document.getElementById('listaPets');
     if (!lista) return;
 
-    lista.innerHTML = pets.length
-        ? pets.map(p => `
-            <div class="pet-card">
-                <strong>${p.nome}</strong>
-                <p>Tipo: ${p.tipo} | Tutor: ${p.tutorNome} | ${p.idade} ano(s) | ${p.peso} kg</p>
-            </div>`).join('')
-        : `<p style="color:var(--text-muted)">Nenhum pet cadastrado.</p>`;
+    lista.innerHTML = pets.length ? pets.map(p => `
+    <div class="pet-card">
+      <div class="pet-info">
+        <h4>${p.nome}</h4>
+        <p><strong>Tipo:</strong> ${p.tipo}</p>
+        <p><strong>Tutor:</strong> ${p.tutorNome || '-'}</p>
+        <p><strong>Idade:</strong> ${p.idade} ano(s) | <strong>Peso:</strong> ${p.peso} kg</p>
+      </div>
+      <div class="pet-acoes">
+        <button class="btn-editar" onclick="editarPet(${p.id}, '${p.nome}', '${p.tipo}', ${p.idade}, ${p.peso}, ${p.tutorId || 0})">✏️ Editar</button>
+        <button class="btn-desativar" onclick="excluirPet(${p.id})">🗑️ Excluir</button>
+      </div>
+    </div>`).join('')
+    : `<p style="color:var(--text-muted)">Nenhum pet cadastrado.</p>`;
 }
 
 // ── CONSULTAS ──────────────────────────────────────────
+
 async function carregarTodasConsultas() {
-    const result    = await petcareListarConsultas();
+    const result = await petcareListarConsultas();
     const consultas = result?.dados || [];
     const lista = document.getElementById('listaConsultas');
     if (!lista) return;
 
-    lista.innerHTML = consultas.length
-        ? consultas.map(c => `
-            <div class="pet-card" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-                <div>
-                    <strong>${c.petNome} — ${c.data} às ${c.hora}</strong>
-                    <p>Vet: ${c.vetNome} | Status: ${c.status}</p>
-                </div>
-                ${c.status === 'Marcada' ? `
-                <button onclick="cancelarConsulta(${c.id})" class="btn-small btn-danger">✕ Cancelar</button>` : ''}
-            </div>`).join('')
-        : `<p style="color:var(--text-muted)">Nenhuma consulta encontrada.</p>`;
+    lista.innerHTML = consultas.length ? consultas.map(c => `
+    <div class="consulta-card">
+        <div class="consulta-info">
+            <h4>${c.petNome} — ${c.data} às ${c.hora}</h4>
+            <p><strong>Veterinário:</strong> ${c.vetNome}</p>
+            <p><strong>Status:</strong> ${c.status}</p>
+        </div>
+        <div class="consulta-acoes">
+            ${c.status === 'Marcada' ? `<button class="btn-concluir" onclick="concluirConsulta(${c.id})">✓ Concluída</button>` : ''}
+            ${c.status === 'Marcada' ? `<button class="btn-desativar" onclick="abrirConfirmacaoCancelamento(${c.id})">✕ Cancelar</button>` : ''}
+        </div>
+    </div>`).join('')
+    : `<p style="color:var(--text-muted)">Nenhuma consulta encontrada.</p>`;
+}
+
+async function concluirConsulta(id){
+    const result =
+        await petcareAtualizarStatusConsulta(
+            id,
+            'Realizada'
+        );
+    if(!result?.sucesso){
+        mostrarFeedback('Erro', result?.mensagem || 'Erro ao concluir consulta.', false);
+        return;
+    }
+    mostrarFeedback('Sucesso','Consulta concluída com sucesso!',true);
+    await carregarTodasConsultas();
 }
 
 async function cancelarConsulta(id) {
-    if (!confirm('Cancelar esta consulta?')) return;
-    const result = await petcareAtualizarStatusConsulta(id, 'Cancelada');
-    if (!result?.sucesso) { alert(result?.mensagem || 'Erro.'); return; }
-    await carregarTodasConsultas();
+    abrirConfirmacaoCancelamento(id);
 }
 
 // ── AVISOS ─────────────────────────────────────────────
@@ -1111,27 +1221,88 @@ async function carregarAvisos() {
     const lista  = document.getElementById('listaAvisos');
     if (!lista) return;
 
-    lista.innerHTML = avisos.length
-        ? avisos.map(a => `
-            <div class="pet-card">
-                <strong>${a.titulo}</strong>
+    const total = document.getElementById('totalAvisos');
+    if(total) total.textContent = avisos.length;
+
+    lista.innerHTML = avisos.length ? avisos.map(a => `
+        <div class="aviso-card ${a.lido ? 'aviso-lido' : ''}">
+            <div class="aviso-info">
+                <h4>📢 ${a.titulo}</h4>
                 <p>${a.texto}</p>
-            </div>`).join('')
+                <span class="badge-aviso">${a.tipo || 'Aviso'}</span>
+            </div>
+            <div class="aviso-acoes">
+                ${!a.lido ? `<button class="btn-concluir" onclick="marcarAvisoLido(${a.id})">✓ Lido</button>` : ''}
+            </div>
+        </div>`).join('')
         : `<p style="color:var(--text-muted)">Sem avisos publicados.</p>`;
 }
 
-async function enviarAviso() {
-    const titulo = document.getElementById('novoAvisoTitulo')
-    const texto  = document.getElementById('novoAvisoTexto');
-    if (!titulo || !texto) { alert('Preencha o título e o texto.'); return; }
+async function marcarAvisoLido(id){
+    if(typeof petcareMarcarAvisoLido !== 'function') return;
+    const r = await petcareMarcarAvisoLido(id);
+    if(r?.sucesso){
+        mostrarFeedback('Sucesso','Aviso marcado como lido!',true);
+        carregarAvisos();
+    }
+}
 
-    const result = await petcareCriarAviso(titulo, texto, 'geral');
-    if (!result?.sucesso) { alert(result?.mensagem || 'Erro.'); return; }
-    alert('Aviso publicado!');
-    document.getElementById('avisoTitulo').value = '';
-    document.getElementById('avisoTexto').value  = '';
+async function enviarAviso() {
+
+    const titulo =
+        document.getElementById('novoAvisoTitulo')?.value?.trim();
+
+    const texto =
+        document.getElementById('novoAvisoTexto')?.value?.trim();
+
+    if (!titulo || !texto) {
+        mostrarFeedback(
+            'Campos obrigatórios',
+            'Preencha o título e o texto.',
+            false
+        );
+        return;
+    }
+
+    const result =
+        await petcareCriarAviso(
+            titulo,
+            texto,
+            'geral'
+        );
+
+    if (!result?.sucesso) {
+
+        mostrarFeedback(
+            'Erro',
+            result?.mensagem || 'Erro.',
+            false
+        );
+
+        return;
+    }
+
+    mostrarFeedback(
+        'Sucesso',
+        'Aviso publicado!',
+        true
+    );
+
+    mostrarModalSucessoAviso();
+
+    const campoTitulo =
+        document.getElementById('novoAvisoTitulo');
+
+    const campoTexto =
+        document.getElementById('novoAvisoTexto');
+
+    if (campoTitulo) campoTitulo.value = '';
+    if (campoTexto) campoTexto.value = '';
+
     await carregarAvisos();
+    await carregarEstatisticas();
     await carregarPainelResumo();
+    await carregarRelatorios();
 }
 
 
@@ -1183,17 +1354,701 @@ async function carregarPainelResumo(){
     }
 }
 
+async function carregarPetsConsulta(){
+
+    const result =
+        await petcareListarPets();
+
+    const pets =
+        result?.dados || [];
+
+    const select =
+        document.getElementById('novaConsultaPet');
+
+    if(!select) return;
+
+    select.innerHTML =
+        '<option value="">Selecione um pet</option>';
+
+    pets.forEach(p => {
+
+        select.innerHTML += `
+            <option value="${p.id}">
+                ${p.nome}
+            </option>
+        `;
+    });
+}
+
+async function carregarVeterinariosConsulta(){
+
+    const result =
+        await petcareListarVeterinarios();
+
+    const vets =
+        result?.dados || [];
+
+    const select =
+        document.getElementById('novaConsultaVet');
+
+    if(!select) return;
+
+    select.innerHTML =
+        '<option value="">Selecione um veterinário</option>';
+
+    vets.forEach(v => {
+
+        select.innerHTML += `
+            <option value="${v.id}">
+                ${v.nome}
+            </option>
+        `;
+    });
+}
+
+function carregarHorariosConsulta(){
+
+    const select =
+        document.getElementById('novaConsultaHora');
+
+    if(!select) return;
+
+    select.innerHTML =
+        '<option value="">Selecione um horário</option>';
+
+    petcareHorariosDisponiveis()
+        .forEach(h => {
+
+            select.innerHTML += `
+                <option value="${h}">
+                    ${h}
+                </option>
+            `;
+        });
+}
+
+
+async function carregarDestinatariosAviso(){
+    try{
+        const usuarios = (await petcareListarUsuarios())?.dados || [];
+
+        const tutores = usuarios.filter(u =>
+            String(u.perfil).toLowerCase().includes('tutor')
+        );
+
+        const vets = usuarios.filter(u =>
+            String(u.perfil).toLowerCase().includes('veter')
+        );
+
+        const destinoTutor = document.getElementById('destinoTutor');
+        const editDestinoTutor = document.getElementById('editDestinoTutor');
+        const destinoVet = document.getElementById('destinoVet');
+        const editDestinoVet = document.getElementById('editDestinoVet');
+
+        [destinoTutor,editDestinoTutor].forEach(select=>{
+            if(select){
+                select.innerHTML='<option value="">Selecione um tutor</option>';
+                tutores.forEach(t=>{
+                    select.innerHTML += `<option value="${t.id}">${t.nome}</option>`;
+                });
+            }
+        });
+
+        [destinoVet,editDestinoVet].forEach(select=>{
+            if(select){
+                select.innerHTML='<option value="">Selecione um veterinário</option>';
+                vets.forEach(v=>{
+                    select.innerHTML += `<option value="${v.id}">${v.nome}</option>`;
+                });
+            }
+        });
+    }catch(e){console.error(e);}
+}
+
 
 // ── INICIALIZAÇÃO ──────────────────────────────────────
 (async function init() {
+
     await carregarEstatisticas();
+
     await carregarUsuarios();
+
+    await carregarTutores();
+
     await carregarTodosPets();
+
+    await carregarPetsConsulta();
+
+    await carregarVeterinariosConsulta();
+    await carregarDestinatariosAviso();
+
+    carregarHorariosConsulta();
+
     await carregarTodasConsultas();
+
     await carregarAvisos();
+
     await carregarPainelResumo();
+    await carregarRelatorios();
+
+    const campoData =
+    document.getElementById('novaConsultaData');
+
+if (campoData) {
+
+    const hoje = new Date();
+
+    const ano = hoje.getFullYear();
+
+    const mes =
+        String(hoje.getMonth() + 1)
+            .padStart(2, '0');
+
+    const dia =
+        String(hoje.getDate())
+            .padStart(2, '0');
+
+    campoData.min =
+        `${ano}-${mes}-${dia}`;
+}
+
 })();
 
+
+// ===== Correções rápidas =====
+function cadastrarUsuario(){ return criarUsuario(); }
+
+function formatarPeso(input){
+  let v=(input.value||'').replace(/[^0-9,\.]/g,'');
+  input.value=v.replace('.',',');
+}
+
+function somenteInteiroPositivo(input){
+  input.value=(input.value||'').replace(/\D/g,'');
+}
+
+function bloquearTeclasInvalidasInteiro(e){
+  if(['e','E','+','-','.',','].includes(e.key)) e.preventDefault();
+}
+
+function toggleDestinoAviso(){
+ const v=document.getElementById('destinoAviso')?.value;
+ const t=document.getElementById('grupoDestinoTutor');
+ const vt=document.getElementById('grupoDestinoVet');
+ if(t) t.style.display=v==='tutor'?'block':'none';
+ if(vt) vt.style.display=v==='vet'?'block':'none';
+}
+
+function toggleDestinoAvisoEdicao(){
+ const v=document.getElementById('editDestinoAviso')?.value;
+ const t=document.getElementById('grupoEditDestinoTutor');
+ const vt=document.getElementById('grupoEditDestinoVet');
+ if(t) t.style.display=v==='tutor'?'block':'none';
+ if(vt) vt.style.display=v==='vet'?'block':'none';
+}
+
+async function publicarAviso(){ return enviarAviso(); }
+
 </script>
+
+<script>
+let usuarioEditandoId = null;
+
+function abrirModalEditarUsuario(id,nome,email,perfil,ativo){
+
+    usuarioEditandoId = id;
+
+    document.getElementById('editUserNome').value =
+        nome || '';
+
+    document.getElementById('editUserEmail').value =
+        email || '';
+
+    document.getElementById('editUserPerfil').value =
+        perfil || 'Tutor';
+
+    document.getElementById('editUserAtivo').value =
+        ativo ? 'true' : 'false';
+
+    document.getElementById('modalUsuario')
+        .classList.add('active');
+}
+
+function closeModal(id){
+    const modal = document.getElementById(id);
+    if(modal) modal.classList.remove('active');
+}
+
+async function salvarUsuarioEditado(){
+    const nome = document.getElementById('editUserNome').value.trim();
+    const email = document.getElementById('editUserEmail').value.trim();
+
+    const perfil =
+    document.getElementById('editUserPerfil').value;
+
+const ativo =
+    document.getElementById('editUserAtivo').value === 'true';
+
+const r = await petcareAtualizarUsuario(
+    usuarioEditandoId,
+    {
+        nome,
+        email,
+        perfil,
+        ativo
+    }
+);
+
+    if(r?.sucesso){
+        closeModal('modalUsuario');
+        await carregarUsuarios();
+        await carregarEstatisticas();
+    }else{
+        mostrarFeedback('Erro', r?.mensagem || 'Erro ao atualizar usuário.', false);
+    }
+}
+</script>
+
+
+<script>
+function mostrarModalSistema(titulo,texto){
+
+    let modal = document.getElementById('modalSistema');
+
+    if(!modal){
+
+        document.body.insertAdjacentHTML('beforeend', `
+            <div id="modalSistema"
+                 style="
+                    position:fixed;
+                    inset:0;
+                    background:rgba(0,0,0,.25);
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    z-index:99999;">
+
+                <div style="
+                    background:white;
+                    width:560px;
+                    max-width:90%;
+                    padding:30px;
+                    border-radius:24px;">
+
+                    <h2 id="modalSistemaTitulo">
+                        PetCare Connect
+                    </h2>
+
+                    <p id="modalSistemaTexto"></p>
+
+                    <div style="text-align:right;margin-top:20px;">
+                        <button
+                            class="btn btn-primary"
+                            onclick="fecharModalSistema()">
+                            OK
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        `);
+
+        modal = document.getElementById('modalSistema');
+    }
+
+    document.getElementById(
+        'modalSistemaTitulo'
+    ).textContent = titulo;
+
+    document.getElementById(
+        'modalSistemaTexto'
+    ).textContent = texto;
+
+    modal.style.display = 'flex';
+}
+function fecharModalSistema(){
+ document.getElementById('modalSistema').style.display='none';
+}
+function mostrarFeedback(titulo,mensagem,sucesso=true){
+ mostrarModalSistema(titulo,mensagem);
+}
+function fecharFeedback(){}
+
+async function carregarTutores(){
+
+    const result = await petcareListarUsuarios('Tutor');
+    const tutores = result?.dados || [];
+
+    const novoPetTutor = document.getElementById('novoPetTutor');
+    const editPetTutor = document.getElementById('editPetTutor');
+
+    if(novoPetTutor){
+        novoPetTutor.innerHTML = '<option value="">Selecione um tutor</option>';
+        tutores.forEach(t=>{
+            novoPetTutor.innerHTML += `<option value="${t.id}">${t.nome}</option>`;
+        });
+    }
+
+    if(editPetTutor){
+        editPetTutor.innerHTML = '<option value="">Selecione um tutor</option>';
+        tutores.forEach(t=>{
+            editPetTutor.innerHTML += `<option value="${t.id}">${t.nome}</option>`;
+        });
+    }
+}
+
+</script>
+
+<script>
+let petEditandoId=null;
+
+async function cadastrarPet(){
+ const nome=document.getElementById('novoPetNome').value.trim();
+ const tutorId=parseInt(document.getElementById('novoPetTutor').value);
+ const tipo=document.getElementById('novoPetTipo').value;
+ const idade=parseInt(document.getElementById('novoPetIdade').value);
+ const peso=parseFloat((document.getElementById('novoPetPeso').value||'0').replace(',','.'));
+ if(!nome||!tutorId||!tipo||!idade||!peso){
+   mostrarFeedback('Campos obrigatórios','Preencha todos os dados do pet.',false);
+   return;
+ }
+ const r=await petcareCriarPet(nome,tipo,idade,peso,tutorId);
+ if(r?.sucesso){
+   mostrarFeedback('Sucesso','Pet cadastrado com sucesso!',true);
+   await carregarTodosPets();
+ }else{
+   mostrarFeedback('Erro',r?.mensagem||'Erro ao cadastrar pet.',false);
+ }
+}
+
+async function editarPet(id,nome,tipo,idade,peso,tutorId){
+ petEditandoId=id;
+ await carregarTutores();
+ document.getElementById('editPetNome').value=nome||'';
+ document.getElementById('editPetTipo').value=tipo||'';
+ document.getElementById('editPetTutor').value=tutorId||'';
+ document.getElementById('editPetIdade').value=idade||'';
+ document.getElementById('editPetPeso').value=peso||'';
+ document.getElementById('modalPet').classList.add('active');
+}
+
+async function salvarPetEditado(){
+ const nome=document.getElementById('editPetNome').value.trim();
+ const tipo=document.getElementById('editPetTipo').value;
+ const tutorId=parseInt(document.getElementById('editPetTutor').value);
+ const idade=parseInt(document.getElementById('editPetIdade').value);
+ const peso=parseFloat((document.getElementById('editPetPeso').value||'0').replace(',','.'));
+
+ const r = await petcareAtualizarPet(
+    petEditandoId,
+    idade,
+    peso
+);
+
+ if(r?.sucesso){
+   closeModal('modalPet');
+   mostrarFeedback('Sucesso','Pet atualizado!',true);
+   await carregarTodosPets();
+ }else{
+   mostrarFeedback('Erro',r?.mensagem||'Erro ao atualizar pet.',false);
+ }
+}
+
+async function excluirPet(id){
+ const r=await petcareRemoverPet(id);
+ if(r?.sucesso){
+   mostrarFeedback('Sucesso','Pet excluído!',true);
+   await carregarTodosPets();
+ }else{
+   mostrarFeedback('Erro',r?.mensagem||'Erro ao excluir pet.',false);
+ }
+}
+
+async function agendarConsulta() {
+
+    const petId =
+        parseInt(
+            document.getElementById('novaConsultaPet').value
+        );
+
+    const veterinarioId =
+        parseInt(
+            document.getElementById('novaConsultaVet').value
+        );
+
+    const dataInput =
+        document.getElementById('novaConsultaData').value;
+
+    const hoje = new Date();
+
+hoje.setHours(0,0,0,0);
+
+const dataSelecionada =
+    new Date(dataInput);
+
+dataSelecionada.setHours(0,0,0,0);
+
+if (dataSelecionada.getTime() === hoje.getTime()) {
+
+    mostrarFeedback(
+        'Atenção',
+        'Consultas devem ser agendadas para uma data futura.',
+        false
+    );
+
+    return;
+}
+
+    if (!dataInput) {
+
+        mostrarFeedback(
+            'Atenção',
+            'Selecione uma data.',
+            false
+        );
+
+        return;
+    }
+
+    const partes =
+        dataInput.split('-');
+
+    const data =
+        `${partes[2]}/${partes[1]}/${partes[0]}`;
+
+    const hora =
+        document.getElementById('novaConsultaHora').value;
+
+    if (!petId || !veterinarioId || !data || !hora) {
+
+        mostrarFeedback(
+            'Atenção',
+            'Preencha todos os campos.',
+            false
+        );
+
+        return;
+    }
+
+    const result =
+        await petcareCriarConsulta(
+            petId,
+            veterinarioId,
+            data,
+            hora
+        );
+
+    if (result?.sucesso) {
+
+        mostrarFeedback(
+            'Sucesso',
+            'Consulta agendada com sucesso.',
+            true
+        );
+
+        document.getElementById('novaConsultaData').value = '';
+        document.getElementById('novaConsultaHora').selectedIndex = 0;
+
+        await carregarTodasConsultas();
+        await carregarEstatisticas();
+
+    } else {
+
+        mostrarFeedback(
+            'Erro',
+            result?.mensagem || 'Erro ao agendar consulta.',
+            false
+        );
+    }
+}
+</script>
+
+<script>
+document.getElementById('novaConsultaData')?.addEventListener('change', atualizarHorariosDisponiveis);
+document.getElementById('novaConsultaVet')?.addEventListener('change', atualizarHorariosDisponiveis);
+
+async function atualizarHorariosDisponiveis(){
+    if(typeof petcareListarConsultas !== 'function') return;
+
+    const vet = document.getElementById('novaConsultaVet')?.value;
+    const data = document.getElementById('novaConsultaData')?.value;
+    if(!vet || !data) return;
+
+    const consultas = (await petcareListarConsultas())?.dados || [];
+    const ocupados = consultas
+        .filter(c => String(c.veterinarioId ?? c.vetId) === String(vet) && c.data?.includes(data.split('-').reverse().join('/')) && c.status === 'Marcada')
+        .map(c => c.hora);
+
+    const select = document.getElementById('novaConsultaHora');
+    if(!select) return;
+
+    select.innerHTML = '<option value="">Selecione um horário</option>';
+
+    petcareHorariosDisponiveis().forEach(h=>{
+        if(!ocupados.includes(h)){
+            select.innerHTML += `<option value="${h}">${h}</option>`;
+        }
+    });
+}
+</script>
+<script>
+let consultaParaCancelar = null;
+
+function abrirConfirmacaoCancelamento(id){
+    consultaParaCancelar = id;
+    document.getElementById('confirmTitle').textContent = 'Cancelar consulta';
+    document.getElementById('confirmText').textContent = 'Deseja realmente cancelar esta consulta?';
+    document.getElementById('modalConfirm').classList.add('active');
+}
+
+function closeConfirm(confirmado){
+    document.getElementById('modalConfirm').classList.remove('active');
+
+    if(confirmado && consultaParaCancelar){
+        executarCancelamentoConsulta(consultaParaCancelar);
+    }
+
+    consultaParaCancelar = null;
+}
+
+async function executarCancelamentoConsulta(id){
+    const result = await petcareAtualizarStatusConsulta(id,'Cancelada');
+
+    if(!result?.sucesso){
+        mostrarFeedback('Erro', result?.mensagem || 'Erro ao cancelar consulta.', false);
+        return;
+    }
+
+    mostrarFeedback('Sucesso','Consulta cancelada com sucesso!',true);
+    await carregarTodasConsultas();
+}
+</script>
+
+<div id="sucessoAvisoModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.25);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:white;width:560px;max-width:90%;padding:30px;border-radius:24px;box-shadow:0 20px 60px rgba(0,0,0,.2)">
+    <h2 style="margin-bottom:15px;color:#1a2e44">PetCare Connect</h2>
+    <p style="font-size:20px;color:#0d9488">✓ Aviso enviado com sucesso!</p>
+    <div style="text-align:right;margin-top:25px">
+      <button onclick="fecharModalSucessoAviso()" class="btn btn-primary">OK</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function mostrarModalSucessoAviso(){
+  const m=document.getElementById('sucessoAvisoModal');
+  if(m) m.style.display='flex';
+}
+function fecharModalSucessoAviso(){
+  const m=document.getElementById('sucessoAvisoModal');
+  if(m) m.style.display='none';
+}
+</script>
+
+
+<script>
+// ===== RELATÓRIOS =====
+async function carregarRelatorios(){
+    if(typeof petcareListarRelatorios!=='function') return;
+    const result = await petcareListarRelatorios();
+    const relatorios = result?.dados || [];
+    const lista = document.getElementById('listaRelatorios');
+    const total = document.getElementById('totalRelatorios');
+    if(total) total.textContent = relatorios.length;
+
+    if(!lista) return;
+
+    lista.innerHTML = relatorios.length ? relatorios.map(r => `
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">📄 ${r.petNome || 'Pet'}</div>
+            <span class="tag tag-green">${r.tutorNome || ''}</span>
+        </div>
+        <div class="card-sub">${r.texto || ''}</div>
+        <div class="card-actions">
+            <button class="btn btn-primary btn-sm" onclick="visualizarRelatorio(${r.petId}, '${(r.petNome||'Pet').replace(/'/g,'')}','${(r.texto||'').replace(/'/g,'')}','${(r.tutorNome||'').replace(/'/g,'')}')">👁 Visualizar</button>
+            <button class="btn btn-danger btn-sm" onclick="excluirRelatorio(${r.petId})">🗑️ Excluir</button>
+        </div>
+    </div>`).join('')
+    : '<div class="empty"><p>Nenhum relatório encontrado.</p></div>';
+}
+
+
+function visualizarRelatorio(petId, petNome, texto, tutorNome){
+    const w = window.open('', '_blank');
+    const hoje = new Date().toLocaleDateString('pt-BR') + ', ' +
+                 new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+
+    w.document.write(`
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Relatório ${petNome}</title>
+<style>
+body{font-family:Arial,sans-serif;background:#eef5f5;margin:0;padding:20px}
+.relatorio{max-width:820px;margin:auto;background:#fff;padding:28px 46px;color:#1a2e44;position:relative}
+.topo{display:flex;justify-content:space-between;font-size:11px;margin-bottom:20px}
+.cabecalho{display:flex;align-items:center;gap:14px}
+.logo{font-size:42px}
+h1{margin:0;color:#16938c;font-size:42px}
+.sub{color:#6b8c8a}
+hr{border:none;border-top:1px solid #dbe7e7;margin:18px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.box{border:1px solid #dbe7e7;border-radius:12px;padding:14px}
+.lbl{font-size:11px;font-weight:bold;color:#6b8c8a;text-transform:uppercase;margin-bottom:6px}
+.valor{font-weight:700}
+.titulo{margin-top:18px;color:#16938c;font-weight:700;border-bottom:1px solid #dbe7e7;padding-bottom:6px}
+.textbox{border:1px solid #dbe7e7;border-radius:12px;padding:14px;margin-top:10px}
+.watermark{position:absolute;top:260px;left:50%;transform:translateX(-50%);font-size:250px;opacity:.04}
+.footer{margin-top:30px;padding-top:12px;border-top:1px solid #dbe7e7;text-align:right;font-size:12px}
+</style>
+</head>
+<body>
+<div class="relatorio">
+<div class="watermark">🐾</div>
+<div class="topo"><div>${hoje}</div><div>relatorio-${petNome.toLowerCase()}.pdf</div></div>
+<div class="cabecalho">
+<div class="logo">🐾</div>
+<div>
+<h1>Relatório Pet</h1>
+<div class="sub">PetCare Connect — Relatório clínico do animal</div>
+</div>
+</div>
+<hr>
+<div class="grid">
+<div class="box"><div class="lbl">Tutor(a)</div><div class="valor">${tutorNome}</div></div>
+<div class="box"><div class="lbl">Pet</div><div class="valor">${petNome}</div></div>
+<div class="box"><div class="lbl">Tipo</div><div class="valor">Não informado</div></div>
+<div class="box"><div class="lbl">Idade</div><div class="valor">Não informada</div></div>
+<div class="box"><div class="lbl">Peso</div><div class="valor">Não informado</div></div>
+<div class="box"><div class="lbl">Última atualização</div><div class="valor">${new Date().toLocaleDateString('pt-BR')}</div></div>
+</div>
+<div class="titulo">RELATÓRIO CLÍNICO</div>
+<div class="textbox">${texto}</div>
+<div class="titulo">VACINAS</div>
+<ul><li>Nenhuma vacina registrada.</li></ul>
+<div class="titulo">MEDICAÇÕES</div>
+<ul><li>Nenhuma medicação registrada.</li></ul>
+<div class="titulo">HISTÓRICO</div>
+<ul><li>${new Date().toLocaleDateString('pt-BR')}: ${texto}</li></ul>
+<div class="footer">Documento gerado pelo sistema PetCare Connect</div>
+</div>
 </body>
+</html>`);
+    w.document.close();
+    w.print();
+}
+
+async function excluirRelatorio(petId){
+    const r = await petcareExcluirRelatorio(petId);
+    if(r?.sucesso){
+        mostrarFeedback('Sucesso','Relatório excluído!',true);
+        carregarRelatorios();
+    }
+}
+</script>
+
+</body>
+
 </html>
